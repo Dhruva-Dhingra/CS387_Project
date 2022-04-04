@@ -180,3 +180,77 @@ Create Table Group_Admin {
   FOREIGN KEY (User_ID) REFERENCES User (User_ID),
   FOREIGN KEY (Group_ID) REFERENCES Group (Group_ID)
 };
+
+Create Materialized View Homepage
+as
+with actual_friends as (
+        (select Friend.Sender a, Friend.Acceptor b from Friend where Friend.Accept_Time is not null)
+        union
+        (select Friend.Acceptor a, Friend.Sender b from Friend where Friend.Accept_Time is not null)
+    )
+select Post.Post_ID, Post.Page_ID, post.User_ID, Post.Content_Type, Post.Content, Post.Time
+    from Post, User where 
+        (
+            Post.User_ID is not null and
+            Post.User_ID in 
+                (select actual_friends.b from actual_friends where actual_friends.a = User.User_ID)
+        )
+        or
+        (
+            Post.Post_ID is not null and
+            Post.Post_ID in 
+                (select Follower.Page_ID from Follower where Follower.User_ID = User.User_ID)
+        )
+    order by Post.Time desc limit 20
+;
+
+Create Materialized View Timeline
+as
+select Post.Post_id, Post.Page_ID, Post.User_ID, Post.Content_Type, Post.Content, Post.Time, rank() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
+    from Post, User where 
+        (
+            Post.User_ID is not null and
+            Post.User_ID in 
+                (select actual_friends.b from actual_friends where actual_friends.a = User.User_ID)
+			Post_Rank <= 50
+        )
+;
+
+Create Materialized View Reaction_Count
+as
+	select Post_ID, Reaction, count(Reaction) as Reaction_Count
+	from Reaction
+	group by (Post_ID, Reaction)
+;
+
+Create Materialized View Top_Comments
+as
+	select Post_ID, Comment_ID, Content, Time_Posted, rank() over (Partition By Post_ID order by Time_Posted desc) as Comment_Rank
+	from Comment
+	where Comment_Rank <= 10
+;
+
+Create Materialized View Invitations
+as
+	select Sender, Acceptor, rank() over (Partition By Acceptor order by Sending_Time asc) as Invitation_Rank 
+	from Friend
+	where 
+		not Status
+		and Invitation_Rank <= 20
+;
+
+Create Materialised View DM_Cached_Messages
+as
+	select Message.Message_ID, Message.Content, Message.Time, Private_Chat.Sender_ID, Private_Chat.Receiver_ID, 
+		rank() over (Partition by (Private_Chat.Sender_ID, Private_Chat.Receiver_ID) order by Message.Time desc) as Message_rank
+	from Message inner join Private_Chat
+		where Message_rank <= 50
+;
+
+Create Materialised View Group_Cached_Messages
+as
+	select Message.Message_ID, Message.Content, Message.Time, Group_Chat.Sender_ID, Group_Chat.Group_ID, 
+		rank() over (Partition by (Group_Chat.Sender_ID, Group_Chat.Group_ID) order by Message.Time desc) as Message_rank
+	from Message inner join Group_Chat
+		where Message_rank <= 50
+;
