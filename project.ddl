@@ -12,8 +12,8 @@ Create Table AppUser (
   Birthday  date,
   SignUp_Date  timestamp NOT NULL,
   Profile_Picture   oid,
-  Private  bit NOT NULL,
-  AutoAdd_to_Groups  bit NOT NULL
+  Private  boolean NOT NULL,
+  AutoAdd_to_Groups  boolean NOT NULL
 );
 
 Create Table Website_Admin (
@@ -27,6 +27,14 @@ Create Table Hobby (
   Name  text NOT NULL,
   Category  text,
   Description  text
+);
+
+Create Table Page (
+  Page_ID  bigint  PRIMARY KEY,
+  Name  text NOT NULL,
+  Profile_Picture   oid,
+  Description  text,
+  Created_On  timestamp NOT NULL
 );
 
 Create Table Post (
@@ -51,14 +59,6 @@ Create Table Status (
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID)
  );
 
-Create Table Page (
-  Page_ID  bigint  PRIMARY KEY,
-  Name  text NOT NULL,
-  Profile_Picture   oid,
-  Description  text,
-  Created_On  timestamp NOT NULL
-);
-
 Create Table Page_Keyword (
   Page_ID bigint,  
   Keyword text,
@@ -78,9 +78,9 @@ Create Table Message (
   Message_ID  int PRIMARY KEY ,
   Content  text NOT NULL,
   Time  timestamp NOT NULL,
-  View_Once  bit NOT NULL,
-  Deleted  bit NOT NULL,
-  Invitation  bit,
+  View_Once  boolean NOT NULL,
+  Deleted  boolean NOT NULL,
+  Invitation  boolean,
   Group_ID  bigint
 
 );
@@ -111,39 +111,43 @@ Create Table Follower (
 );
 
 Create Table Comment (
-  Post_ID bigint PRIMARY KEY ,
-  User_ID bigint  PRIMARY KEY,
-  Comment_ID bigint PRIMARY KEY,  
+  Post_ID bigint,
+  User_ID bigint,
+  Comment_ID bigint,  
   Content text NOT NULL,
   Time_Posted timestamp NOT NULL,
   Last_Edited timestamp NOT NULL,
-  Deleted bit NOT NULL,
+  Deleted boolean NOT NULL,
+  PRIMARY KEY (Post_ID, User_ID, Comment_ID),
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Post_ID) REFERENCES Post (Post_ID)
 );
 
 Create Table Reaction (
-  User_ID bigint PRIMARY KEY,  
-  Post_ID bigint PRIMARY KEY,
+  User_ID bigint,  
+  Post_ID bigint,
   Reaction int NOT NULL,
+  PRIMARY KEY (User_ID, Post_ID),
   Timestamp timestamp NOT NULL,
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Post_ID) REFERENCES Post (Post_ID)
 );
 
 Create Table Friend (
-  Sender bigint PRIMARY KEY,  
-  Acceptor bigint PRIMARY KEY,  
+  Sender bigint,  
+  Acceptor bigint,  
   Sending_Time Timestamp NOT NULL,
   Accept_Time Timestamp,
-  Status bit NOT NULL,
+  Status boolean NOT NULL,
+  PRIMARY KEY (Sender, Acceptor),
   FOREIGN KEY (Acceptor) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Sender) REFERENCES AppUser (User_ID)
 );
 
 Create Table Likes (
-  Hobby_ID bigint PRIMARY KEY, 
-  User_ID bigint PRIMARY KEY,
+  Hobby_ID bigint, 
+  User_ID bigint,
+  PRIMARY KEY (Hobby_ID, User_ID),
   FOREIGN KEY (Hobby_ID) REFERENCES Hobby (Hobby_ID),
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID)
 );
@@ -163,24 +167,27 @@ Create Table Group_Chat (
 );
 
 Create Table Member (
-  Group_ID bigint PRIMARY KEY,  
-  User_ID bigint  PRIMARY KEY,
+  Group_ID bigint,  
+  User_ID bigint,
   Privilege bigint NOT NULL,
   Joining_Time timestamp NOT NULL,
+  PRIMARY KEY (Group_ID, User_ID),
   FOREIGN KEY (Group_ID) REFERENCES UserGroup (Group_ID),
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID)
 );
 
 Create Table Page_Admin (
-  Page_ID bigint PRIMARY KEY ,
-  User_ID bigint  PRIMARY KEY,
+  Page_ID bigint,
+  User_ID bigint,
+  PRIMARY KEY (Page_ID, User_ID),
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Page_ID) REFERENCES Page (Page_ID)
 );
 
 Create Table Group_Admin (
-  Group_ID bigint  PRIMARY KEY,
-  User_ID bigint  PRIMARY KEY,
+  Group_ID bigint,
+  User_ID bigint,
+  PRIMARY KEY (Group_ID, User_ID),
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Group_ID) REFERENCES UserGroup (Group_ID)
 );
@@ -210,14 +217,21 @@ select Post.Post_ID, Post.Page_ID, post.User_ID, Post.Content_Type, Post.Content
 
 Create Materialized View Timeline
 as
-select Post.Post_id, Post.Page_ID, Post.User_ID, Post.Content_Type, Post.Content, Post.Time, rank() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
-    from Post, AppUser where 
-        (
-            Post.User_ID is not null and
-            Post.User_ID in 
-                (select actual_friends.b from actual_friends where actual_friends.a = AppUser.User_ID)
-			      and Post_Rank <= 50
+with actual_friends as (
+        (select Friend.Sender a, Friend.Acceptor b from Friend where Friend.Accept_Time is not null)
+        union
+        (select Friend.Acceptor a, Friend.Sender b from Friend where Friend.Accept_Time is not null)
+    )
+select * 
+from 
+(select Post.Post_id, Post.Page_ID, Post.User_ID, Post.Content_Type, Post.Content, Post.Time, rank() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
+    from Post, AppUser
+where 
+        (Post.User_ID is not null and
+          Post.User_ID in (select actual_friends.b from actual_friends where actual_friends.a = AppUser.User_ID)
         )
+) as intermediate
+where Post_Rank <= 50
 ;
 
 Create Materialized View Reaction_Count
@@ -229,32 +243,41 @@ as
 
 Create Materialized View Top_Comments
 as
-	select Post_ID, Comment_ID, Content, Time_Posted, rank() over (Partition By Post_ID order by Time_Posted desc) as Comment_Rank
-	from Comment
+	select *
+  from 
+  (select Post_ID, Comment_ID, Content, Time_Posted, rank() over (Partition By Post_ID order by Time_Posted desc) as Comment_Rank
+	from Comment) as intermediate
 	where Comment_Rank <= 10
 ;
 
 Create Materialized View Invitations
 as
-	select Sender, Acceptor, rank() over (Partition By Acceptor order by Sending_Time asc) as Invitation_Rank 
+	select *
+  from
+  (select Sender, Acceptor, rank() over (Partition By Acceptor order by Sending_Time asc) as Invitation_Rank 
 	from Friend
-	where 
-		not Status
-		and Invitation_Rank <= 20
+	where not Status) as intermediate
+	where Invitation_Rank <= 20
 ;
 
 Create Materialized View DM_Cached_Messages
 as
-	select Message.Message_ID, Message.Content, Message.Time, Private_Chat.Sender_ID, Private_Chat.Receiver_ID, 
+	select * 
+  from 
+  (select Message.Message_ID, Message.Content, Message.Time, Private_Chat.Sender_ID, Private_Chat.Receiver_ID, 
 		rank() over (Partition by (Private_Chat.Sender_ID, Private_Chat.Receiver_ID) order by Message.Time desc) as Message_rank
-	from Message inner join Private_Chat
-		where Message_rank <= 50
+	from Message, Private_Chat
+		where Message.Message_ID = Private_Chat.Message_ID) as intermediate
+    where Message_rank <= 50
 ;
 
 Create Materialized View Group_Cached_Messages
 as
-	select Message.Message_ID, Message.Content, Message.Time, Group_Chat.Sender_ID, Group_Chat.Group_ID, 
+	select *
+  from
+  (select Message.Message_ID, Message.Content, Message.Time, Group_Chat.Sender_ID, Group_Chat.Group_ID, 
 		rank() over (Partition by (Group_Chat.Sender_ID, Group_Chat.Group_ID) order by Message.Time desc) as Message_rank
-	from Message inner join Group_Chat
-		where Message_rank <= 50
+	from Message, Group_Chat
+		where Message.Message_ID = Group_Chat.Message_ID) as intermediate
+    where Message_rank <= 50
 ;
