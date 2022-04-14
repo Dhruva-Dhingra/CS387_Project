@@ -1,4 +1,4 @@
-Create Table User {
+Create Table AppUser (
   User_ID  bigint PRIMARY KEY ,
   First_Name  text NOT NULL,
   Last_Name  text,
@@ -14,22 +14,22 @@ Create Table User {
   Profile_Picture   oid,
   Private  bit NOT NULL,
   AutoAdd_to_Groups  bit NOT NULL
-};
+);
 
-Create Table Website_Admin {
+Create Table Website_Admin (
   Admin_ID int PRIMARY KEY,
   Email text NOT NULL,
   Hash_of_Password text NOT NULL
-};
+);
 
-Create Table Hobby {
+Create Table Hobby (
   Hobby_ID  int PRIMARY KEY NOT NULL,
   Name  text NOT NULL,
   Category  text,
   Description  text
-};
+);
 
-Create Table Post {
+Create Table Post (
 	Post_ID bigint PRIMARY KEY ,
 	Page_ID bigint,
 	User_ID bigint,
@@ -37,43 +37,44 @@ Create Table Post {
 	Content  oid NOT NULL,
 	Time  timestamp NOT NULL,
 	Validity  int NOT NULL,
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID),
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Page_ID) REFERENCES Page (Page_ID)
- };
+ );
 
 
-Create Table Status {
+Create Table Status (
   Status_ID bigint PRIMARY KEY,  
   User_ID bigint NOT NULL,
   Content_Type int NOT NULL,
   Content  oid NOT NULL,
   Time timestamp NOT NULL,
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID)
- };
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID)
+ );
 
-Create Table Page {
+Create Table Page (
   Page_ID  bigint  PRIMARY KEY,
   Name  text NOT NULL,
   Profile_Picture   oid,
   Description  text,
   Created_On  timestamp NOT NULL
-};
+);
 
-Create Table Page_Keyword {
-  Page_ID bigint PRIMARY KEY,  
-  Keyword text PRIMARY KEY ,
+Create Table Page_Keyword (
+  Page_ID bigint,  
+  Keyword text,
+  PRIMARY KEY (Page_ID, Keyword),
   FOREIGN KEY (Page_ID) REFERENCES Page (Page_ID)
-};
+);
 
-Create Table Group {
+Create Table UserGroup (
 Group_ID  bigint PRIMARY KEY,  
 	Name  text NOT NULL,
 	Profile_Picture   oid,
 	Description  text,
 	Created_on  timestamp NOT NULL
-};
+);
 
-Create Table Message {
+Create Table Message (
   Message_ID  int PRIMARY KEY ,
   Content  text NOT NULL,
   Time  timestamp NOT NULL,
@@ -82,31 +83,34 @@ Create Table Message {
   Invitation  bit,
   Group_ID  bigint
 
-};
+);
 
-Create Table About {
-  Page_ID bigint PRIMARY KEY,  
-  Hobby_ID bigint PRIMARY KEY ,
+Create Table About (
+  Page_ID bigint,  
+  Hobby_ID bigint,
+  PRIMARY KEY (Page_ID, Hobby_ID),
   FOREIGN KEY (Page_ID) REFERENCES Page (Page_ID),
   FOREIGN KEY (Hobby_ID) REFERENCES Hobby (Hobby_ID)
-};
+);
 
-Create Table Tags {
-  Post_ID bigint PRIMARY KEY, 
-  User_ID bigint  PRIMARY KEY,
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID),
+Create Table Tags (
+  Post_ID bigint, 
+  User_ID bigint,
+  PRIMARY KEY (Post_ID, User_ID),
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Post_ID) REFERENCES Post (Post_ID)
-};
+);
 
-Create Table Follower {
-  Page_ID bigint PRIMARY KEY, 
-  User_ID bigint  PRIMARY KEY,
+Create Table Follower (
+  Page_ID bigint, 
+  User_ID bigint,
   TimeStamp timestamp,
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID),
+  PRIMARY KEY (Page_ID, User_ID),
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Page_ID) REFERENCES Page (Page_ID)
-};
+);
 
-Create Table Comment {
+Create Table Comment (
   Post_ID bigint PRIMARY KEY ,
   User_ID bigint  PRIMARY KEY,
   Comment_ID bigint PRIMARY KEY,  
@@ -114,72 +118,72 @@ Create Table Comment {
   Time_Posted timestamp NOT NULL,
   Last_Edited timestamp NOT NULL,
   Deleted bit NOT NULL,
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID),
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Post_ID) REFERENCES Post (Post_ID)
-};
+);
 
-Create Table Reaction {
+Create Table Reaction (
   User_ID bigint PRIMARY KEY,  
   Post_ID bigint PRIMARY KEY,
   Reaction int NOT NULL,
   Timestamp timestamp NOT NULL,
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID),
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Post_ID) REFERENCES Post (Post_ID)
-};
+);
 
-Create Table Friend {
+Create Table Friend (
   Sender bigint PRIMARY KEY,  
   Acceptor bigint PRIMARY KEY,  
   Sending_Time Timestamp NOT NULL,
   Accept_Time Timestamp,
   Status bit NOT NULL,
-  FOREIGN KEY (Acceptor) REFERENCES User (User_ID),
-  FOREIGN KEY (Sender) REFERENCES User (User_ID)
-};
+  FOREIGN KEY (Acceptor) REFERENCES AppUser (User_ID),
+  FOREIGN KEY (Sender) REFERENCES AppUser (User_ID)
+);
 
-Create Table Likes {
+Create Table Likes (
   Hobby_ID bigint PRIMARY KEY, 
   User_ID bigint PRIMARY KEY,
   FOREIGN KEY (Hobby_ID) REFERENCES Hobby (Hobby_ID),
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID)
-};
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID)
+);
 
-Create Table Private_Chat {
+Create Table Private_Chat (
   Message_ID bigint PRIMARY KEY,  
   Sender_ID bigint NOT NULL,
   Receiver_ID bigint NOT NULL,
   FOREIGN KEY (Message_ID) REFERENCES Message (Message_ID)
-};
+);
 
-Create Table Group_Chat {
+Create Table Group_Chat (
   Message_ID bigint PRIMARY KEY, 
   Sender_ID bigint NOT NULL,
   Group_ID bigint NOT NULL,
   FOREIGN KEY (Message_ID) REFERENCES Message (Message_ID)
-};
+);
 
-Create Table Member {
+Create Table Member (
   Group_ID bigint PRIMARY KEY,  
   User_ID bigint  PRIMARY KEY,
   Privilege bigint NOT NULL,
   Joining_Time timestamp NOT NULL,
-  FOREIGN KEY (Group_ID) REFERENCES Group (Group_ID),
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID)
-};
+  FOREIGN KEY (Group_ID) REFERENCES UserGroup (Group_ID),
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID)
+);
 
-Create Table Page_Admin {
+Create Table Page_Admin (
   Page_ID bigint PRIMARY KEY ,
   User_ID bigint  PRIMARY KEY,
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID),
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Page_ID) REFERENCES Page (Page_ID)
-};
+);
 
-Create Table Group_Admin {
+Create Table Group_Admin (
   Group_ID bigint  PRIMARY KEY,
-  User_ID bigint  PRIMARY KEY
-  FOREIGN KEY (User_ID) REFERENCES User (User_ID),
-  FOREIGN KEY (Group_ID) REFERENCES Group (Group_ID)
-};
+  User_ID bigint  PRIMARY KEY,
+  FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
+  FOREIGN KEY (Group_ID) REFERENCES UserGroup (Group_ID)
+);
 
 Create Materialized View Homepage
 as
@@ -189,17 +193,17 @@ with actual_friends as (
         (select Friend.Acceptor a, Friend.Sender b from Friend where Friend.Accept_Time is not null)
     )
 select Post.Post_ID, Post.Page_ID, post.User_ID, Post.Content_Type, Post.Content, Post.Time
-    from Post, User where 
+    from Post, AppUser where 
         (
             Post.User_ID is not null and
             Post.User_ID in 
-                (select actual_friends.b from actual_friends where actual_friends.a = User.User_ID)
+                (select actual_friends.b from actual_friends where actual_friends.a = AppUser.User_ID)
         )
         or
         (
             Post.Post_ID is not null and
             Post.Post_ID in 
-                (select Follower.Page_ID from Follower where Follower.User_ID = User.User_ID)
+                (select Follower.Page_ID from Follower where Follower.User_ID = AppUser.User_ID)
         )
     order by Post.Time desc limit 20
 ;
@@ -207,12 +211,12 @@ select Post.Post_ID, Post.Page_ID, post.User_ID, Post.Content_Type, Post.Content
 Create Materialized View Timeline
 as
 select Post.Post_id, Post.Page_ID, Post.User_ID, Post.Content_Type, Post.Content, Post.Time, rank() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
-    from Post, User where 
+    from Post, AppUser where 
         (
             Post.User_ID is not null and
             Post.User_ID in 
-                (select actual_friends.b from actual_friends where actual_friends.a = User.User_ID)
-			Post_Rank <= 50
+                (select actual_friends.b from actual_friends where actual_friends.a = AppUser.User_ID)
+			      and Post_Rank <= 50
         )
 ;
 
@@ -239,7 +243,7 @@ as
 		and Invitation_Rank <= 20
 ;
 
-Create Materialised View DM_Cached_Messages
+Create Materialized View DM_Cached_Messages
 as
 	select Message.Message_ID, Message.Content, Message.Time, Private_Chat.Sender_ID, Private_Chat.Receiver_ID, 
 		rank() over (Partition by (Private_Chat.Sender_ID, Private_Chat.Receiver_ID) order by Message.Time desc) as Message_rank
@@ -247,7 +251,7 @@ as
 		where Message_rank <= 50
 ;
 
-Create Materialised View Group_Cached_Messages
+Create Materialized View Group_Cached_Messages
 as
 	select Message.Message_ID, Message.Content, Message.Time, Group_Chat.Sender_ID, Group_Chat.Group_ID, 
 		rank() over (Partition by (Group_Chat.Sender_ID, Group_Chat.Group_ID) order by Message.Time desc) as Message_rank
