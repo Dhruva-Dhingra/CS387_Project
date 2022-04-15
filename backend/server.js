@@ -4,7 +4,7 @@ const cors = require('cors')
 const app = express();
 const login_signup = require ('./Views/login_signup')
 var corsOptions = {
-    origin: 'http://localhost:8081'
+    origin: 'http://localhost:3001'
 };
 
 
