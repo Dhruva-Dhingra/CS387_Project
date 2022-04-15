@@ -18,7 +18,6 @@ class LoginForm extends Component {
 				this.setState({
 						[e.target.name]: e.target.value,
 				});
-				console.log('Target:', e.target)
 				console.log(this.state);
 		}
 
@@ -26,16 +25,16 @@ class LoginForm extends Component {
 				e.preventDefault();
 				console.log('Sending to backend!');
 				console.log(this.state);
-				// const requestOptions = {
-				// 		method: 'POST',
-				// 		headers: { 'Content-Type': 'application/json'},
-				// 		body: JSON.stringify(e.state),
-				// };
-				// fetch('localhost:8080/login_signup', requestOptions)
-				// 		.then(response => {
-				// 				response.json();
-				// 				console.log(response);
-				// 		});
+				const requestOptions = {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json'},
+						body: JSON.stringify(this.state),
+				};
+				fetch('http://localhost:8080/login', requestOptions)
+						.then(response => {
+								response.json();
+								console.log(response);
+						});
 		}
 
 		render() {
@@ -60,19 +59,19 @@ class SignupForm extends Component {
 				super();
 
 				this.state = {
-						// firstname: null,
-						// lastname: null,
-						// rollno: null,
-						// branch: null,
-						// degree: null,
-						// batch: null,
+						firstname: null,
+						lastname: null,
+						rollno: null,
+						branch: null,
+						degree: null,
+						batch: null,
 						email: null,
 						password: null,
-						// residence: null,
-						// birthday: null,
-						// profile_pic: null,
-						// pvt: null,
-						// autoadd: null,
+						residence: null,
+						birthday: null,
+						profile_pic: null,
+						pvt: null,
+						autoadd: null,
 				}
 				this.handleSubmit = this.handleSubmit.bind(this);
 				this.handleChange = this.handleChange.bind(this);
@@ -80,10 +79,9 @@ class SignupForm extends Component {
 
 		handleChange(e) {
 				e.preventDefault();
-				console.log('Change in signup form');
+				console.log('Change in login form');
 				this.setState({
-						email: e.target.email,
-						password: e.target.password
+						[e.target.name]: e.target.value,
 				});
 				console.log(this.state);
 		}
@@ -92,16 +90,16 @@ class SignupForm extends Component {
 				e.preventDefault();
 				console.log('Sending to backend!');
 				console.log(this.state);
-				// const requestOptions = {
-				// 		method: 'POST',
-				// 		headers: { 'Content-Type': 'application/json'},
-				// 		body: JSON.stringify(e.state),
-				// };
-				// fetch('localhost:8080/login_signup', requestOptions)
-				// 		.then(response => {
-				// 				response.json();
-				// 				console.log(response);
-				// 		});
+				const requestOptions = {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json'},
+						body: JSON.stringify(this.state),
+				};
+				fetch('http://localhost:8080/signup', requestOptions)
+						.then(response => {
+								response.json();
+								console.log(response);
+						});
 		}
 
 		render() {
@@ -110,11 +108,11 @@ class SignupForm extends Component {
 								<form onSubmit = {this.handleSubmit}>
 								<label>
 								Email:
-								<input type = 'text' value = {this.state.email} onChange = {this.handleChange} />
+								<input type = 'text' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
 								</label>
 								<label>
 								Password:
-								<input type = 'text' value = {this.state.password} onChange = {this.handleChange} />
+								<input type = 'text' name = 'password' value = {this.state.password} onChange = {this.handleChange} />
 								</label>
 								<input type = 'submit' value ='Submit'></input>
 								</form>

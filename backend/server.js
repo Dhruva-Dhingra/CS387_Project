@@ -4,7 +4,7 @@ const cors = require('cors')
 const app = express();
 const login_signup = require ('./Views/login_signup')
 var corsOptions = {
-    origin: 'http://localhost:3001'
+    origin: 'http://localhost:3000'
 };
 
 
@@ -21,5 +21,14 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-app.post('/signup', [login_signup.checkIfExists], login_signup.signup);
-app.post('./login', login_signup.login);
+// app.post('/signup', [login_signup.checkIfExists], login_signup.signup);
+// app.post('./login', login_signup.login);
+
+app.post('/signup', (req, res) => {
+		console.log('At signup backend!');
+		console.log(req.body);
+});
+app.post('/login', (req, res) => {
+		console.log('At login backend!');
+		console.log(req.body);
+});
