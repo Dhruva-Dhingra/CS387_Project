@@ -21,9 +21,12 @@ drop table if exists About;
 drop table if exists Message;
 drop table if exists UserGroup;
 drop table if exists Page_Keyword;
-drop table if exists Page;
 drop table if exists Status;
 drop table if exists Post;
+drop table if exists Page;
 drop table if exists Hobby;
 drop table if exists Website_Admin;
 drop table if exists AppUser;
+
+
+drop sequence if exists inc;

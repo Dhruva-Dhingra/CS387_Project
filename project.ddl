@@ -1,19 +1,19 @@
-Create Table AppUser (
+create Table AppUser (
   User_ID  bigint PRIMARY KEY ,
-  First_Name  text NOT NULL,
-  Last_Name  text,
-  Roll_Number  text NOT NULL,
-  Branch  text NOT NULL,
-  Degree  text NOT NULL,
-  Batch  int NOT NULL,
+  -- First_Name  text NOT NULL,
+  -- Last_Name  text,
+  -- Roll_Number  text NOT NULL,
+  -- Branch  text NOT NULL,
+  -- Degree  text NOT NULL,
+  -- Batch  int NOT NULL,
   Email  text NOT NULL,
-  Hash_of_Password  text NOT NULL,
-  Residence  text,
-  Birthday  date,
-  SignUp_Date  timestamp NOT NULL,
-  Profile_Picture   oid,
-  Private  boolean NOT NULL,
-  AutoAdd_to_Groups  boolean NOT NULL
+  Hash_of_Password  text NOT NULL
+  -- Residence  text,
+  -- Birthday  date,
+  -- SignUp_Date  timestamp NOT NULL,
+  -- Profile_Picture   oid,
+  -- Private  boolean NOT NULL,
+  -- AutoAdd_to_Groups  boolean NOT NULL
 );
 
 Create Table Website_Admin (

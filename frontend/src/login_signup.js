@@ -14,42 +14,49 @@ class LoginForm extends Component {
 
 		handleChange(e) {
 				e.preventDefault();
-				console.log('Change in login form');
 				this.setState({
 						[e.target.name]: e.target.value,
 				});
-				console.log(this.state);
 		}
 
-		handleSubmit(e) {
+		async handleSubmit(e) {
 				e.preventDefault();
 				console.log('Sending to backend!');
 				console.log(this.state);
 				const requestOptions = {
 						method: 'POST',
-						headers: { 'Content-Type': 'application/json'},
+						mode: 'cors',
+						headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
 						body: JSON.stringify(this.state),
 				};
-				fetch('http://localhost:8080/login', requestOptions)
-						.then(response => {
-								response.json();
-								console.log(response);
-						});
+				console.log('Sending...');
+				const res = await fetch('http://localhost:8080/login', requestOptions)
+				const data = await res.json();
+				console.log(data);
 		}
 
 		render() {
 				return (
+						<div>
+								<p>Please login!</p>
+								<br/>
 								<form onSubmit = {this.handleSubmit}>
-								<label>
-								Email:
-										<input type = 'text' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
-								</label>
-								<label>
-								Password:
-										<input type = 'text' name = 'password' value = {this.state.password} onChange = {this.handleChange} />
-								</label>
-								<input type = 'submit' value ='Submit'></input>
+										<label>
+												Email:
+												<input type = 'text' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
+										</label>
+										<br/>
+										<label>
+												Password:
+												<input type = 'password' name = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</label>
+										<br/>
+										<input type = 'submit' value ='Submit'></input>
 								</form>
+						</div>
 				);
 		}
 }
@@ -59,19 +66,19 @@ class SignupForm extends Component {
 				super();
 
 				this.state = {
-						firstname: null,
-						lastname: null,
-						rollno: null,
-						branch: null,
-						degree: null,
-						batch: null,
+						// firstname: null,
+						// lastname: null,
+						// rollno: null,
+						// branch: null,
+						// degree: null,
+						// batch: null,
 						email: null,
 						password: null,
-						residence: null,
-						birthday: null,
-						profile_pic: null,
-						pvt: null,
-						autoadd: null,
+						// residence: null,
+						// birthday: null,
+						// profile_pic: null,
+						// pvt: null,
+						// autoadd: null,
 				}
 				this.handleSubmit = this.handleSubmit.bind(this);
 				this.handleChange = this.handleChange.bind(this);
@@ -79,7 +86,7 @@ class SignupForm extends Component {
 
 		handleChange(e) {
 				e.preventDefault();
-				console.log('Change in login form');
+				console.log('Change in signup form');
 				this.setState({
 						[e.target.name]: e.target.value,
 				});
@@ -104,18 +111,23 @@ class SignupForm extends Component {
 
 		render() {
 				return (
-						// <div>Login</div>
+						<div>
+								<p>Please sign up!</p>
+								<br/>
 								<form onSubmit = {this.handleSubmit}>
-								<label>
-								Email:
-								<input type = 'text' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
-								</label>
-								<label>
-								Password:
-								<input type = 'text' name = 'password' value = {this.state.password} onChange = {this.handleChange} />
-								</label>
-								<input type = 'submit' value ='Submit'></input>
+										<label>
+												Email:
+												<input type = 'text' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
+										</label>
+										<br/>
+										<label>
+												Password:
+												<input type = 'password' name = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</label>
+										<br/>
+										<input type = 'submit' value ='Submit'></input>
 								</form>
+						</div>
 				);
 		}
 
@@ -127,18 +139,33 @@ class LoginSignup extends Component {
 				this.state = {
 						isLogin: true,
 				}
+				this.loginClick = this.loginClick.bind(this);
+				this.signupClick = this.signupClick.bind(this);
+		}
+
+		loginClick() {
+				this.setState({
+						isLogin: true
+				});
+				console.log(this.state.isLogin);
+		}
+
+		signupClick () {
+				this.setState({
+						isLogin: false
+				});
+				console.log(this.state.isLogin);
 		}
 
 		render () {
-				const isLogin = this.state.isLogin;
 				let form;
-				form = isLogin? <LoginForm />: <SignupForm />;
+				form = this.state.isLogin? <LoginForm />: <SignupForm />;
 
 				return (
 						<div>
 						 		{form}
-						 		<button onClick = {() => {this.setState({isLogin: true});}}>Login</button>
-								<button onClick = {() => {this.setState({isLogin: false});}}>Signup</button>
+						 		<button onClick = {this.loginClick}>Login</button>
+						 		<button onClick = {this.signupClick}>Signup</button>
 						</div>
 				)
 		}
