@@ -41,7 +41,7 @@ class LoginForm extends Component {
 		render() {
 				return (
 						<div>
-								<p>Please login!</p>
+								<p>Please Login!</p>
 								<br/>
 								<form onSubmit = {this.handleSubmit}>
 										<label>
