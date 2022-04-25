@@ -23,7 +23,7 @@ const EditForm = () => {
       const [residence, setresidence] = useState("")
       const [bday, setbday] = useState("")
       const [dp, setdp] = useState("")
-      const [private, setprivate] = useState("")
+      const [hidden, setprivate] = useState("")
       const [autoadd, setautoadd] = useState("")
 
       const handleSubmit = async (e) => {
@@ -73,13 +73,13 @@ const EditForm = () => {
                 <input value = {dp} onChange={(e) => setdp(e.target.value)} type="number" className='form-control' placeholder='Profile Picture'/>
             </div>
             <div className="col">
-                <input value = {private} onChange={(e) => setprivate(e.target.value)} type="number" className='form-control' placeholder='Hide Account'/>
+                <input value = {hidden} onChange={(e) => setprivate(e.target.value)} type="number" className='form-control' placeholder='Hide Account'/>
             </div>
             <div className="col">
                 <input value = {autoadd} onChange={(e) => setautoadd(e.target.value)} type="number" className='form-control' placeholder='Auto Add to Groups'/>
             </div>
             <br></br>
-            <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn-lg">Update</button></center>
+            <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn-lg">Update Profile!</button></center>
             
           </div>
       </form>
