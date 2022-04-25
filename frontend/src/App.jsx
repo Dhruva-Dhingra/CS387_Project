@@ -4,7 +4,8 @@ import { ContextProvider } from './context/Context';
 // import Main from './Main';
 // import LoginSignup from '.routes/login_signup';
 // import Test from '.routes/Test';
-import Homepage from './routes/Homepage';
+import HomePage from './routes/HomePage';
+import TimelinePage from './routes/TimelinePage';
 
 const App = () => {
 	
@@ -12,7 +13,8 @@ const App = () => {
 			<ContextProvider>
 				<BrowserRouter>
 					<Routes>
-						<Route path = "/homepage" element = {<Homepage/>}></Route>
+						<Route path = "/homepage" element = {<HomePage/>}></Route>
+						<Route path = "/timeline/:id" element = {<TimelinePage/>}></Route>
 						{/* <Route path = '/' element = {< Test />}></Route> */}
 						{/* <Route path = '/' element = {< Test />}></Route> 
 			<Route path = '/ls' element = {< LoginSignup />}></Route>  */}
@@ -22,7 +24,6 @@ const App = () => {
 				
 		);
 }
-
 
 
 export default App;
