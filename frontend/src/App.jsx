@@ -24,9 +24,7 @@ const App = () => {
 						<Route path = "/timeline/:id" element = {<TimelinePage/>}></Route>
 						<Route path = "/message/:id" element = {<MessagePage/>}></Route>
 						<Route path = "/admin" element = {<WebAdminPage/>}></Route>
-						{/* <Route path = '/' element = {< Test />}></Route> */}
-						{/* <Route path = '/' element = {< Test />}></Route> 
-			<Route path = '/ls' element = {< LoginSignup />}></Route>  */}
+						{/* <Route path = '/ls' element = {< LoginSignup />}></Route>  */}
 					</Routes>
 				</BrowserRouter>
 				</div>
