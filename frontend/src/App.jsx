@@ -1,10 +1,10 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import { BrowserRouter } from 'react-router-dom';
-// import Main from './Main';
-import LoginSignup from '.routes/login_signup';
-import Test from './Test';
 import { ContextProvider } from './context/Context';
+// import Main from './Main';
+// import LoginSignup from '.routes/login_signup';
+// import Test from '.routes/Test';
+
 import Homepage from './routes/Homepage';
 
 const App = () => {
