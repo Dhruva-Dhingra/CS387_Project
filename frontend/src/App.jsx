@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import {BrowserRouter as BrowserRouter, Routes, Route} from "react-router-dom";
 import { ContextProvider } from './context/Context';
 // import Main from './Main';
 // import LoginSignup from '.routes/login_signup';
@@ -11,11 +11,11 @@ const App = () => {
 	
 		return (
 			<ContextProvider>
-				<Router>
-					<Switch>
-						<Router exact path = "/homepage" component = {Homepage}></Router>
-					</Switch>
-				</Router>
+				<BrowserRouter>
+					<Routes>
+						<Route path = "/homepage" component = {Homepage}></Route>
+					</Routes>
+				</BrowserRouter>
 			</ContextProvider>
 				
 		);
