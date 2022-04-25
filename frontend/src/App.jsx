@@ -4,7 +4,6 @@ import { ContextProvider } from './context/Context';
 // import Main from './Main';
 // import LoginSignup from '.routes/login_signup';
 // import Test from '.routes/Test';
-
 import Homepage from './routes/Homepage';
 
 const App = () => {
@@ -13,7 +12,10 @@ const App = () => {
 			<ContextProvider>
 				<BrowserRouter>
 					<Routes>
-						<Route path = "/homepage" component = {Homepage}></Route>
+						<Route path = "/homepage" element = {<Homepage/>}></Route>
+						{/* <Route path = '/' element = {< Test />}></Route> */}
+						{/* <Route path = '/' element = {< Test />}></Route> 
+			<Route path = '/ls' element = {< LoginSignup />}></Route>  */}
 					</Routes>
 				</BrowserRouter>
 			</ContextProvider>
@@ -21,11 +23,6 @@ const App = () => {
 		);
 }
 
-// <BrowserRouter>
-// 		<Routes>
-// 				{/* <Route path = '/' element = {< Test />}></Route> */}
-// 				{/* <Route path = '/ls' element = {< LoginSignup />}></Route> */}
-// 		</Routes>
-// </BrowserRouter>
+
 
 export default App;
