@@ -168,6 +168,28 @@ const verifyToken = (token) => {
 		});
 		console.log(ver);
 		return ver;
+		
+const get_friends  = async (req, res) => {
+	console.log('Fetch friends');
+	try {
+		// let user_id = req.user_id; // TODO
+		let user_id = 1;
+		const friends = await db.query(`with actual_friends as (
+			(select friend.acceptor a from friend where friend.accept_time is not null and friend.sender = $1)
+			union
+			(select  friend.sender a from friend where friend.accept_time is not null  and friend.acceptor = $1)
+		)  select first_name, last_name , profile_picture from appuser, actual_friends where  a = appuser.user_id`, [user_id]);
+		console.log(friends);
+        res.status(200).json({
+            status: "success",
+            data: {
+               friends : friends
+            }     
+        });
+	   } 
+	catch (err) {
+        return err.stack;
+    }
 }
 
 module.exports = {
@@ -176,4 +198,5 @@ module.exports = {
     signup,
     login,
 		verifyToken,
+	get_friends
 }
