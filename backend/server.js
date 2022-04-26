@@ -1,11 +1,12 @@
 const express = require('express');
-const cookieParser = require('cooke-parser');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 app.use(cookieParser());
 var corsOptions = {
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
+		credentials: true
 };
 
 app.use(cors(corsOptions))
@@ -17,11 +18,25 @@ const {
 		auto_user_id,
     checkIfExists,
     signup,
-    login
+    login,
+		verifyToken
 } = require('./Views/login_signup');
 
-app.get('/', async (req, res) => {
-    res.json({ message: 'Welcome to our project!'});
+app.use(function(req, res, next) {
+		res.header('Content-Type', 'application/json')
+		res.header('Access-Control-Allow-Credentials', true)
+		res.header(
+				'Access-Control-Allow-Headers',
+				'Origin, X-Requested-With, Content-Type, Accept'
+		)
+		next()
+})
+
+app.post('/test', async (req, res) => {
+		if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
+		else res.json({'result': 'failed'})
+		console.log(req.body);
+		console.log(req.cookies);
 });
 
 const PORT = 8080
@@ -45,6 +60,7 @@ app.post('/login', async (req, res) => {
 				httpOnly: true
 		});
 		res.json(ans);
+		// console.log('JSON response sent');
 });
 
 // app.post('/signup', (req, res) => {

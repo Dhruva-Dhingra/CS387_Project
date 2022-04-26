@@ -73,7 +73,6 @@ where Email = $1
     }
 }
 
-
 const signup = async (req, res) => {
 		console.log('Signing up in backend')
     try {
@@ -162,9 +161,19 @@ where Email = $1
     }
 }
 
+const verifyToken = (token) => {
+		let ver = jwt.verify(token, config.secret, (err, verified) => {
+				if (err) return false;
+				return true;
+		});
+		console.log(ver);
+		return ver;
+}
+
 module.exports = {
 		auto_user_id,
     checkIfExists,
     signup,
-    login
+    login,
+		verifyToken,
 }

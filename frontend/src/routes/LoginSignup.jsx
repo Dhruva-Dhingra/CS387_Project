@@ -26,6 +26,7 @@ class LoginForm extends Component {
 				const requestOptions = {
 						method: 'POST',
 						mode: 'cors',
+						credentials: 'include',
 						headers: {
 								'Accept': 'application/json',
 								'Content-Type': 'application/json'
@@ -34,8 +35,23 @@ class LoginForm extends Component {
 				};
 				console.log('Sending...');
 				const res = await fetch('http://localhost:8080/login', requestOptions)
-				const data = await res.json();
+				let data = await res.json();
 				console.log(data);
+				console.log(data);
+				const reqOpt = {
+						method: 'POST',
+						mode: 'cors',
+						credentials: 'include',
+						headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(this.state),
+				};
+
+				const resp = await fetch('http://localhost:8080/test', reqOpt)
+				const dat = await resp.json();
+				console.log(dat);
 		}
 
 		render() {
