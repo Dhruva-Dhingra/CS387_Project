@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter as BrowserRouter, Routes, Route} from "react-router-dom";
 import { ContextProvider } from './context/Context';
 // import Main from './Main';
-// import LoginSignup from '.routes/login_signup';
+import LoginSignup from './routes/LoginSignup';
 // import Test from '.routes/Test';
 import HomePage from './routes/HomePage';
 import TimelinePage from './routes/TimelinePage';
@@ -48,7 +48,7 @@ return (
 <Route path = "/timeline/:id" element = {<TimelinePage/>}></Route>
 <Route path = "/message/:id" element = {<MessagePage/>}></Route>
 <Route path = "/admin" element = {<WebAdminPage/>}></Route>
-{/* <Route path = '/ls' element = {< LoginSignup />}></Route>  */}
+<Route path = '/ls' element = {< LoginSignup />}></Route> 
 </Routes>
 </BrowserRouter>
 </div>
