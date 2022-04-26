@@ -41,6 +41,11 @@ app.post('/login', async (req, res) => {
 		res.json(ans);
 });
 
+app.get('/messenger', async(req,res)=> {
+	let ans = await get_friends (req,res);
+	console.log('Received response', ans);
+});
+
 // app.post('/signup', (req, res) => {
 // 		console.log('At signup backend!');
 // 		console.log(req.body);

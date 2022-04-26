@@ -15,13 +15,15 @@ export const ContextProvider = (props) => {
     const [dp, setdp] = useState("")
     const [hidden, setprivate] = useState("")
     const [autoadd, setautoadd] = useState("")
+    const [friends, setFriends] = useState("")
     
     return (
         <Context.Provider
             value={{
                 search, setSearchBox,
                 friendRequest, setFriendRequest,
-                text_message, setTextMessage
+                text_message, setTextMessage,
+                friends, setFriends
             }}
         >
             {props.children}
