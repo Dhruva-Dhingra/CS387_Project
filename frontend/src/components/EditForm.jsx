@@ -58,19 +58,19 @@ const EditForm = () => {
                 <input value = {last} onChange={(e) => setlast(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
             </div>
             <div className="col">
-                <input value = {email} onChange={(e) => setemail(e.target.value)} type="text" className='form-control' placeholder='Email-ID'/>
+                <input value = {email} onChange={(e) => setemail(e.target.value)} type="email" className='form-control' placeholder='Email-ID'/>
             </div>
             <div className="col">
-                <input value = {pswd} onChange={(e) => setpswd(e.target.value)} type="number" className='form-control' placeholder='Password'/>
+                <input value = {pswd} onChange={(e) => setpswd(e.target.value)} type="password" className='form-control' placeholder='Password'/>
             </div>
             <div className="col">
-                <input value = {residence} onChange={(e) => setresidence(e.target.value)} type="number" className='form-control' placeholder='Residence'/>
+                <input value = {residence} onChange={(e) => setresidence(e.target.value)} type="text" className='form-control' placeholder='Residence'/>
             </div>
             <div className="col">
-                <input value = {bday} onChange={(e) => setbday(e.target.value)} type="number" className='form-control' placeholder='Birthday'/>
+                <input value = {bday} onChange={(e) => setbday(e.target.value)} type="date" className='form-control' placeholder='Birthday'/>
             </div>
             <div className="col">
-                <input value = {dp} onChange={(e) => setdp(e.target.value)} type="number" className='form-control' placeholder='Profile Picture'/>
+                <input value = {dp} onChange={(e) => setdp(e.target.value)} type="file" className='form-control' placeholder='Profile Picture'/>
             </div>
             <div className="col">
                 <input value = {hidden} onChange={(e) => setprivate(e.target.value)} type="number" className='form-control' placeholder='Hide Account'/>
