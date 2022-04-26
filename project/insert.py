@@ -27,6 +27,7 @@ parser.add_argument("--data")
 args = parser.parse_args()
 
 database = "dbname=" + args.name +" user=" + args.user + " host=" + args.host + " password="+args.pswd+ " port="+args.port
+database = "dbname=" + args.name +" user=" + args.user + " password="+args.pswd+ " port="+args.port
 conn = psycopg2.connect(database)
 c = conn.cursor()
 
@@ -41,11 +42,11 @@ tables = {}
 q1 = "INSERT INTO "
 q2 = " VALUES %s;"
 
-order = ["hobbies.csv", "user.csv", "website_admin.csv"]
+order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv"]
 
 for file in order:
     File = open(args.data+"/"+file, newline='')
-    reader = csv.reader(File, delimiter=',', quotechar='"',quoting=csv.QUOTE_MINIMAL)
+    reader = csv.reader(File, quotechar='"', delimiter=',')
     relation, header = get_data(reader)
 
     header = ", ".join(header)
