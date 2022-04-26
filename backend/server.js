@@ -1,7 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser')
-const cors = require('cors')
+const cookieParser = require('cooke-parser');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
+app.use(cookieParser());
 var corsOptions = {
     origin: 'http://localhost:3000'
 };
@@ -38,6 +40,10 @@ app.post('/signup', async(req, res) => {
 app.post('/login', async (req, res) => {
 		let ans = await login(req, res);
 		console.log('Received response', ans);
+		res.cookie('accessToken', ans.accessToken, {
+				secure: true,
+				httpOnly: true
+		});
 		res.json(ans);
 });
 
