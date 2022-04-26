@@ -5,9 +5,11 @@ import { ContextProvider } from './context/Context';
 import LoginSignup from './routes/LoginSignup';
 // import Test from '.routes/Test';
 import HomePage from './routes/HomePage';
+import EditProfile from './routes/EditProfile';
 import TimelinePage from './routes/TimelinePage';
 import MessagePage from './routes/MessagePage';
 import WebAdminPage from './routes/WebAdminPage';
+
 
 const App = () => {
 	
@@ -45,6 +47,7 @@ return (
 <BrowserRouter>
 <Routes>
 <Route path = "/homepage" element = {<HomePage/>}></Route>
+<Route path = "/editprofile" element = {<EditProfile/>}></Route>
 <Route path = "/timeline/:id" element = {<TimelinePage/>}></Route>
 <Route path = "/message/:id" element = {<MessagePage/>}></Route>
 <Route path = "/admin" element = {<WebAdminPage/>}></Route>

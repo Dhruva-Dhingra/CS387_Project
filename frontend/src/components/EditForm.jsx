@@ -29,7 +29,7 @@ const EditForm = () => {
       const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-          const response = await VenueFinder.post("/", {
+          const response = await HomepageFinder.post("/", {
               first: first,
               last: last,
               email: email,
@@ -37,7 +37,7 @@ const EditForm = () => {
               residence: residence,
               bday: bday,
               dp: dp,
-              private: private,
+             private: hidden,
               autoadd: autoadd
           })
           editForm(response.data.data.venue);
@@ -85,3 +85,5 @@ const EditForm = () => {
       </form>
   </div>;
 }
+
+export default EditForm;
