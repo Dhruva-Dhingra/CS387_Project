@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import MessageFinder from '../apis/MessageFinder';
+import TimelineFinder from '../apis/TimelineFinder';
 import { Context } from '../context/Context';
 
 const Comment = () => {
