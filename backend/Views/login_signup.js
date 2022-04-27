@@ -128,6 +128,7 @@ const login = async (req, res) => {
 						var token = jwt.sign({id: ans['user_id']}, config.secret, {
 							expiresIn: 86400
 						});
+						res.cookie('accessToken', token);
 						res.status(200).json({
 							id: ans['user_id'],
 							email: ans['email'],
