@@ -1,0 +1,19 @@
+# QUERY FOR NUMBER OF FRIENDS FREQUENCY
+
+WITH res as (SELECT User_ID, count(*) as num_friends FROM User, Friend WHERE ((User.User_ID = Sender OR User.User_ID = Receiver) AND Status = 'true') GROUP BY User_ID) SELECT num_friends, count(*) as frequency FROM res GROUP BY num_friends ORDER BY num_friends;
+
+# QUERY FOR NUMBER OF FRIENDS vs LIKES ON POSTS ON AVG
+
+WITH res as (SELECT User_ID, count(*) as num_friends FROM User, Friend WHERE ((User.User_ID = Sender OR User.User_ID = Receiver) AND Status = 'true') GROUP BY User_ID), res2 as (SELECT Post_ID, count(*) as num_likes FROM Reaction WHERE Reaction.Reaction = 0), res3 as (SELECT num_friends, num_likes FROM res, res2, Post WHERE res.User_ID = Post.User_ID AND res2.Post_ID = Post.Post_ID) SELECT num_friends, avg(num_likes) FROM res3 ORDER BY num_friends;
+
+# QUERY FOR HOUR VS POSTS FREQUENCY
+
+WITH res as (SELECT DATEPART(HOUR, Time) as hour FROM Post) SELECT hour, count(*) as hourly_frequency FROM res GROUP BY res ORDER BY hour;
+
+# QUERY PER WEEKDAY VS POSTS FREQUENCY
+
+WITH res as (SELECT EXTRACT(DOW FROM Time) as weekday FROM Post) SELECT weekday, count(*) as weekday_frequency FROM res GROUP BY res ORDER BY weekday;
+
+# QUERY FOR NUMBER OF POSTS PER DAY (For Forecast)
+
+WITH res as (SELECT DATEPART(DAY, Time) as day FROM Post) SELECT day, count(*) as day_frequency FROM res GROUP BY res ORDER BY day;
