@@ -130,17 +130,17 @@ class SignupForm extends Component {
 						<div>
 								<p>Please sign up!</p>
 								<br/>
-								
-								<form onSubmit = {this.handleSubmit}>
+								<form onSubmit = {this.handleSubmit}  class="was-validated">
+							
 									
-										<label>
+										<label class="col-sm-12 controls">
 												Email:
-												<input type = 'text' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
+												<input type = 'text' name = 'email' value = {this.state.email} placeholder = 'Enter email' onChange = {this.handleChange} />
 										</label>
 										<br/>
 										<label>
 												Password:
-												<input type = 'password' name = 'password' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</label>
 										<br/>
 										<input type = 'submit' value ='Submit'></input>
@@ -182,8 +182,9 @@ class LoginSignup extends Component {
 				return (
 						<div>
 						 		{form}
-						 		<button onClick = {this.loginClick}>Login</button>
-						 		<button onClick = {this.signupClick}>Signup</button>
+							
+						 		<button onClick = {this.loginClick} class="btn btn-success">Login</button>
+						 		<button onClick = {this.signupClick} class="btn btn-primary">Signup</button>
 						</div>
 				)
 		}
