@@ -29,6 +29,10 @@ const {
 	get_timeline
 } = require('./Views/timeline');
 
+const {
+	create_post
+} = require('./Views/post');
+
 app.use(function(req, res, next) {
 		res.header('Content-Type', 'application/json')
 		res.header('Access-Control-Allow-Credentials', true)
@@ -108,6 +112,23 @@ app.post('/timeline/:user', async (req, res) => {
 	if(verification){
 		let ans = get_timeline(req, res);
 		console.log(ans);
+		let result = {'verification' : 'success', 'result' : ans};
+		res.json(result);
+	}
+	res.json()
+});
+
+app.post('/create_post', async (req, res) => {
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+		verification = true;
+	}
+	else{
+		verification = false;
+		res.json({'verification': 'failed', 'result' : null})
+	}
+	if(verification){
+		let ans = create_post(req, res);
 		let result = {'verification' : 'success', 'result' : ans};
 		res.json(result);
 	}
