@@ -305,3 +305,18 @@ as
 		where Message.Message_ID = Group_Chat.Message_ID) as intermediate
     where Message_rank <= 50
 ;
+
+create sequence if not exists seq_user_id
+start with 1
+increment by 1;
+alter table AppUser
+alter column User_ID
+set default nextval('seq_user_id');
+
+
+create sequence if not exists seq_message_id
+start with 1
+increment by 1;
+alter table message
+alter column message_id
+set default nextval('seq_message_id');

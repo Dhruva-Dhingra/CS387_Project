@@ -15,8 +15,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 const {
-	auto_user_id,
-    checkIfExists,
+	checkIfExists,
     signup,
     login,
 	verifyToken
@@ -49,8 +48,7 @@ app.post('/test', async (req, res) => {
 
 const PORT = 8080
 app.listen(PORT, async () => {
-		await auto_user_id();
-    console.log(`Server running on port ${PORT}`);
+	console.log(`Server running on port ${PORT}`);
 });
 
 app.post('/signup', async(req, res) => {
