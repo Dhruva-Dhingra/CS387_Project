@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import {Line,Doughnut} from 'react-chartjs-2';
 import { useParams } from "react-router-dom";
 import { Context } from '../context/Context';
+import AdminFinder from '../apis/AdminFinder';
 import { useNavigate } from "react-router-dom";
 
 const WebAdminPage = () => {
