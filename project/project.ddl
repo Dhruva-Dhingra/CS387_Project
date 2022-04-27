@@ -1,3 +1,4 @@
+drop materialized view if exists Last_Time_Conversation_User
 drop materialized view if exists Group_Cached_Messages;
 drop materialized view if exists DM_Cached_Messages;
 drop materialized view if exists Invitations;
@@ -29,6 +30,15 @@ drop table if exists Website_Admin;
 drop table if exists AppUser;
 
 
+drop sequence if exists seq_user_id;
+drop sequence if exists seq_admin_id;
+drop sequence if exists seq_hobby_id;
+drop sequence if exists seq_page_id;
+drop sequence if exists seq_post_id;
+drop sequence if exists seq_status_id;
+drop sequence if exists seq_group_id;
+drop sequence if exists seq_message_id;
+drop sequence if exists seq_comment_id;
 drop sequence if exists inc;
 
 create Table AppUser (
