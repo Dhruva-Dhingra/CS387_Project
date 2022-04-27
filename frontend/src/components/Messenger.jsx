@@ -31,7 +31,7 @@ const Messenger = (props) => {
       <tbody>
           {friends && friends.map(friend => {
               return (
-                <tr onClick={() => handlePostSelect(friend.user_id)} 
+                <tr onClick={() => handleMsgSelect(friend.user_id)} 
                 key={friend.friend_id}>
                   <td>{friend.friend_id}</td>
               </tr>
