@@ -151,9 +151,20 @@ const verifyToken = (token) => {
 	return ver;
 }
 
+const verifyTokenWithUserID = (token, user_id) => {
+	let ver = jwt.verify(token, config.secret);
+	console.log(ver);
+	if(ver.id != user_id){
+		return false;
+	} else {
+		return true;
+	}
+}
+
 module.exports = {
     checkIfExists,
     signup,
     login,
 	verifyToken,
+	verifyTokenWithUserID,
 }

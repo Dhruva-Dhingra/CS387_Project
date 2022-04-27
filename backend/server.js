@@ -18,7 +18,7 @@ const {
     signup,
     login,
 	verifyToken,
-
+	verifyTokenWithUserID,
 } = require('./Views/login_signup');
 
 const {
@@ -119,6 +119,7 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/homepage', async (req, res) => {
+	console.log("Get Homepage");
 	let verification = false;
 	if (verifyToken(req.cookies.accessToken)){
 		verification = true;
@@ -152,7 +153,8 @@ app.post('/timeline/:user', async (req, res) => {
 
 app.post('/create_post', async (req, res) => {
 	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
+	let user_id = req.body.user_id;
+	if (verifyTokenWithUserID(req.cookies.accessToken, user_id)){
 		verification = true;
 	}
 	else{
