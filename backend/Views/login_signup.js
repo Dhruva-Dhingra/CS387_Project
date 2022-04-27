@@ -11,9 +11,6 @@ var database = process.env.DATABASE;
 var password = process.env.PASSWORD;
 var port = process.env.PORT;
 
-
-console.log(user, host, database, password, port);
-
 const pool = new Pool({
     user: user,
     host: host,

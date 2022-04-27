@@ -45,10 +45,10 @@ const sync_graphdb = async (user_arr, friend_arr) => {
 				user_ans = user_ans.rows.map((el) => el.user_id);
 				user_diff = user_ans.filter((el) => !user_arr.includes(el));
 				console.log('New users:', user_diff);
-				let query = [];
+				let queries = [];
 				for (let user of user_diff) {
 						console.log('User', user);
-						query.push(`CREATE (n: User {ID: ${user}})`);
+						queries.push(`CREATE (n: User {ID: ${user}});`);
 				}
 				console.log("New users' queries done");
 				let friend_ans = await pool.query(`
@@ -57,17 +57,20 @@ from Friend
 where Status  
 `);
 				friend_ans = friend_ans.rows.map((el) => [el.sender, el.acceptor]);
-				console.log('GraphDB sync:', query);
+				console.log('GraphDB sync:', queries);
 				friend_diff = friend_ans.filter((el) => !friend_arr.includes(el));
 				console.log('New friends:', friend_diff);
 				for (let friend of friend_diff) {
-						query.push(`MATCH (n: User {ID: ${friend[0]}}), (m: User {ID: ${friend[1]}}) CREATE (n)-[FRIEND]->(m)`)
+						queries.push(`MATCH (n: User {ID: ${friend[0]}}), (m: User {ID: ${friend[1]}}) CREATE (n)-[:FRIEND]->(m);`)
 				}
-				query = query.join('\n');
-				console.log('GraphDB sync:', query);
-				const res = await session.run(query);
+				for (let query of queries) {
+						let res = await session.run(query);
+				}
 				console.log('Syncing done');
-				return {'user_arr': user_ans, 'friend_arr': friend_ans};
+				let result = {
+						'user_arr': user_ans, 'friend_arr': friend_ans
+				};
+				return result;
 		} catch (err) {
 				return err.stack;
 		}
