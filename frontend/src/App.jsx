@@ -7,7 +7,8 @@ import LoginSignup from './routes/LoginSignup';
 import HomePage from './routes/HomePage';
 import EditProfile from './routes/EditProfile';
 import TimelinePage from './routes/TimelinePage';
-import Messenger from './components/Messenger';
+// import Messenger from './components/Messenger';
+import MessageBasePage from './routes/MessageBasePage';
 import WebAdminPage from './routes/WebAdminPage';
 import NotifPage from './routes/NotifPage';
 
@@ -26,7 +27,7 @@ return (
 <div className="collapse navbar-collapse" id="navbarResponsive">
 <ul className="navbar-nav ms-auto">
 <li className="nav-item active">
-<a className="nav-link" href="http://localhost:3000/messenger">Messenger</a>
+<a className="nav-link" href="http://localhost:3000/messenger">MessageBasePage</a>
 </li>
 <li className="nav-item">
 <a className="nav-link" href="http://localhost:3000/requests">Friend Requests</a>
@@ -50,7 +51,7 @@ return (
 <Route path = "/homepage" element = {<HomePage/>}></Route>
 <Route path = "/editprofile" element = {<EditProfile/>}></Route>
 <Route path = "/timeline/:id" element = {<TimelinePage/>}></Route>
-<Route path = "/messenger/:id" element = {<Messenger/>}></Route>
+<Route path = "/messenger/:id" element = {<MessageBasePage/>}></Route>
 <Route path = "/admin" element = {<WebAdminPage/>}></Route>
 <Route path = "/notif" element = {<NotifPage/>}></Route>
 <Route path = '/ls' element = {< LoginSignup />}></Route> 

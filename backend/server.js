@@ -13,18 +13,19 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
-
 const {
 	checkIfExists,
     signup,
     login,
-	verifyToken
+	verifyToken,
+
 } = require('./Views/login_signup');
 
 const {
 		get_invitations,
 		sync_graphdb,
 		get_recommendations,
+		get_friends,
 } = require('./Views/friends');
 
 const {
@@ -43,6 +44,7 @@ const {
 	send_message,
 	display_chat,
 	last_message_list,
+	
 } = require('./Views/message');
 
 app.use(function(req, res, next) {
@@ -163,7 +165,9 @@ app.post('/create_post', async (req, res) => {
 app.get('/messenger', async(req,res)=> {
 
 	console.log('Received request');
-	console.log(req.params.id);
+	// console.log(req.params.id);
+	let id1  = req.cookies.user_id;
+	console.log(id1);
 	let ans = await get_friends (req,res);
 	console.log('Received response', ans);
 });

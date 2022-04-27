@@ -22,13 +22,12 @@ const Messenger = (props) => {
 								'Accept': 'application/json',
 								'Content-Type': 'application/json'
 						},
-						body: `id=${1}`,
+						// body: `id=${1}`,
 				};
 				console.log(requestOptions);
-			    const res =  await MessageFinder.fetch(
-                    '/',
+			    const res =  await fetch(
+                    'http://localhost:8080/messenger',
                     requestOptions); // TODO : add id as request parameter
-                // let data = await res.json();
                 console.log("received response from backend");
                 console.log(res.data);
                 setFriends(res.data.data.friends);
@@ -39,7 +38,8 @@ const Messenger = (props) => {
    },[]) 
 
    const handleFriendSelect = (id2) => {
-    navigate(`messenger/${id2}`); // TODO
+       let id1  = document.cookie ['user_id']
+    navigate(`messenger/${id1}/${id2}`); // TODO
   };
 
     return (
