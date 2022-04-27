@@ -23,20 +23,30 @@ const session = driver.session();
 
 const get_invitations = async (user_id) => {
 		try {
-				let acceptor_id = user_id
+				console.log('In invitations code');
+				let acceptor_id = user_id;
+				console.log('Checking invitations for', acceptor_id);
 				let ans = await pool.query(`
-select AppUser.User_ID, AppUser.First_Name, AppUser.Last_Name, AppUser.Roll_Number
+-- select AppUser.User_ID, AppUser.First_Name, AppUser.Last_Name, AppUser.Roll_Number
+select AppUser.User_ID
 from AppUser, Invitations
 where Invitations.Sender = AppUser.User_ID
 and Invitations.Acceptor = ${acceptor_id};
 `
 				);
 				console.log(ans.rows);
+				return ans.rows;
 		} catch (err) {
 				return err.stack;
 		}
 }
 
+const checkArray = (arr, arrays) => {
+		for (let array of arrays) {
+				if (arr[0] == array[0] && arr[1] == array[1]) return true;
+		}
+		return false;
+}
 const sync_graphdb = async (user_arr, friend_arr) => {
 		try {
 				console.log('Here in syncing function');
@@ -50,18 +60,17 @@ const sync_graphdb = async (user_arr, friend_arr) => {
 						console.log('User', user);
 						queries.push(`CREATE (n: User {ID: ${user}});`);
 				}
-				console.log("New users' queries done");
 				let friend_ans = await pool.query(`
 select Sender, Acceptor
 from Friend
 where Status  
 `);
-				friend_ans = friend_ans.rows.map((el) => [el.sender, el.acceptor]);
-				console.log('GraphDB sync:', queries);
-				friend_diff = friend_ans.filter((el) => !friend_arr.includes(el));
+				friend_ans = friend_ans.rows.map((el) => JSON.stringify(el));
+				friend_diff = friend_ans.filter((el) => friend_arr.indexOf(el) == -1);
 				console.log('New friends:', friend_diff);
 				for (let friend of friend_diff) {
-						queries.push(`MATCH (n: User {ID: ${friend[0]}}), (m: User {ID: ${friend[1]}}) CREATE (n)-[:FRIEND]->(m);`)
+						friend = JSON.parse(friend);
+						queries.push(`MATCH (n: User {ID: ${friend.sender}}), (m: User {ID: ${friend.acceptor}}) CREATE (n)-[:FRIEND]->(m);`)
 				}
 				for (let query of queries) {
 						let res = await session.run(query);
@@ -81,31 +90,52 @@ const get_recommendations = async (user_id) => {
 				console.log('Getting recommendations!');
 				let ans = await pool.query(`
 with linked as (
-select Sender from Friend where Acceptor = ${user_id}
+select Sender as user_id from Friend where Acceptor = ${user_id}
 union
-select Acceptor from Friend where Sender = ${user_id}
-)
+select Acceptor as user_id from Friend where Sender = ${user_id}
+union
+select User_ID from AppUser where User_ID = ${user_id}
+),
+res as (
 select User_ID
 from AppUser
-where User_ID not in linked
+except 
+select user_id from linked)
+select * from res
 order by random()
-limit 10;
+limit 20;
 `);
 				console.log('SQL query run');
-				let wildcard = ans.rows();
-				console.log(wildcard);
+				let wildcard = ans.rows;
+				wildcard = wildcard.map((el) => el.user_id);
 
-				query = `MATCH p = (n: User {id: 1})-[*2..3]-(m: User)
+				query = `MATCH p = (n: User {ID: ${user_id}})-[*2..3]-(m: User)
 UNWIND NODES(p) as nd
 WITH p, size(collect(distinct(nd))) as distinctlen, m, size((m)--()) as degree
 where distinctlen = length(p) + 1
 WITH m, 1.0 * degree / (distinctlen - 1) as factor
-WHERE factor >= 1.5
-RETURN m.id, factor
+WHERE factor >= 1
+RETURN m.ID as id, factor
 order by factor desc`;
 				let res = await session.run(query);
-				console.log(res.records);
-
+				res = res.records.map((el) => (el.get('id').low).toString());
+				res.push.apply(res, wildcard);
+				console.log(res);
+				res = res.filter((el, index) => res.indexOf(el) === index);
+				res = res.slice(0, 20);
+				ret = []
+				for (let result of res) {
+						console.log(result);
+						let ans = await pool.query(`
+select AppUser.User_ID
+from AppUser
+where User_ID = ${result}
+`);
+						console.log(ans.rows);
+						ret.push(ans.rows[0]);
+				}
+				console.log(ret);
+				return ret;
 		} catch (err) {
 				return err.stack;
 		}
@@ -133,9 +163,19 @@ const get_friends  = async (req, res) => {
     }
 }
 
+const reset_graph = async () => {
+		try {
+				let query = 'MATCH (n: User) detach delete n;';
+				let res = await session.run(query);
+				return res;
+		} catch (err) {
+				return err.stack;
+		}
+}
 module.exports = {
 		get_invitations,
 		sync_graphdb,
 		get_recommendations,
 		get_friends,
+		reset_graph,
 }

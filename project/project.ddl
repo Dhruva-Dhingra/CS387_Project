@@ -293,6 +293,8 @@ as
 	where not Status) as intermediate
 	where Invitation_Rank <= 20
 ;
+create unique index on Invitations (Sender, Acceptor);
+refresh materialized view concurrently Invitations;
 
 Create Materialized View DM_Cached_Messages
 as
