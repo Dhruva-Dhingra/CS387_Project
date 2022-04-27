@@ -40,17 +40,16 @@ class LoginForm extends Component {
 				console.log(data);
 				console.log(data);
 				const reqOpt = {
-						method: 'POST',
+						method: 'GET',
 						mode: 'cors',
 						credentials: 'include',
 						headers: {
 								'Accept': 'application/json',
 								'Content-Type': 'application/json'
 						},
-						body: JSON.stringify(this.state),
 				};
 
-				const resp = await fetch('http://localhost:8080/test', reqOpt)
+				const resp = await fetch('http://localhost:8080/friends/recommendations', reqOpt)
 				const dat = await resp.json();
 				console.log(dat);
 		}

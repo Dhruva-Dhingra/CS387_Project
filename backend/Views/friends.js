@@ -67,6 +67,7 @@ where Status
 
 const get_recommendations = async (user_id) => {
 		try {
+				console.log('Getting recommendations!');
 				let ans = await pool.query(`
 with linked as (
 select Sender from Friend where Acceptor = ${user_id}
@@ -79,6 +80,7 @@ where User_ID not in linked
 order by random()
 limit 10;
 `);
+				console.log('SQL query run');
 				let wildcard = ans.rows();
 				console.log(wildcard);
 

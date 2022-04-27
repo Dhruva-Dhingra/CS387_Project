@@ -149,7 +149,8 @@ app.get('/messenger', async(req,res)=> {
 	console.log('Received response', ans);
 });
 
-app.post('/friends/recommendations', async(req, res) => {
+app.get('/friends/recommendations', async(req, res) => {
+		console.log('In recommendations endpoint');
 		let verification = false;
 		if (verifyToken(req.cookies.accessToken)){
 				verification = true;
@@ -160,7 +161,8 @@ app.post('/friends/recommendations', async(req, res) => {
 		}
 		console.log(req.body);
 		if (verification) {
-				let user_id = req.body.user_id;
+				let user_id = req.cookies.user_id;
+				console.log('Recommendations: verified, user_id -', user_id);
 				get_recommendations(user_id);
 		}
 });
