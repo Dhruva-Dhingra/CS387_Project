@@ -51,7 +51,6 @@ set default nextval('inc');
 
 const checkIfExists = async (email) => {
 		console.log('Checking if user exists');
-		console.log(email);
     try {
 				let res = await pool.query(
 						`
@@ -83,7 +82,8 @@ const signup = async (req, res) => {
 				// let branch = req.body.branch;
 				// let degree = req.body.degree;
 				// let batch = req.body.batch;
-				let password = bcrypt.hashSync(req.body.password, 8);
+				// let password = bcrypt.hashSync(req.body.password, 8);
+				let password = req.body.password;
 				// let residence = req.body.residence;
 				// let bday = req.body.bday;
 				// let sgndate = new Date();
@@ -117,7 +117,6 @@ const login = async (req, res) => {
 		console.log('Trying to login in backend');
     try {
 				email = req.body.email;
-				console.log(email)
 				password = req.body.password;
         const user_details = await pool.query(
 						`
@@ -136,12 +135,11 @@ where Email = $1
 				};
 				ans = user_details.rows[0];
 				refpswd = ans['hash_of_password'];
-				console.log(password);
-				console.log(refpswd);
 				console.log(ans);
 				// var isValid = bcrypt.compareSync(bcrypt.hash(password), refpswd);
-				var isValid = password == refpswd;
-				console.log(isValid);
+				var isValid = (password.localeCompare(refpswd)) == 0;
+				console.log(password, '==', refpswd)
+				console.log('isValid:', isValid);
 				if (!isValid) {
 						console.log('Invalid password');
 						return {
@@ -158,7 +156,7 @@ where Email = $1
 						return {
 								id: ans['user_id'],
 								email: ans['email'],
-								accessToken: token
+								accessToken: token,
 						};
 				} 
     } catch (err) {
@@ -174,29 +172,6 @@ const verifyToken = (token) => {
 		console.log(ver);
 		return ver;
 	}
-		
-const get_friends  = async (req, res) => {
-	console.log('Fetch friends');
-	try {
-		// let user_id = req.user_id; // TODO
-		let user_id = 1;
-		const friends = await db.query(`with actual_friends as (
-			(select friend.acceptor a from friend where friend.accept_time is not null and friend.sender = $1)
-			union
-			(select  friend.sender a from friend where friend.accept_time is not null  and friend.acceptor = $1)
-		)  select first_name, last_name , profile_picture from appuser, actual_friends where  a = appuser.user_id`, [user_id]);
-		console.log(friends);
-        res.status(200).json({
-            status: "success",
-            data: {
-               friends : friends
-            }     
-        });
-	   } 
-	catch (err) {
-        return err.stack;
-    }
-}
 
 module.exports = {
 		auto_user_id,
@@ -204,5 +179,4 @@ module.exports = {
     signup,
     login,
 		verifyToken,
-	get_friends
 }

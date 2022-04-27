@@ -36,6 +36,7 @@ class LoginForm extends Component {
 				console.log('Sending...');
 				const res = await fetch('http://localhost:8080/login', requestOptions)
 				let data = await res.json();
+				document.cookie = `user_id=${data.id}`;
 				console.log(data);
 				console.log(data);
 				const reqOpt = {

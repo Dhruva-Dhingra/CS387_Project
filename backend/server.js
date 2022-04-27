@@ -23,6 +23,12 @@ const {
 } = require('./Views/login_signup');
 
 const {
+		get_invitations,
+		sync_graphdb,
+		get_recommendations,
+} = require('./Views/friends');
+
+const {
 	get_homepage_posts
 } = require('./Views/homepage');
 
@@ -93,6 +99,38 @@ app.post('/homepage', async (req, res) => {
 app.get('/messenger', async(req,res)=> {
 	let ans = await get_friends (req,res);
 	console.log('Received response', ans);
+});
+
+app.post('/friends/recommendations', async(req, res) => {
+		let verification = false;
+		if (verifyToken(req.cookies.accessToken)){
+				verification = true;
+		}
+		else{
+				verification = false;
+				res.json({'verification': 'failed', 'result' : null})
+		}
+		console.log(req.body);
+		if (verification) {
+				let user_id = req.body.user_id;
+				get_recommendations(user_id);
+		}
+});
+
+app.post('/friends/invitations', async(req, res) => {
+		let verification = false;
+		if (verifyToken(req.cookies.accessToken)){
+				verification = true;
+		}
+		else{
+				verification = false;
+				res.json({'verification': 'failed', 'result' : null})
+		}
+		console.log(req.body);
+		if (verification) {
+				let user_id = req.body.user_id;
+				get_invitations(user_id);
+		}
 });
 
 // app.post('/signup', (req, res) => {

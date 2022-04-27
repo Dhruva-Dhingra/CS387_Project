@@ -1,4 +1,5 @@
-const neo4j = require('neo4j-driver')
+const neo4j = require('neo4j-driver');
+const nconf = require('nconf');
 const Pool = require('pg').Pool;
 require('dotenv').config();
 
@@ -16,12 +17,13 @@ const pool = new Pool({
     port: port
 });
 
-const driver = neo4j.driver(nconf.get('neo4j-locl'), neo4j.auth.basic(nconf.get('USERNAME'), nconf.get('PASSWORD')));
+const driver = neo4j.driver("neo4j://localhost:7687", neo4j.auth.basic("neo4j", "neo4j"));
+console.log('Connected to neo4j');
 const session = driver.session();
 
-const get_invitations = async (req, res) => {
+const get_invitations = async (user_id) => {
 		try {
-				let acceptor_id = req.body.user_id
+				let acceptor_id = user_id
 				let ans = await pool.query(`
 select AppUser.User_ID, AppUser.First_Name, AppUser.Last_Name, AppUser.Roll_Number
 from AppUser, Invitations
@@ -56,12 +58,14 @@ where Status
 				}
 				query.join('\n');
 				console.log('GraphDB sync:', query);
-				const res = session.run(query);
+				const res = await session.run(query);
 				return ans;
+		} catch (err) {
+				return err.stack;
 		}
 }
 
-const get_recommendations = async () => {
+const get_recommendations = async (user_id) => {
 		try {
 				let ans = await pool.query(`
 with linked as (
@@ -82,11 +86,43 @@ limit 10;
 UNWIND NODES(p) as nd
 WITH p, size(collect(distinct(nd))) as distinctlen, m, size((m)--()) as degree
 where distinctlen = length(p) + 1
-RETURN m.id, 1.0 * degree / (distinctlen - 1) as factor
-order by factor desc;
-`;
-				let res = session.run(query);
-				conosole.log(res.records);
+WITH m, 1.0 * degree / (distinctlen - 1) as factor
+WHERE factor >= 1.5
+RETURN m.id, factor
+order by factor desc`;
+				let res = await session.run(query);
+				console.log(res.records);
 
+		} catch (err) {
+				return err.stack;
 		}
+}
+		
+const get_friends  = async (req, res) => {
+	console.log('Fetch friends');
+	try {
+		// let user_id = req.user_id; // TODO
+		let user_id = 1;
+		const friends = await db.query(`with actual_friends as (
+			(select friend.acceptor a from friend where friend.accept_time is not null and friend.sender = $1)
+			union
+			(select  friend.sender a from friend where friend.accept_time is not null  and friend.acceptor = $1)
+		)  select first_name, last_name , profile_picture from appuser, actual_friends where  a = appuser.user_id`, [user_id]);
+		console.log(friends);
+        res.status(200).json({
+            status: "success",
+            data: {
+               friends : friends
+            }     
+        });
+	   } catch (err) {
+        return err.stack;
+    }
+}
+
+module.exports = {
+		get_invitations,
+		sync_graphdb,
+		get_recommendations,
+		get_friends,
 }
