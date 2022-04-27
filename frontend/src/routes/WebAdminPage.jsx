@@ -1,5 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import {Line,Doughnut} from 'react-chartjs-2';
+import { Chart as ChartJS } from 'chart.js/auto'
+import { Chart }            from 'react-chartjs-2'
 import { useParams } from "react-router-dom";
 import { Context } from '../context/Context';
 import AdminFinder from '../apis/AdminFinder';
@@ -13,32 +15,24 @@ const WebAdminPage = () => {
     useEffect( ()=> {
          const fetchData = async () => {
              try {
-              
                  const response = await  AdminFinder.get("/");
-                 console.log(response.data);
                  const arr1 = response.data.map(x => x.num_friends);
                  const arr2 = response.data.map(x => x.frequency);
-                 console.log(response.data);
-                 console.log(response.data);
                  SL1(arr1);
                  SD1(arr2);
-                 console.log(SL1);
-                 console.log(L1);
-                //  SL2(response.data.data[0]);
-                //  SD2(response.data.data[1]);
              } catch (err) {console.log(err.stack);}
          }
           fetchData();
-    },[]) 
+    },[L1, SL1, D1, SD1]) 
     
     
     return (
 <div>Welcome to InstiGram
 
 {/* NUMBER OF FRIENDS VS FREQUENCY */}
-{/* <Line
+<Line
       data = {{
-                 labels: L1.map((B) => B.num_friends),
+                 labels: L1,
                  type: 'line',
                  datasets : [
                  {
@@ -49,7 +43,7 @@ const WebAdminPage = () => {
                   backgroundColor: 'rgb(54, 162, 235)',
                   borderWidth: 2,
                   pointRadius: 0,
-                data: D1.map ((A) => A.frequency)
+                data: D1
                     }],}}
       options = {{plugins:{title:{
         display:true,
@@ -59,7 +53,7 @@ const WebAdminPage = () => {
       legend:{
         display:true,
         position:'top'
-      },}}}/> */}
+      },}}}/>
 
 {/* NUMBER OF FRIENDS VS AVG NUMBER OF LIKES */}
 {/* <Line

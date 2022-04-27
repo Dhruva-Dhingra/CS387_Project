@@ -11,6 +11,7 @@ const DisplayPostHomepage = () => {
          const fetchData = async () => {
              try {
                  const response = await  HomepageFinder.get("/");
+                 console.log(response.data);
                  setPost(response.data.data.result);
              } catch (err) {}
          }
