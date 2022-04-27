@@ -15,13 +15,20 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 const {
-		auto_user_id,
+	auto_user_id,
     checkIfExists,
     signup,
     login,
-		verifyToken,
-		get_friends
+	verifyToken
 } = require('./Views/login_signup');
+
+const {
+	get_homepage_posts
+} = require('./Views/homepage');
+
+const {
+	get_timeline
+} = require('./Views/timeline');
 
 app.use(function(req, res, next) {
 		res.header('Content-Type', 'application/json')
@@ -34,10 +41,10 @@ app.use(function(req, res, next) {
 })
 
 app.post('/test', async (req, res) => {
-		if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
-		else res.json({'result': 'failed'})
-		console.log(req.body);
-		console.log(req.cookies);
+	if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
+	else res.json({'result': 'failed'})
+	console.log(req.body);
+	console.log(req.cookies);
 });
 
 const PORT = 8080
@@ -54,6 +61,7 @@ app.post('/signup', async(req, res) => {
 });
 
 app.post('/login', async (req, res) => {
+		console.log(req.body);
 		let ans = await login(req, res);
 		console.log('Received response', ans);
 		res.cookie('accessToken', ans.accessToken, {
@@ -62,6 +70,50 @@ app.post('/login', async (req, res) => {
 		});
 		res.json(ans);
 		// console.log('JSON response sent');
+});
+
+app.post('/homepage', async (req, res) => {
+	console.log('Getting Homepage Posts');
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+		verification = true;
+	}
+	else{
+		verification = false;
+		res.json({'verification': 'failed', 'result' : null})
+	}
+	console.log(req.body);
+	console.log(req.cookies);
+	console.log("Called Post Homepage");
+	if(verification){
+		let ans = get_homepage_posts(req, res);
+		console.log(ans);
+		let result = {'verification' : 'success', 'result' : ans};
+		res.json(result);
+	}
+	res.json()
+});
+
+app.post('/timeline/:user', async (req, res) => {
+	console.log('Getting Timeline Posts');
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+		verification = true;
+	}
+	else{
+		verification = false;
+		res.json({'verification': 'failed', 'result' : null})
+	}
+	console.log(req.body);
+	console.log(req.cookies);
+	console.log("Called Post Timeline");
+	if(verification){
+		let ans = get_timeline(req, res);
+		console.log(ans);
+		let result = {'verification' : 'success', 'result' : ans};
+		res.json(result);
+	}
+	res.json()
 });
 
 app.get('/messenger', async(req,res)=> {
