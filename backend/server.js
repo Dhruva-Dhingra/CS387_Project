@@ -58,7 +58,7 @@ app.use(function(req, res, next) {
 		next()
 })
 
-let moreseconds = 500;
+let seconds = 500 * 1000;
 let user_arr = [];
 let friend_arr = [];
 setTimeout(async () => {
@@ -78,7 +78,7 @@ setInterval(async () => {
 		friend_arr = uf.friend_arr;
 		console.log('friend_arr =', friend_arr);
 		console.log('user_arr =', user_arr);
-}, moreseconds * 1000);
+}, seconds);
 
 app.post('/test', async (req, res) => {
 	if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
@@ -94,21 +94,18 @@ app.listen(PORT, async () => {
 
 app.post('/signup', async(req, res) => {
 		let ex = await checkIfExists(req.body.email);
-		if (!ex)
+		if (!ex){
 				signup(req, res);
-		else console.log('Could not sign up!');
+		}
+		else{
+			console.log('Could not sign up!');
+			res.status(400).json({"status" : "failure"});
+	}
 });
 
 app.post('/login', async (req, res) => {
 		console.log(req.body);
-		let ans = await login(req, res);
-		console.log('Received response', ans);
-		res.cookie('accessToken', ans.accessToken, {
-				secure: true,
-				httpOnly: true
-		});
-		res.json(ans);
-		// console.log('JSON response sent');
+		login(req, res);
 });
 
 app.post('/homepage', async (req, res) => {

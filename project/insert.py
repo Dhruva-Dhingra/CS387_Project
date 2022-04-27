@@ -43,9 +43,10 @@ tables = {}
 q1 = "INSERT INTO "
 q2 = " VALUES %s;"
 
-order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv"]
+order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv", "Friend.csv"]
 
 for file in order:
+    print(file)
     File = open(args.data+"/"+file, newline='')
     reader = csv.reader(File, quotechar='"', delimiter=',')
     relation, header = get_data(reader)
