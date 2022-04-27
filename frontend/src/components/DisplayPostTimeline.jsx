@@ -1,16 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
-import HomepageFinder from '../apis/HomepageFinder';
+import TimelineFinder from '../apis/TimelineFinder';
 import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
 
-const DisplayPost = () => {
+const DisplayPostTimeline = () => {
 
     const {posts, setPost} = useContext(Context)
     let history = useNavigate();
     useEffect( ()=> {
          const fetchData = async () => {
              try {
-                 const response = await  HomepageFinder.get("/");
+                 const response = await  TimelineFinder.get("/");
                  setPost(response.data.data.result);
              } catch (err) {}
          }
@@ -19,7 +19,7 @@ const DisplayPost = () => {
     },[]) 
     
     const handlePostSelect = (id) => {
-        history.push(`/homepage/${id}`);
+        history.push(`/timeline/${id}`);
       };
 
     return <div className='list-group'>
@@ -46,4 +46,4 @@ const DisplayPost = () => {
 
 };
 
-export default DisplayPost;
+export default DisplayPostTimeline;
