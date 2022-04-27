@@ -168,6 +168,7 @@ const verifyToken = (token) => {
 		});
 		console.log(ver);
 		return ver;
+	}
 		
 const get_friends  = async (req, res) => {
 	console.log('Fetch friends');
