@@ -29,6 +29,7 @@ args = parser.parse_args()
 database = "dbname=" + args.name +" user=" + args.user + " host=" + args.host + " password="+args.pswd+ " port="+args.port
 database = "dbname=" + args.name +" user=" + args.user + " password="+args.pswd+ " port="+args.port
 conn = psycopg2.connect(database)
+#conn =psycopg2.connect(database="projectdb", user="postgres" , password = "1234" , host="127.0.0.1")
 c = conn.cursor()
 
 ddl_file = open(args.ddl)
