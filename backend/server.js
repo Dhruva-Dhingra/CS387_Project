@@ -39,6 +39,12 @@ const {
 	create_post
 } = require('./Views/post');
 
+const {
+	send_message,
+	display_chat,
+	last_message_list,
+} = require('./Views/message');
+
 app.use(function(req, res, next) {
 		res.header('Content-Type', 'application/json')
 		res.header('Access-Control-Allow-Credentials', true)

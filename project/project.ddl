@@ -306,6 +306,23 @@ as
     where Message_rank <= 50
 ;
 
+create Materialized View Last_Time_Conversation_User
+as
+  with single_directional_view as
+    (select Message.Content, Message.Time, user_1, user_2
+    from (
+      select Message.Content as content, Message.Time as time, Private_Chat.Sender_ID as user_1, Private_Chat.Receiver_ID as user_2, rank() over (Partition over Sender_ID, Receiver_ID order by (Message.Time, Sender_ID, Receiver_ID) as message_rank
+      from 
+      Message, Private_Chat
+    )
+    where
+    rank <= 1
+    )
+  (select content, time, user_1, user_2 from single_directional_view)
+  union
+  (select content, time, user_2, user_1 from single_directional_view)
+;
+
 create sequence if not exists seq_user_id
 start with 1
 increment by 1;

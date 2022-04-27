@@ -57,7 +57,29 @@ const display_chat = async (req,res) =>{
     }
 }
 
-			
+const last_message_list = async (req, res) => {
+  console.log('Getting Message List')
+  try {
+      
+      let user_id = req.body.user_id;
+      let ans = await pool.query(
+                       `
+                       select message, content, time, user_1, user_2
+                       from
+                       Last_Time_Conversation_User
+                       where 
+                       user_1 = $1;
+                       `
+                       , [user_id]);
+      return ans.rows;
+  }
+  catch (err) {
+  return err.stack;
+  }
+}
+
 module.exports = {
 	send_message,
+  display_chat,
+  last_message_list,
 }
