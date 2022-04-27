@@ -104,7 +104,7 @@ const get_friends  = async (req, res) => {
 	console.log('Fetch friends');
 	try {
 		// let user_id = req.user_id; // TODO
-		let user_id = 1;
+		let user_id = req.cookies.user_id;
 		const friends = await db.query(`with actual_friends as (
 			(select friend.acceptor a from friend where friend.accept_time is not null and friend.sender = $1)
 			union
