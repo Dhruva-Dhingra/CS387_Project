@@ -142,17 +142,17 @@ const login = async (req, res) => {
 }
 
 const verifyToken = (token) => {
-		let ver = jwt.verify(token, config.secret, (err, verified) => {
-				if (err) return false;
-				return true;
-		});
-		console.log(ver);
-		return ver;
-	}
+	let ver = jwt.verify(token, config.secret, (err, verified) => {
+			if (err) return false;
+			return true;
+	});
+	console.log(ver);
+	return ver;
+}
 
 module.exports = {
     checkIfExists,
     signup,
     login,
-		verifyToken,
+	verifyToken,
 }
