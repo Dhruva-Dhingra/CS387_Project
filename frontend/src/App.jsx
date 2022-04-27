@@ -9,6 +9,7 @@ import EditProfile from './routes/EditProfile';
 import TimelinePage from './routes/TimelinePage';
 import MessagePage from './routes/MessagePage';
 import WebAdminPage from './routes/WebAdminPage';
+import NotifPage from './routes/NotifPage';
 
 
 const App = () => {
@@ -51,6 +52,7 @@ return (
 <Route path = "/timeline/:id" element = {<TimelinePage/>}></Route>
 <Route path = "/message/:id" element = {<MessagePage/>}></Route>
 <Route path = "/admin" element = {<WebAdminPage/>}></Route>
+<Route path = "/notif" element = {<NotifPage/>}></Route>
 <Route path = '/ls' element = {< LoginSignup />}></Route> 
 </Routes>
 </BrowserRouter>
