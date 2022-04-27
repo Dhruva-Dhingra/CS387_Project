@@ -19,7 +19,8 @@ const {
     checkIfExists,
     signup,
     login,
-		verifyToken
+		verifyToken,
+		get_friends
 } = require('./Views/login_signup');
 
 app.use(function(req, res, next) {
@@ -64,6 +65,9 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/messenger', async(req,res)=> {
+
+	console.log('Received request');
+	console.log(req.params.id);
 	let ans = await get_friends (req,res);
 	console.log('Received response', ans);
 });

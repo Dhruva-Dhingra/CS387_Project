@@ -179,7 +179,7 @@ const get_friends  = async (req, res) => {
 			(select friend.acceptor a from friend where friend.accept_time is not null and friend.sender = $1)
 			union
 			(select  friend.sender a from friend where friend.accept_time is not null  and friend.acceptor = $1)
-		)  select first_name, last_name , profile_picture from appuser, actual_friends where  a = appuser.user_id`, [user_id]);
+		)  select first_name, last_name , ENCODE(profile_picture, 'base64') as dp from appuser, actual_friends where  a = appuser.user_id`, [user_id]);
 		console.log(friends);
         res.status(200).json({
             status: "success",
