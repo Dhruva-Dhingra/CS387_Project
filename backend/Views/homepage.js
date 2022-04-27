@@ -1,11 +1,37 @@
+const Pool = require('pg').Pool;
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const config = require('../config/auth.config')
+require('dotenv').config();
+
+var user = process.env.USR;
+var host = process.env.HOST;
+var database = process.env.DATABASE;
+var password = process.env.PASSWORD;
+var port = process.env.PORT;
+
+
+console.log(user, host, database, password, port);
+
+const pool = new Pool({
+    user: user,
+    host: host,
+    database: database,
+    password: password,
+    port: port
+});
+
+console.log('Pool made');
+
+
 const get_homepage_posts = async (req, res) => {
     try {
-        res = {'result' : null};
+        let result = {'result' : null};
         let user_id = req.body.user_id;
         let start = req.body.start;
         let end = req.body.end;
-        let materialised_view_start = max(start, 21);
-        let materialised_view_end = min(20, end);
+        let materialised_view_start = start > 21 ? 21 : start;
+        let materialised_view_end = end < 20 ? end : 20;
         
         let materialised_view_ans = pool.query(
             `select homepage_user, post_id, poster_page_id, poster_user_id, content_type, content, time
@@ -13,13 +39,12 @@ const get_homepage_posts = async (req, res) => {
                 select homepage_user, post_id, poster_page_id, poster_user_id, content_type, content, time, rank() over (order by time asc) as post_rank
                 from Homepage
                 where homepage_user = $1
-            )
-            where post_rank between $2 and $3`
+            ) as temp
+            where post_rank between $2 and $3`,
             [user_id, materialised_view_start, materialised_view_end]
         );
-
         if(start > 20){        
-        ans = pool.query(
+        let ans = pool.query(
             `with actual_friends as (
                 (select Friend.Sender a, Friend.Acceptor b from Friend where Friend.Accept_Time is not null and Friend.Sender = $1)
                 union
@@ -41,17 +66,17 @@ const get_homepage_posts = async (req, res) => {
                         (select Follower.Page_ID from Follower where Follower.User_ID = $1)
                 )
                 order by Post.Time desc limit $3
-            )
+            ) as temp
             where post_rank between $2 and $3`,
             [user_id, start, end]
-        )
-        res.result = ((await materialised_view_ans).rows).concat((await ans).rows);
+        );
+        result.result = ((await materialised_view_ans).rows).concat((await ans).rows);
         }
         else{
-            res.result = (await materialised_view_ans).rows;
+            result.result = (await materialised_view_ans).rows;
         }
-        console.log(res);
-        return res;
+        console.log(result.result);
+        return result;
     }
     catch (err) {
 		return err.stack;

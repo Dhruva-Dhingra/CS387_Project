@@ -57,6 +57,7 @@ app.post('/signup', async(req, res) => {
 });
 
 app.post('/login', async (req, res) => {
+		console.log(req.body);
 		let ans = await login(req, res);
 		console.log('Received response', ans);
 		res.cookie('accessToken', ans.accessToken, {

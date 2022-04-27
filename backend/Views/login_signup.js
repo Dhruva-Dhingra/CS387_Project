@@ -139,7 +139,8 @@ where Email = $1
 				console.log(password);
 				console.log(refpswd);
 				console.log(ans);
-				var isValid = bcrypt.compareSync(password, refpswd);
+				// var isValid = bcrypt.compareSync(bcrypt.hash(password), refpswd);
+				var isValid = password == refpswd;
 				console.log(isValid);
 				if (!isValid) {
 						console.log('Invalid password');
