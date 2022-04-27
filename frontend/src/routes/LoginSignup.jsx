@@ -33,12 +33,12 @@ class LoginForm extends Component {
 						},
 						body: JSON.stringify(this.state),
 				};
-				console.log('Sending...');
 				const res = await fetch('http://localhost:8080/login', requestOptions)
 				let data = await res.json();
+
 				document.cookie = `user_id=${data.id}`;
 				console.log(data);
-				console.log(data);
+
 				const reqOpt = {
 						method: 'GET',
 						mode: 'cors',
@@ -49,8 +49,12 @@ class LoginForm extends Component {
 						},
 				};
 
-				const resp = await fetch('http://localhost:8080/friends/recommendations', reqOpt)
-				const dat = await resp.json();
+				let resp = await fetch('http://localhost:8080/friends/recommendations', reqOpt)
+				let dat = await resp.json();
+				console.log(dat);
+
+				resp = await fetch('http://localhost:8080/friends/invitations', reqOpt)
+				dat = await resp.json();
 				console.log(dat);
 		}
 

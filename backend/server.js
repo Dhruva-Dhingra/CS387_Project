@@ -26,6 +26,7 @@ const {
 		sync_graphdb,
 		get_recommendations,
 		get_friends,
+		reset_graph,
 } = require('./Views/friends');
 
 const {
@@ -57,18 +58,27 @@ app.use(function(req, res, next) {
 		next()
 })
 
-let seconds = 5, interval = seconds * 1000;
+let moreseconds = 500;
 let user_arr = [];
 let friend_arr = [];
-setInterval(async () => {
+setTimeout(async () => {
+		let ans = await reset_graph();
+		console.log('First delete');
 		console.log('Calling periodic function');
 		uf = await sync_graphdb(user_arr, friend_arr);
-		console.log(uf);
 		user_arr = uf.user_arr;
 		friend_arr = uf.friend_arr;
 		console.log('friend_arr =', friend_arr);
 		console.log('user_arr =', user_arr);
-}, interval);
+});
+setInterval(async () => {
+		console.log('Calling periodic function');
+		uf = await sync_graphdb(user_arr, friend_arr);
+		user_arr = uf.user_arr;
+		friend_arr = uf.friend_arr;
+		console.log('friend_arr =', friend_arr);
+		console.log('user_arr =', user_arr);
+}, moreseconds * 1000);
 
 app.post('/test', async (req, res) => {
 	if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
@@ -186,11 +196,13 @@ app.get('/friends/recommendations', async(req, res) => {
 		if (verification) {
 				let user_id = req.cookies.user_id;
 				console.log('Recommendations: verified, user_id -', user_id);
-				get_recommendations(user_id);
+				let ans = await get_recommendations(user_id);
+				res.json(ans);
 		}
 });
 
-app.post('/friends/invitations', async(req, res) => {
+app.get('/friends/invitations', async(req, res) => {
+		console.log('In invitations endpoint');
 		let verification = false;
 		if (verifyToken(req.cookies.accessToken)){
 				verification = true;
@@ -201,8 +213,10 @@ app.post('/friends/invitations', async(req, res) => {
 		}
 		console.log(req.body);
 		if (verification) {
-				let user_id = req.body.user_id;
-				get_invitations(user_id);
+				let user_id = req.cookies.user_id;
+				console.log('Recommendations: verified, user_id -', user_id);
+				let ans = await get_invitations(user_id);
+				res.json(ans);
 		}
 });
 
