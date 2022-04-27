@@ -29,21 +29,12 @@ const get_homepage_posts = async (req, res) => {
         let user_id = req.body.user_id;
         let start = req.body.start;
         let end = req.body.end;
-        let materialised_view_start = start > 21 ? 21 : start;
-        let materialised_view_end = end < 20 ? end : 20;
+        if(start < 0 || end < 0){
+            res.status(400).json({"status" : "failure", "message" : "start or end < 0"});
+        }
         
-        let materialised_view_ans = pool.query(
-            `select homepage_user, post_id, poster_page_id, poster_user_id, content_type, content, time
-            from (
-                select homepage_user, post_id, poster_page_id, poster_user_id, content_type, content, time, rank() over (order by time asc) as post_rank
-                from Homepage
-                where homepage_user = $1
-            ) as temp
-            where post_rank between $2 and $3`,
-            [user_id, materialised_view_start, materialised_view_end]
-        );
-        if(start > 20){        
-        let ans = pool.query(
+        if(end > 20){        
+        pool.query(
             `with actual_friends as (
                 (select Friend.Sender a, Friend.Acceptor b from Friend where Friend.Accept_Time is not null and Friend.Sender = $1)
                 union
@@ -51,7 +42,7 @@ const get_homepage_posts = async (req, res) => {
             )
             select homepage_user, post_id, poster_page_id, poster_user_id, content_type, content, time
             from (
-                select AppUser.User_ID as homepage_user, Post.Post_ID as post_id, Post.Page_ID as poster_page_id, Post.User_ID as poster_user_id , Post.Content_Type as content_type, Post.Content as content, Post.Time as time, rank() over (order by Post.Time asc) as post_rank
+                select $1 as homepage_user, Post.Post_ID as post_id, Post.Page_ID as poster_page_id, Post.User_ID as poster_user_id , Post.Content_Type as content_type, Post.Content as content, Post.Time as time, rank() over (order by Post.Time asc) as post_rank
                 from Post where 
                 (
                     Post.User_ID is not null and
@@ -67,12 +58,38 @@ const get_homepage_posts = async (req, res) => {
                 order by Post.Time desc limit $3
             ) as temp
             where post_rank between $2 and $3`,
-            [user_id, start, end]
+            [user_id, start, end],
+			(err, result) => {
+				if (err) {
+					res.status(400).json({"status" : "failure", "message" : "SQL query failed"});
+					return console.error('Error executing query', err.stack);
+				}
+				else{
+                    res.status(200).json([{"status" : "success"}, result]);
+				}
+			}
         );
-        result = ((await materialised_view_ans).rows).concat((await ans).rows);
         }
         else{
-            result = (await materialised_view_ans).rows;
+            pool.query(
+                `select homepage_user, post_id, poster_page_id, poster_user_id, content_type, content, time
+                from (
+                    select homepage_user, post_id, poster_page_id, poster_user_id, content_type, content, time, rank() over (order by time asc) as post_rank
+                    from Homepage
+                    where homepage_user = $1
+                ) as temp
+                where post_rank between $2 and $3`,
+                [user_id, start, end],
+                (err, result) => {
+                    if (err) {
+                        res.status(400).json({"status" : "failure", "message" : "SQL query failed"});
+                        return console.error('Error executing query', err.stack);
+                    }
+                    else{
+                        res.status(200).json([{"status" : "success"}, result]);
+                    }
+                }
+            );
         }
         return result
     }
@@ -81,8 +98,6 @@ const get_homepage_posts = async (req, res) => {
     }
 }
 
-
-			
 module.exports = {
     get_homepage_posts,
 }

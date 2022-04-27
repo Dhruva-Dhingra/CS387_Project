@@ -68,27 +68,27 @@ app.use(function(req, res, next) {
 		next()
 })
 
-let seconds = 500 * 1000;
-let user_arr = [];
-let friend_arr = [];
-setTimeout(async () => {
-		let ans = await reset_graph();
-		console.log('First delete');
-		console.log('Calling periodic function');
-		uf = await sync_graphdb(user_arr, friend_arr);
-		user_arr = uf.user_arr;
-		friend_arr = uf.friend_arr;
-		console.log('friend_arr =', friend_arr);
-		console.log('user_arr =', user_arr);
-});
-setInterval(async () => {
-		console.log('Calling periodic function');
-		uf = await sync_graphdb(user_arr, friend_arr);
-		user_arr = uf.user_arr;
-		friend_arr = uf.friend_arr;
-		console.log('friend_arr =', friend_arr);
-		console.log('user_arr =', user_arr);
-}, seconds);
+// let seconds = 500 * 1000;
+// let user_arr = [];
+// let friend_arr = [];
+// setTimeout(async () => {
+// 		let ans = await reset_graph();
+// 		console.log('First delete');
+// 		console.log('Calling periodic function');
+// 		uf = await sync_graphdb(user_arr, friend_arr);
+// 		user_arr = uf.user_arr;
+// 		friend_arr = uf.friend_arr;
+// 		console.log('friend_arr =', friend_arr);
+// 		console.log('user_arr =', user_arr);
+// });
+// setInterval(async () => {
+// 		console.log('Calling periodic function');
+// 		uf = await sync_graphdb(user_arr, friend_arr);
+// 		user_arr = uf.user_arr;
+// 		friend_arr = uf.friend_arr;
+// 		console.log('friend_arr =', friend_arr);
+// 		console.log('user_arr =', user_arr);
+// }, seconds);
 
 app.post('/test', async (req, res) => {
 	if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
@@ -119,7 +119,6 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/homepage', async (req, res) => {
-	console.log('Getting Homepage Posts');
 	let verification = false;
 	if (verifyToken(req.cookies.accessToken)){
 		verification = true;
@@ -128,16 +127,9 @@ app.post('/homepage', async (req, res) => {
 		verification = false;
 		res.json({'verification': 'failed', 'result' : null})
 	}
-	console.log(req.body);
-	console.log(req.cookies);
-	console.log("Called Post Homepage");
 	if(verification){
-		let ans = get_homepage_posts(req, res);
-		console.log(ans);
-		let result = {'verification' : 'success', 'result' : ans};
-		res.json(result);
+		get_homepage_posts(req, res);
 	}
-	res.json()
 });
 
 app.post('/timeline/:user', async (req, res) => {
