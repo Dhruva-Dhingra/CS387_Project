@@ -70,24 +70,24 @@ app.post('/login', async (req, res) => {
 
 app.post('/homepage', async (req, res) => {
 	console.log('Getting Homepage Posts');
-	// let verification = false;
-	// if (verifyToken(req.cookies.accessToken)){
-	// 	res.json({'verification': 'success', 'result' : null});
-	// 	verification = true;
-	// }
-	// else{
-	// 	verification = false;
-	// 	res.json({'verification': 'failed', 'result' : null})
-	// }
-	// console.log(req.body);
-	// console.log(req.cookies);
-	// console.log("Called Post Homepage")
-	// if(verification){
-	// 	get_homepage_posts(req, res);
-	// }
-	let ans = await get_homepage_posts(req, res);
-	console.log('Received response', ans);
-	res.json(ans);
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+		verification = true;
+	}
+	else{
+		verification = false;
+		res.json({'verification': 'failed', 'result' : null})
+	}
+	console.log(req.body);
+	console.log(req.cookies);
+	console.log("Called Post Homepage");
+	if(verification){
+		let ans = get_homepage_posts(req, res);
+		console.log(ans);
+		let result = {'verification' : 'sucess', 'result' : ans};
+		res.json(result);
+	}
+	res.json()
 });
 
 app.get('/messenger', async(req,res)=> {

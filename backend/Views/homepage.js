@@ -26,7 +26,7 @@ console.log('Pool made');
 
 const get_homepage_posts = async (req, res) => {
     try {
-        let result = {'result' : null};
+        var result;
         let user_id = req.body.user_id;
         let start = req.body.start;
         let end = req.body.end;
@@ -70,13 +70,12 @@ const get_homepage_posts = async (req, res) => {
             where post_rank between $2 and $3`,
             [user_id, start, end]
         );
-        result.result = ((await materialised_view_ans).rows).concat((await ans).rows);
+        result = ((await materialised_view_ans).rows).concat((await ans).rows);
         }
         else{
-            result.result = (await materialised_view_ans).rows;
+            result = (await materialised_view_ans).rows;
         }
-        console.log(result.result);
-        return result;
+        return result
     }
     catch (err) {
 		return err.stack;
