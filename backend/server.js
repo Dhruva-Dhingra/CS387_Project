@@ -160,11 +160,8 @@ app.post('/create_post', async (req, res) => {
 		res.json({'verification': 'failed', 'result' : null})
 	}
 	if(verification){
-		let ans = create_post(req, res);
-		let result = {'verification' : 'success', 'result' : ans};
-		res.json(result);
+		create_post(req, res);
 	}
-	res.json()
 });
 
 app.get('/messenger', async(req,res)=> {
