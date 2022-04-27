@@ -7,24 +7,24 @@ import { useNavigate } from "react-router-dom";
 
 const WebAdminPage = () => {
     
+  
     const {L1, SL1, D1, SD1, L2, SL2, D2, SD2} = useContext(Context);
-    let history = useNavigate();
+    
     useEffect( ()=> {
          const fetchData = async () => {
              try {
+              
                  const response = await  AdminFinder.get("/");
-                 SL1(response.data.data.num_friends);
-                 SD1(response.data.data.frequency);
-                 SL2(response.data.data.num_friends);
-                 SD2(response.data.data.num_likes);
+                 console.log(response.data);
+                 SL1(response.data.data[0]);
+                 SD1(response.data.data[1]);
+                //  SL2(response.data.data[0]);
+                //  SD2(response.data.data[1]);
              } catch (err) {}
          }
-         fetchData();
+          fetchData();
     },[]) 
     
-    const handleAdminSelect = (id) => {
-        history.push(`/homepage/${id}`);
-      };
     
     return (
 <div>Welcome to InstiGram
@@ -56,7 +56,7 @@ const WebAdminPage = () => {
       },}}}/>
 
 {/* NUMBER OF FRIENDS VS AVG NUMBER OF LIKES */}
-<Line
+{/* <Line
       data = {{
                  labels: L2.map((B) => B.num_friends),
                  type: 'line',
@@ -79,7 +79,7 @@ const WebAdminPage = () => {
       legend:{
         display:true,
         position:'top'
-      },}}}/>
+      },}}}/> */}
 
 
 </div>

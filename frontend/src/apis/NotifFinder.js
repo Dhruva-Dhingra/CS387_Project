@@ -1,4 +1,4 @@
 import axios from "axios";
 export default axios.create({
-    baseURL: "https/localhost:3000/notif"
+    baseURL: "https/localhost:8080/notif"
 });
