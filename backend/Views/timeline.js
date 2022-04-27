@@ -24,35 +24,27 @@ console.log('Pool made');
 
 const get_timeline = async (req, res) => {
     try {
-        var result;
         let user_id = req.body.user_id;
         let start = req.body.start;
         let end = req.body.end;
-        let materialised_view_start = start > 51 ? 51 : start;
-        let materialised_view_end = end < 50 ? end : 50;
-        
-        let materialised_view_ans = pool.query(
-            `select Post_id, Page_ID, User_ID, Content_Type, Content, Time, Post_Rank
-            from Timeline
-            where Post_Rank between $2 and $3 and User_ID = $1`,
-            [user_id, materialised_view_start, materialised_view_end]
-        );
-        if(start > 50){        
-        let ans = pool.query(
-            `select * 
+        pool.query(
+            `select post_info.post_id, post_info.poster_page_id, post_info.poster_user_id, post_info.content_type, post_info.content, post_info.time, coalesce(reaction_count.reaction_count, 0)
             from 
-            (select Post.Post_id, Post.Page_ID, Post.User_ID, Post.Content_Type, Post.Content, Post.Time, rank() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
+            (select Post.Post_id, Post.Page_ID as poster_page_id, Post.User_ID as poster_user_id, Post.Content_Type, Post.Content, Post.Time, rank() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
                 from Post where Post.User_ID = $1
-            ) as intermediate
-            where Post_Rank between $2 and $3`,
-            [user_id, start, end]
+            ) as post_info left outer join reaction_count
+            on post_info.post_rank between $2 and $3 and (post_info.post_id = reaction_count.post_id or reaction_count.post_id is null);`,
+            [user_id, start, end],
+			(err, result) => {
+				if (err) {
+					res.status(400).json({"status" : "failure", "message" : "SQL query failed"});
+					return console.error('Error executing query', err.stack);
+				}
+				else{
+                    res.status(200).json({"status" : "success", "result" : result.rows});
+				}
+			}
         );
-        result = ((await materialised_view_ans).rows).concat((await ans).rows);
-        }
-        else{
-            result = (await materialised_view_ans).rows;
-        }
-        return result
     }
     catch (err) {
 		return err.stack;

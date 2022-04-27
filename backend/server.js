@@ -146,12 +146,8 @@ app.post('/timeline/:user', async (req, res) => {
 	console.log(req.cookies);
 	console.log("Called Post Timeline");
 	if(verification){
-		let ans = get_timeline(req, res);
-		console.log(ans);
-		let result = {'verification' : 'success', 'result' : ans};
-		res.json(result);
+		get_timeline(req, res);
 	}
-	res.json()
 });
 
 app.post('/create_post', async (req, res) => {
