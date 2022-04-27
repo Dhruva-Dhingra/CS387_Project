@@ -1,0 +1,87 @@
+const neo4j = require('neo4j-driver')
+const Pool = require('pg').Pool;
+require('dotenv').config();
+
+var user = process.env.USR;
+var host = process.env.HOST;
+var database = process.env.DATABASE;
+var password = process.env.PASSWORD;
+var port = process.env.PORT;
+
+const pool = new Pool({
+    user: user,
+    host: host,
+    database: database,
+    password: password,
+    port: port
+});
+
+const driver = neo4j.driver(nconf.get('neo4j-locl'), neo4j.auth.basic(nconf.get('USERNAME'), nconf.get('PASSWORD')));
+const session = driver.session();
+
+const get_invitations = async (req, res) => {
+		try {
+				let acceptor_id = req.body.user_id
+				let ans = await pool.query(`
+select AppUser.User_ID, AppUser.First_Name, AppUser.Last_Name, AppUser.Roll_Number
+from AppUser, Invitations
+where Invitations.Sender = AppUser.User_ID
+and Invitations.Acceptor = ${acceptor_id};
+`
+				);
+				console.log(ans.rows);
+		} catch (err) {
+				return err.stack;
+		}
+}
+
+const sync_graphdb = async (user_arr, friend_arr) => {
+		try {
+				let ans = await pool.query(`select User_ID from AppUser;`).rows;
+				user_diff = ans.filter((el) => !user_arr.includes(el));
+				console.log(user_diff);
+				let query = [];
+				for (user in user_diff) {
+						query.push(`CREATE (n: User {ID: ${user}})`);
+				}
+				ans = await pool.query(`
+select Sender, Acceptor
+from Friend
+where Status  
+`);
+				friend_diff = ans.filter((el) => !friend_arr.includes(el));
+				console.log(friend_diff);
+				for (friend in friend_diff) {
+						query.push(`MATCH (n: User {ID: ${friend.sender}}), (m: User {ID: ${friend.acceptor}}) CREATE (n)-[FRIEND]->(m)`)
+				}
+				query.join('\n');
+				console.log('GraphDB sync:', query);
+				return ans;
+		}
+}
+
+const get_recommendations = async () => {
+		try {
+				let ans = await pool.query(`
+with linked as (
+select Sender from Friend where Acceptor = ${user_id}
+union
+select Acceptor from Friend where Sender = ${user_id}
+)
+select User_ID
+from AppUser
+where User_ID not in linked
+order by random()
+limit 10;
+`);
+				let wildcard = ans.rows();
+
+				query = `MATCH p = (n: User {id: 1})-[*2..3]-(m: User)
+UNWIND NODES(p) as nd
+WITH p, size(collect(distinct(nd))) as distinctlen, m, size((m)--()) as degree
+where distinctlen = length(p) + 1
+RETURN m.id, 1.0 * degree / (distinctlen - 1) as factor
+order by factor desc;
+`
+		}
+}
