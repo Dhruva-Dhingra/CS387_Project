@@ -1,5 +1,4 @@
 const Pool = require('pg').Pool;
-const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const config = require('../config/auth.config')
 require('dotenv').config();

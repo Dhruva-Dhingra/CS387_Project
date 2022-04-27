@@ -15,8 +15,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 const {
-	auto_user_id,
-    checkIfExists,
+	checkIfExists,
     signup,
     login,
 	verifyToken
@@ -31,6 +30,14 @@ const {
 const {
 	get_homepage_posts
 } = require('./Views/homepage');
+
+const {
+	get_timeline
+} = require('./Views/timeline');
+
+const {
+	create_post
+} = require('./Views/post');
 
 app.use(function(req, res, next) {
 		res.header('Content-Type', 'application/json')
@@ -51,8 +58,7 @@ app.post('/test', async (req, res) => {
 
 const PORT = 8080
 app.listen(PORT, async () => {
-		await auto_user_id();
-    console.log(`Server running on port ${PORT}`);
+	console.log(`Server running on port ${PORT}`);
 });
 
 app.post('/signup', async(req, res) => {
@@ -90,13 +96,55 @@ app.post('/homepage', async (req, res) => {
 	if(verification){
 		let ans = get_homepage_posts(req, res);
 		console.log(ans);
-		let result = {'verification' : 'sucess', 'result' : ans};
+		let result = {'verification' : 'success', 'result' : ans};
+		res.json(result);
+	}
+	res.json()
+});
+
+app.post('/timeline/:user', async (req, res) => {
+	console.log('Getting Timeline Posts');
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+		verification = true;
+	}
+	else{
+		verification = false;
+		res.json({'verification': 'failed', 'result' : null})
+	}
+	console.log(req.body);
+	console.log(req.cookies);
+	console.log("Called Post Timeline");
+	if(verification){
+		let ans = get_timeline(req, res);
+		console.log(ans);
+		let result = {'verification' : 'success', 'result' : ans};
+		res.json(result);
+	}
+	res.json()
+});
+
+app.post('/create_post', async (req, res) => {
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+		verification = true;
+	}
+	else{
+		verification = false;
+		res.json({'verification': 'failed', 'result' : null})
+	}
+	if(verification){
+		let ans = create_post(req, res);
+		let result = {'verification' : 'success', 'result' : ans};
 		res.json(result);
 	}
 	res.json()
 });
 
 app.get('/messenger', async(req,res)=> {
+
+	console.log('Received request');
+	console.log(req.params.id);
 	let ans = await get_friends (req,res);
 	console.log('Received response', ans);
 });

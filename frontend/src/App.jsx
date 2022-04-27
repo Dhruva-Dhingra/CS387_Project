@@ -7,7 +7,7 @@ import LoginSignup from './routes/LoginSignup';
 import HomePage from './routes/HomePage';
 import EditProfile from './routes/EditProfile';
 import TimelinePage from './routes/TimelinePage';
-import MessagePage from './routes/MessagePage';
+import Messenger from './components/Messenger';
 import WebAdminPage from './routes/WebAdminPage';
 import NotifPage from './routes/NotifPage';
 
@@ -50,7 +50,7 @@ return (
 <Route path = "/homepage" element = {<HomePage/>}></Route>
 <Route path = "/editprofile" element = {<EditProfile/>}></Route>
 <Route path = "/timeline/:id" element = {<TimelinePage/>}></Route>
-<Route path = "/message/:id" element = {<MessagePage/>}></Route>
+<Route path = "/messenger/:id" element = {<Messenger/>}></Route>
 <Route path = "/admin" element = {<WebAdminPage/>}></Route>
 <Route path = "/notif" element = {<NotifPage/>}></Route>
 <Route path = '/ls' element = {< LoginSignup />}></Route> 
