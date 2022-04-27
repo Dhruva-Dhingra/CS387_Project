@@ -1,3 +1,4 @@
+drop materialized view if exists Last_Time_Conversation_User;
 drop materialized view if exists Group_Cached_Messages;
 drop materialized view if exists DM_Cached_Messages;
 drop materialized view if exists Invitations;
@@ -29,6 +30,15 @@ drop table if exists Website_Admin;
 drop table if exists AppUser;
 
 
+drop sequence if exists seq_user_id;
+drop sequence if exists seq_admin_id;
+drop sequence if exists seq_hobby_id;
+drop sequence if exists seq_page_id;
+drop sequence if exists seq_post_id;
+drop sequence if exists seq_status_id;
+drop sequence if exists seq_group_id;
+drop sequence if exists seq_message_id;
+drop sequence if exists seq_comment_id;
 drop sequence if exists inc;
 
 create Table AppUser (
@@ -309,14 +319,14 @@ as
 create Materialized View Last_Time_Conversation_User
 as
   with single_directional_view as
-    (select Message.Content, Message.Time, user_1, user_2
+    (select Content, Time, user_1, user_2
     from (
-      select Message.Content as content, Message.Time as time, Private_Chat.Sender_ID as user_1, Private_Chat.Receiver_ID as user_2, rank() over (Partition over Sender_ID, Receiver_ID order by (Message.Time, Sender_ID, Receiver_ID) as message_rank
-      from 
-      Message, Private_Chat
-    )
+      select Message.Content as content, Message.Time as time, Private_Chat.Sender_ID as user_1, Private_Chat.Receiver_ID as user_2, 
+			rank() over (Partition by (Sender_ID, Receiver_ID) order by (Message.Time, Sender_ID, Receiver_ID)) as message_rank
+      from Message, Private_Chat
+    ) as intermediate
     where
-    rank <= 1
+    message_rank <= 1
     )
   (select content, time, user_1, user_2 from single_directional_view)
   union

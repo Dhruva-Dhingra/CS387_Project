@@ -57,6 +57,15 @@ app.use(function(req, res, next) {
 		next()
 })
 
+let seconds = 5, interval = seconds * 1000;
+let user_arr = [], friend_arr = [];
+setInterval(async () => {
+		console.log('Calling periodic function');
+		uf = await sync_graphdb(user_arr, friend_arr);
+		user_arr = uf.user_arr;
+		friend_arr = uf.friend_arr;
+}, interval);
+
 app.post('/test', async (req, res) => {
 	if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
 	else res.json({'result': 'failed'})
@@ -201,3 +210,4 @@ app.post('/friends/invitations', async(req, res) => {
 // 		console.log('At login backend!');
 // 		console.log(req.body);
 // });
+

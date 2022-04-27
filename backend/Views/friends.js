@@ -39,27 +39,35 @@ and Invitations.Acceptor = ${acceptor_id};
 
 const sync_graphdb = async (user_arr, friend_arr) => {
 		try {
-				let ans = await pool.query(`select User_ID from AppUser;`).rows;
-				user_diff = ans.filter((el) => !user_arr.includes(el));
-				console.log(user_diff);
+				console.log('Here in syncing function');
+				let user_ans = await pool.query(`select User_ID from AppUser;`)
+				console.log('Got response from SQL server');
+				user_ans = user_ans.rows.map((el) => el.user_id);
+				user_diff = user_ans.filter((el) => !user_arr.includes(el));
+				console.log('New users:', user_diff);
 				let query = [];
-				for (user in user_diff) {
+				for (let user of user_diff) {
+						console.log('User', user);
 						query.push(`CREATE (n: User {ID: ${user}})`);
 				}
-				ans = await pool.query(`
+				console.log("New users' queries done");
+				let friend_ans = await pool.query(`
 select Sender, Acceptor
 from Friend
 where Status  
 `);
-				friend_diff = ans.filter((el) => !friend_arr.includes(el));
-				console.log(friend_diff);
-				for (friend in friend_diff) {
-						query.push(`MATCH (n: User {ID: ${friend.sender}}), (m: User {ID: ${friend.acceptor}}) CREATE (n)-[FRIEND]->(m)`)
+				friend_ans = friend_ans.rows.map((el) => [el.sender, el.acceptor]);
+				console.log('GraphDB sync:', query);
+				friend_diff = friend_ans.filter((el) => !friend_arr.includes(el));
+				console.log('New friends:', friend_diff);
+				for (let friend of friend_diff) {
+						query.push(`MATCH (n: User {ID: ${friend[0]}}), (m: User {ID: ${friend[1]}}) CREATE (n)-[FRIEND]->(m)`)
 				}
-				query.join('\n');
+				query = query.join('\n');
 				console.log('GraphDB sync:', query);
 				const res = await session.run(query);
-				return ans;
+				console.log('Syncing done');
+				return {'user_arr': user_ans, 'friend_arr': friend_ans};
 		} catch (err) {
 				return err.stack;
 		}
