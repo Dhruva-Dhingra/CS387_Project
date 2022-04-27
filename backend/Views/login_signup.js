@@ -119,23 +119,28 @@ const login = async (req, res) => {
 				email = req.body.email;
 				console.log(email)
 				password = req.body.password;
-        const res = await pool.query(
+        const user_details = await pool.query(
 						`
 select *
 from AppUser
 where Email = $1
 `, [email]
         );
-				if (res.rows.length == 0) res.status(401).send({
-						accessToken: null,
-						message: "User doesn't exist"
-				});
-				ans = res.rows[0];
+				// if (user_details.rows.length == 0) res.status(401).send({
+				// 		accessToken: null,
+				// 		message: "User doesn't exist"
+				// });
+				if (user_details.rows.length == 0) return {
+					accessToken: null,
+					message: "User doesn't exist"
+				};
+				ans = user_details.rows[0];
 				refpswd = ans['hash_of_password'];
 				console.log(password);
 				console.log(refpswd);
 				console.log(ans);
-				var isValid = bcrypt.compareSync(password, refpswd);
+				// var isValid = bcrypt.compareSync(bcrypt.hash(password), refpswd);
+				var isValid = password == refpswd;
 				console.log(isValid);
 				if (!isValid) {
 						console.log('Invalid password');
@@ -168,6 +173,7 @@ const verifyToken = (token) => {
 		});
 		console.log(ver);
 		return ver;
+	}
 		
 const get_friends  = async (req, res) => {
 	console.log('Fetch friends');

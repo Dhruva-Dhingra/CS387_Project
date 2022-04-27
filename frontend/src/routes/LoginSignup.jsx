@@ -62,7 +62,7 @@ class LoginForm extends Component {
 								<form onSubmit = {this.handleSubmit}>
 										<label>
 												Email:
-												<input type = 'text' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
+												<input type = 'email' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
 										</label>
 										<br/>
 										<label>
@@ -130,7 +130,9 @@ class SignupForm extends Component {
 						<div>
 								<p>Please sign up!</p>
 								<br/>
+								
 								<form onSubmit = {this.handleSubmit}>
+									
 										<label>
 												Email:
 												<input type = 'text' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
