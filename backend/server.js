@@ -26,6 +26,10 @@ const {
 	get_homepage_posts
 } = require('./Views/homepage');
 
+const {
+	get_timeline
+} = require('./Views/timeline');
+
 app.use(function(req, res, next) {
 		res.header('Content-Type', 'application/json')
 		res.header('Access-Control-Allow-Credentials', true)
@@ -84,7 +88,29 @@ app.post('/homepage', async (req, res) => {
 	if(verification){
 		let ans = get_homepage_posts(req, res);
 		console.log(ans);
-		let result = {'verification' : 'sucess', 'result' : ans};
+		let result = {'verification' : 'success', 'result' : ans};
+		res.json(result);
+	}
+	res.json()
+});
+
+app.post('/timeline/:user', async (req, res) => {
+	console.log('Getting Timeline Posts');
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+		verification = true;
+	}
+	else{
+		verification = false;
+		res.json({'verification': 'failed', 'result' : null})
+	}
+	console.log(req.body);
+	console.log(req.cookies);
+	console.log("Called Post Timeline");
+	if(verification){
+		let ans = get_timeline(req, res);
+		console.log(ans);
+		let result = {'verification' : 'success', 'result' : ans};
 		res.json(result);
 	}
 	res.json()

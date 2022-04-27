@@ -250,19 +250,10 @@ select AppUser.User_ID as homepage_user, Post.Post_ID as post_id, Post.Page_ID a
 
 Create Materialized View Timeline
 as
-with actual_friends as (
-        (select Friend.Sender a, Friend.Acceptor b from Friend where Friend.Accept_Time is not null)
-        union
-        (select Friend.Acceptor a, Friend.Sender b from Friend where Friend.Accept_Time is not null)
-    )
 select * 
 from 
 (select Post.Post_id, Post.Page_ID, Post.User_ID, Post.Content_Type, Post.Content, Post.Time, rank() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
-    from Post, AppUser
-where 
-        (Post.User_ID is not null and
-          Post.User_ID in (select actual_friends.b from actual_friends where actual_friends.a = AppUser.User_ID)
-        )
+    from Post
 ) as intermediate
 where Post_Rank <= 50
 ;
