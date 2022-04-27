@@ -24,31 +24,6 @@ const pool = new Pool({
 
 console.log('Pool made');
 
-const auto_user_id = async () => {
-    try {
-				console.log('Creating auto-incrementing sequence');
-				let len = await pool.query(
-						`
-select count(*) from AppUser;
-`
-				);
-				len = len.rows[0].count;
-				console.log('len is', len);
-				let quer =  await pool.query(
-						`
-create sequence if not exists inc
-start with ${len + 1}
-increment by 1;
-alter table AppUser
-alter column User_ID
-set default nextval('inc');
-`);
-				console.log('Auto-incrementing user ID made');
-    } catch (err) {
-				return err.stack;
-    }
-}
-
 const checkIfExists = async (email) => {
 		console.log('Checking if user exists');
 		console.log(email);
@@ -199,10 +174,9 @@ const get_friends  = async (req, res) => {
 }
 
 module.exports = {
-		auto_user_id,
     checkIfExists,
     signup,
     login,
-		verifyToken,
+	verifyToken,
 	get_friends
 }

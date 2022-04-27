@@ -305,3 +305,66 @@ as
 		where Message.Message_ID = Group_Chat.Message_ID) as intermediate
     where Message_rank <= 50
 ;
+
+create sequence if not exists seq_user_id
+start with 1
+increment by 1;
+alter table AppUser
+alter column User_ID
+set default nextval('seq_user_id');
+
+create sequence if not exists seq_admin_id
+start with 1
+increment by 1;
+alter table Website_Admin
+alter column Admin_ID
+set default nextval('seq_admin_id');
+
+create sequence if not exists seq_hobby_id
+start with 1
+increment by 1;
+alter table Hobby
+alter column Hobby_ID
+set default nextval('seq_hobby_id');
+
+create sequence if not exists seq_page_id
+start with 1
+increment by 1;
+alter table Page
+alter column page_ID
+set default nextval('seq_page_id');
+
+create sequence if not exists seq_post_id
+start with 1
+increment by 1;
+alter table Post
+alter column Post_ID
+set default nextval('seq_post_id');
+
+create sequence if not exists seq_status_id
+start with 1
+increment by 1;
+alter table Status
+alter column Status_ID
+set default nextval('seq_status_id');
+
+create sequence if not exists seq_group_id
+start with 1
+increment by 1;
+alter table UserGroup
+alter column Group_ID
+set default nextval('seq_group_id');
+
+create sequence if not exists seq_message_id
+start with 1
+increment by 1;
+alter table message
+alter column message_id
+set default nextval('seq_message_id');
+
+create sequence if not exists seq_comment_id
+start with 1
+increment by 1;
+alter table Comment
+alter column Comment_ID
+set default nextval('seq_comment_id');
