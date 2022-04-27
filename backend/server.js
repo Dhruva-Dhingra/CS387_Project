@@ -30,6 +30,16 @@ const {
 } = require('./Views/friends');
 
 const {
+	plot1,
+	plot2,
+	plot3,
+	plot4,
+	plot5
+
+} = require('./Views/admin');
+
+
+const {
 	get_homepage_posts
 } = require('./Views/homepage');
 
@@ -215,6 +225,11 @@ app.get('/friends/invitations', async(req, res) => {
 				let ans = await get_invitations(user_id);
 				res.json(ans);
 		}
+});
+
+app.get('/admin', async(req, res) => {
+	console.log("ADMIN ENTERED");
+	plot1(req, res);
 });
 
 // app.post('/signup', (req, res) => {
