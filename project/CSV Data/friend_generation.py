@@ -16,14 +16,14 @@ d1 = datetime.strptime('1/1/1995 12:01 AM', '%m/%d/%Y %I:%M %p')
 d2 = datetime.strptime('12/31/2005 11:59 PM', '%m/%d/%Y %I:%M %p')
 d3 = datetime.strptime('1/1/2019 12:01 AM', '%m/%d/%Y %I:%M %p')
 d4 = datetime.strptime(datetime.now().strftime("%m/%d/%Y %I:%M %p"), '%m/%d/%Y %I:%M %p')
-content = "Sender,Acceptor,Sending_Time,Accept_Time"
+content = "Sender,Acceptor,Sending_Time,Accept_Time,Status\n"
 
 with open("facebook_combined.txt", "r") as infile:
     for line in infile:
         data = [str(int(x) + 1) for x in line.strip().split()]
         send_date = random_date(d3, d4)
-        accept_date = random_date(send_date, d4).strftime("%Y-%M-%D %H:%M:%S")
-        arr = [data[0], data[1], send_date.strftime("%Y-%M-%D %H:%M:%S"), accept_date]
+        accept_date = random_date(send_date, d4).strftime("%Y-%m-%d %H:%M:%S")
+        arr = [data[0], data[1], send_date.strftime("%Y-%m-%d %H:%M:%S"), accept_date, 'true']
         content = content + ",".join(arr) + "\n"
 
 with open("Friend.csv", "w") as outfile:
