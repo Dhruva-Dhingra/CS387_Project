@@ -40,7 +40,7 @@ for data in relation:
 File.close()
 
 content = "Page_ID,User_ID,Content_Type,Content,Time,Validity\n"
-File = open('Post.csv', newline='')
+File = open('Post_backup.csv', newline='')
 reader = csv.reader(File, quotechar='"', delimiter=',')
 relation, header = get_data(reader)
 user_ids = {}
@@ -58,18 +58,19 @@ for i in range(len(relation)):
 File.close()
 
 print(len(user_ids.keys()))
-count = 0
+count = 1
 for i in sorted(user_ids.items(), key = lambda kv : -kv[1]):
     user_id_to_user_id_mapping[i[0]] = count
     count += 1
 
-File = open('Post.csv', newline='')
+File = open('Post_backup.csv', newline='')
 reader = csv.reader(File, quotechar='"', delimiter=',')
 relation, header = get_data(reader)
 for i in range(len(relation)):
     data = [relation[i][j] for j in range(len(relation[i]))]
     user_id = int(data[1])
     data[1] = str(user_id_to_user_id_mapping[user_id])
+    data[3] = "\"" + data[3].replace('"', '') + "\""
     data[4] = random_date(datetime.strptime(signup_times[user_id - 1], "%Y-%m-%d %H:%M:%S"), d4).strftime("%Y-%m-%d %H:%M:%S")
     content += ",".join(data) + "\n"
 File.close()

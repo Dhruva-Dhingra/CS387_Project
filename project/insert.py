@@ -43,17 +43,33 @@ tables = {}
 q1 = "INSERT INTO "
 q2 = " VALUES %s;"
 
-order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv", "Friend.csv"]
+order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv", "Friend.csv", "Post.csv"]
+bytea_fields = [('Post', 'Content')]
 
 for file in order:
     print(file)
     File = open(args.data+"/"+file, newline='')
     reader = csv.reader(File, quotechar='"', delimiter=',')
     relation, header = get_data(reader)
+    print(header)
+    _relation = []
+    for data in relation:
+        temp = []
+        if len(data) > len(header):
+            print(data)
+        for j in range(len(data)):
+            entry = data[j]
+            if entry is None or len(entry) == 0:
+                temp.append(None)
+            elif (file[:-4], header[j]) in bytea_fields:
+                temp.append(bytes(entry, 'ascii'))
+            else:
+                temp.append(entry)
+        _relation.append(temp)
 
     header = ", ".join(header)
     query = q1 + file[:-4] + " ("+ header +")" + q2
-    extras.execute_values(c, query, relation)
+    extras.execute_values(c, query, _relation)
     File.close()
 
 c.close()
