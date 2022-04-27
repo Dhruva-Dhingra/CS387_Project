@@ -232,7 +232,7 @@ with actual_friends as (
         union
         (select Friend.Acceptor a, Friend.Sender b from Friend where Friend.Accept_Time is not null)
     )
-select Post.Post_ID, Post.Page_ID, post.User_ID, Post.Content_Type, Post.Content, Post.Time
+select AppUser.User_ID as homepage_user, Post.Post_ID as post_id, Post.Page_ID as poster_page_id, Post.User_ID as poster_user_id , Post.Content_Type as content_type, Post.Content as content, Post.Time as time
     from Post, AppUser where 
         (
             Post.User_ID is not null and
