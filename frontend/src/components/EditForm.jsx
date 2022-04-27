@@ -18,6 +18,10 @@ const EditForm = () => {
 
       const [first, setfirst] = useState("")
       const [last, setlast] = useState("")
+      const [rolln, setrolln] = useState("")
+      const [branch, setbranch] = useState("")
+      const [degree, setdegree] = useState("")
+      const [batch, setbatch] = useState("")
       const [email, setemail] = useState("")
       const [pswd, setpswd] = useState("")
       const [residence, setresidence] = useState("")
@@ -32,6 +36,10 @@ const EditForm = () => {
           const response = await HomepageFinder.post("/", {
               first: first,
               last: last,
+              rolln: rolln,
+              branch: branch,
+              degree: degree,
+              batch: batch,
               email: email,
               pswd: pswd,
               residence: residence,
@@ -56,6 +64,18 @@ const EditForm = () => {
             </div>
             <div className="col">
                 <input value = {last} onChange={(e) => setlast(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
+            </div>
+            <div className="col">
+                <input value = {rolln} onChange={(e) => setrolln(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
+            </div>
+            <div className="col">
+                <input value = {branch} onChange={(e) => setbranch(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
+            </div>
+            <div className="col">
+                <input value = {degree} onChange={(e) => setdegree(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
+            </div>
+            <div className="col">
+                <input value = {batch} onChange={(e) => setbatch(e.target.value)} type="number" className='form-control' placeholder='Last Name'/>
             </div>
             <div className="col">
                 <input value = {email} onChange={(e) => setemail(e.target.value)} type="email" className='form-control' placeholder='Email-ID'/>
