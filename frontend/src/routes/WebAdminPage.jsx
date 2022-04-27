@@ -30,7 +30,7 @@ const WebAdminPage = () => {
 <div>Welcome to InstiGram
 
 {/* NUMBER OF FRIENDS VS FREQUENCY */}
-<Line
+{/* <Line
       data = {{
                  labels: L1.map((B) => B.num_friends),
                  type: 'line',
@@ -53,7 +53,7 @@ const WebAdminPage = () => {
       legend:{
         display:true,
         position:'top'
-      },}}}/>
+      },}}}/> */}
 
 {/* NUMBER OF FRIENDS VS AVG NUMBER OF LIKES */}
 {/* <Line
