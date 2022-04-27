@@ -26,7 +26,7 @@ const plot1 = async (req, res) => {
 
     pool.query(
     `
-    WITH res as (SELECT User_ID, count(*) as num_friends FROM User, Friend WHERE ((User.User_ID = Sender OR User.User_ID = Receiver) AND Status = 'true') GROUP BY User_ID) SELECT num_friends, count(*) as frequency FROM res GROUP BY num_friends ORDER BY num_friends;
+    WITH res as (SELECT User_ID, count(*) as num_friends FROM Appuser, Friend WHERE ((AppUser.User_ID = Sender OR AppUser.User_ID = Acceptor) AND Status = 'true') GROUP BY User_ID) SELECT num_friends, count(*) as frequency FROM res GROUP BY num_friends ORDER BY num_friends;
     `, [], 
     (err, result) => {
         if (err) {
@@ -45,7 +45,7 @@ const plot2 = async (req, res) => {
 
     pool.query(
     `
-    WITH res as (SELECT User_ID, count(*) as num_friends FROM User, Friend WHERE ((User.User_ID = Sender OR User.User_ID = Receiver) AND Status = 'true') GROUP BY User_ID), res2 as (SELECT Post_ID, count(*) as num_likes FROM Reaction WHERE Reaction.Reaction = 0), res3 as (SELECT num_friends, num_likes FROM res, res2, Post WHERE res.User_ID = Post.User_ID AND res2.Post_ID = Post.Post_ID) SELECT num_friends, avg(num_likes) FROM res3 ORDER BY num_friends;
+    WITH res as (SELECT User_ID, count(*) as num_friends FROM AppUser, Friend WHERE ((AppUser.User_ID = Sender OR AppUser.User_ID = Acceptor) AND Status = 'true') GROUP BY User_ID), res2 as (SELECT Post_ID, count(*) as num_likes FROM Reaction WHERE Reaction.Reaction = 0 GROUP BY Post_ID), res3 as (SELECT num_friends, num_likes FROM res, res2, Post WHERE res.User_ID = Post.User_ID AND res2.Post_ID = Post.Post_ID) SELECT num_friends, avg(num_likes) FROM res3 GROUP BY num_friends ORDER BY num_friends;
     `, [], 
     (err, result) => {
         if (err) {
@@ -64,7 +64,7 @@ const plot3 = async (req, res) => {
 
     pool.query(
     `
-    WITH res as (SELECT DATEPART(HOUR, Time) as hour FROM Post) SELECT hour, count(*) as hourly_frequency FROM res GROUP BY res ORDER BY hour;
+    WITH res as (SELECT EXTRACT(HOUR FROM Time) as hour FROM Post) SELECT hour, count(*) as hourly_frequency FROM res GROUP BY hour ORDER BY hour;
     `, [], 
     (err, result) => {
         if (err) {
@@ -83,7 +83,7 @@ const plot4 = async (req, res) => {
 
     pool.query(
     `
-    WITH res as (SELECT EXTRACT(DOW FROM Time) as weekday FROM Post) SELECT weekday, count(*) as weekday_frequency FROM res GROUP BY res ORDER BY weekday;
+    WITH res as (SELECT EXTRACT(DOW FROM Time) as weekday FROM Post) SELECT weekday, count(*) as weekday_frequency FROM res GROUP BY weekday ORDER BY weekday;
     `, [], 
     (err, result) => {
         if (err) {
@@ -102,7 +102,7 @@ const plot5 = async (req, res) => {
 
     pool.query(
     `
-    WITH res as (SELECT DATEPART(DAY, Time) as day FROM Post) SELECT day, count(*) as day_frequency FROM res GROUP BY res ORDER BY day;
+    WITH res as (SELECT DATE(Time) as day FROM Post) SELECT day, count(*) as day_frequency FROM res GROUP BY day ORDER BY day;
     `, [], 
     (err, result) => {
         if (err) {
