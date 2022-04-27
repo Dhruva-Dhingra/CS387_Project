@@ -7,23 +7,26 @@ import { useNavigate } from "react-router-dom";
 
 const WebAdminPage = () => {
     
+  
     const {L1, SL1, D1, SD1, L2, SL2, D2, SD2} = useContext(Context);
     let history = useNavigate();
     useEffect( ()=> {
          const fetchData = async () => {
              try {
+              
                  const response = await  AdminFinder.get("/");
-                 SL1(response.data.data.num_friends);
-                 SD1(response.data.data.frequency);
+                 console.log(response.data);
+                 SL1(response.data.data[0]);
+                 SD1(response.data.data[1]);
                  SL2(response.data.data.num_friends);
                  SD2(response.data.data.num_likes);
              } catch (err) {}
          }
-         fetchData();
+          fetchData();
     },[]) 
     
     const handleAdminSelect = (id) => {
-        history.push(`/homepage/${id}`);
+        history.push(`/admin/${id}`);
       };
     
     return (

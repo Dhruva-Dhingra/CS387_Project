@@ -16,6 +16,10 @@ export const ContextProvider = (props) => {
     const [hidden, setprivate] = useState("")
     const [autoadd, setautoadd] = useState("")
     const [friends, setFriends] = useState("")
+    const [L1, SL1] = useState("")
+    const [L2, SL2] = useState("")
+    const [D1, SD1] = useState("")
+    const [D2, SD2] = useState("")
     
     return (
         <Context.Provider
@@ -23,7 +27,11 @@ export const ContextProvider = (props) => {
                 search, setSearchBox,
                 friendRequest, setFriendRequest,
                 text_message, setTextMessage,
-                friends, setFriends
+                friends, setFriends,
+                L1, SL1,
+                L2, SL2,
+                D1, SD1,
+                D2, SD2
             }}
         >
             {props.children}
