@@ -42,7 +42,7 @@ const get_homepage_posts = async (req, res) => {
             ),
             post_info_2 as (select post_info.post_id as post_id, post_info.poster_page_id as page_id, post_info.poster_user_id as user_id, post_info.content_type as content_type, post_info.content as content, post_info.time as time, coalesce(sum(reaction_count.reaction_count), 0) as reaction_count
             from (
-                select post_id, page_id as poster_page_id, user_id as poster_user_id, content_type, content, time, row_number() over (order by time) as post_rank
+                select post_id, page_id as poster_page_id, user_id as poster_user_id, content_type, content, time, row_number() over (order by time DESC) as post_rank
                 from post, actual_friends
                 where
                 Post.User_ID is not null and Post.User_ID = actual_friends.other_friend
@@ -51,7 +51,7 @@ const get_homepage_posts = async (req, res) => {
             group by (post_info.post_id, post_info.poster_page_id, post_info.poster_user_id, post_info.content_type, post_info.content, post_info.time))
             select post_info_2.post_id as post_id, post_info_2.page_id as page_id, post_info_2.user_id as user_id, first_name, last_name, email, post_info_2.content_type as content_type, post_info_2.content as content, post_info_2.time as time, post_info_2.reaction_count
             from (post_info_2 join appuser
-            on post_info_2.user_id = appuser.user_id)
+            on post_info_2.user_id = appuser.user_id) order by time DESC
 		    ;`,
             [user_id, start, end],
 			(err, result) => {

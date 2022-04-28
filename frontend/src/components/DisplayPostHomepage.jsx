@@ -90,7 +90,9 @@ const DisplayPostHomepage = () => {
         <thead>
           <tr className='bg-primary'>
               {/* <th scope = "col">Post ID</th> */}
-              <th scope = "col">Post Content</th>
+              <th scope = "col">Content</th>
+              <th scope = "col">Posted By </th>
+              <th scope = "col">Total Likes</th>
           </tr>
         </thead>
         <tbody>
@@ -99,7 +101,9 @@ const DisplayPostHomepage = () => {
                   <tr onClick={() => handlePostSelect(post.post_id)} 
                   key={post.post_id}>
                     {/* <td>{posts.post_id}</td> */}
-                    <td>{post.post_id}</td>
+                    <td>{post.content}</td>
+                    <td>{post.first_name}</td>
+                    <td>{post.reaction_count}</td>
                 </tr>
                 )
             })}
