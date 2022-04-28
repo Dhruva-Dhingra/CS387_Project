@@ -24,10 +24,10 @@ const SearchBox = () => {
     
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         try {
-          const response = await SearchBoxFinder.get("/", {
-            input : e
+          const response = await SearchBoxFinder.post("/", {
+            'input' : search
           })
           searchBox(response.data.data.search);
           console.log(response);
@@ -42,7 +42,7 @@ const SearchBox = () => {
     <form action="">
         <div className="form-row">
           <div className="col">
-              <input value = {search} onChange={(e) => setSearchBox(e.target.value)} type="text" className='form-control' placeholder='Search your friends and pages!'/>
+              <input name = "search" value = {search} onChange={(e) => setSearchBox(e.target.value)} type="text" className='form-control' placeholder='Search your friends and pages!'/>
           </div>
           <br></br>
           <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn-lg">Search</button></center>          
