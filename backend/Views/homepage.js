@@ -26,7 +26,7 @@ console.log('Pool made');
 const get_homepage_posts = async (req, res) => {
     try {
         var result;
-        let user_id = req.body.user_id;
+        let user_id = req.cookies.user_id;
         let start = req.body.start;
         let end = req.body.end;
         if(start < 0 || end < 0){
@@ -55,6 +55,7 @@ const get_homepage_posts = async (req, res) => {
 					return console.error('Error executing query', err.stack);
 				}
 				else{
+                    console.log(result.rowCount);
                     res.status(200).json({"status" : "success", "result" : result.rows.length, data: {postList : result.rows, postscount : result.rowCount}});
 				}
 			}
