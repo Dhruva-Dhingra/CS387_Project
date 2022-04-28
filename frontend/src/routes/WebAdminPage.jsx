@@ -16,8 +16,9 @@ const WebAdminPage = () => {
          const fetchData = async () => {
              try {
                  const response = await  AdminFinder.get("/");
-                 const arr1 = response.data.map(x => x.num_friends);
-                 const arr2 = response.data.map(x => x.frequency);
+                 console.log(response)
+                 const arr1 = response.data.data.r1.map(x => x.num_friends);
+                 const arr2 = response.data.data.r1.map(x => x.frequency);
                  SL1(arr1);
                  SD1(arr2);
              } catch (err) {console.log(err.stack);}

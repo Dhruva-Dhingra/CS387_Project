@@ -30,6 +30,7 @@ const {
 } = require('./Views/friends');
 
 const {
+	plots,
 		plot1,
 		plot2,
 		plot3,
@@ -263,7 +264,7 @@ app.get('/friends/invitations', async(req, res) => {
 });
 
 app.get('/admin', async(req, res) => {
-		await plot1(req, res);
+		await plots(req, res);
 });
 
 // app.post('/signup', (req, res) => {
