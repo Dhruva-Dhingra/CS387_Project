@@ -55,8 +55,8 @@ const display_chat = async (req,res) =>{
   console.log('Display chat messages');
   try{
   // user1 and user2
-  let user1 = req.body.user1;
-  let user2 = req.body.user2;
+  let user1 = req.cookies.user_id;
+  let user2 = req.body.id;
   let ans = await pool.query(` 
   with T1  as 
   (SELECT message_id, 1 as rec from private_chat
@@ -83,7 +83,7 @@ const last_message_list = async (req, res) => {
   console.log('Getting Message List')
   try {
       
-      let user_id = req.body.user_id;
+      let user_id = req.cookies.user_id;
       let ans = await pool.query(
                        `
                        with message_list as 
