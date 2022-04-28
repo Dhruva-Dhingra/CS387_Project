@@ -102,7 +102,7 @@ const DisplayPostHomepage = () => {
                   key={post.post_id}>
                     {/* <td>{posts.post_id}</td> */}
                     <td>{post.content}</td>
-                    <td>{post.first_name}</td>
+                    <td>{post.first_name} {post.last_name}</td>
                     <td>{post.reaction_count}</td>
                 </tr>
                 )
@@ -110,8 +110,8 @@ const DisplayPostHomepage = () => {
         </tbody>
     </table>
    
-    <left><button   disabled={isDisabled} className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button></left> 
-    <right><button  disabled={isNextDisabled} className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button></right>
+    <button   disabled={isDisabled} className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button>
+    <button  disabled={isNextDisabled} className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button>
 </div>;
 
 };

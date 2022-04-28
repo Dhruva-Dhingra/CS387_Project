@@ -5,7 +5,7 @@ import AddPost  from "../components/AddPost";
 import DisplayPostTimeline from "../components/DisplayPostTimeline";
 const TimelinePage = () => {
     return (
-<div>Timeline!
+<div>
     <AddPost></AddPost>
     <DisplayPostTimeline></DisplayPostTimeline>
 </div>

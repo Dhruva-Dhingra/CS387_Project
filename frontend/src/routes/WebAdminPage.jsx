@@ -44,7 +44,7 @@ const WebAdminPage = () => {
     
     
     return (
-<div>Welcome to InstiGram
+<div>
 
 {/* NUMBER OF FRIENDS VS FREQUENCY */}
 <Line
