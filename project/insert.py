@@ -44,7 +44,7 @@ tables = {}
 q1 = "INSERT INTO "
 q2 = " VALUES %s;"
 
-order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv", "Friend.csv", "Post.csv", "Message.csv", "Private_Chat.csv"]
+order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv", "Friend.csv", "Post.csv", "Message.csv", "Private_Chat.csv", "Reaction.csv"]
 bytea_fields = [('Post', 'Content_Picture')]
 
 for file in order:
