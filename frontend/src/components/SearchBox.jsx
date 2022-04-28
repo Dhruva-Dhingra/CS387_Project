@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import HomepageFinder from '../apis/HomepageFinder';
 import { Context } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ const SearchBox = () => {
         'textAlign': 'center'
       }
 
-    const {searchBox} = useContext(Context)
+    const {resultSB, searchBox} = useContext(Context)
     const [search, setSearchBox] = useState("")
     let navigate= useNavigate();
     
@@ -28,12 +28,10 @@ const SearchBox = () => {
         try {
           const response = await SearchBoxFinder.post("/", {
             'input' : search
-          });
-          console.log(response);
-          searchBox(response.data.data.search);
-          console.log(response);
+          }).then(response => {searchBox(response.data.result); console.log("resultSB = ",resultSB);});
+          return true;
         } catch (err) {
-  
+          
         }
     }
 
