@@ -4,11 +4,12 @@ import SearchBoxFinder from "../apis/SearchBoxFinder";
 import DisplayPostHomepage from "../components/DisplayPostHomepage";
 import SearchBox from "../components/SearchBox"
 import { Context } from '../context/Context';
+import { useNavigate } from "react-router-dom";
 
 const SearchPage = () => {
     
     const {L1, SL1} = useContext(Context);
-
+    let history = useNavigate();
     useEffect( ()=>{
         const fetchData = async () => {
             try {
