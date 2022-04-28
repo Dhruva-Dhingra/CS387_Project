@@ -168,7 +168,7 @@ app.post('/homepage', async (req, res) => {
 		}
 		else{
 				verification = false;
-				res.json({'verification': 'failed', 'result' : null})
+				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
 		}
 		if(verification){
 				await get_homepage_posts(req, res);
@@ -183,7 +183,7 @@ app.post('/timeline/:user', async (req, res) => {
 		}
 		else{
 				verification = false;
-				res.json({'verification': 'failed', 'result' : null})
+				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
 		}
 		console.log(req.body);
 		console.log(req.cookies);
@@ -202,7 +202,7 @@ app.post('/create_post', async (req, res) => {
 		}
 		else{
 				verification = false;
-				res.json({'verification': 'failed', 'result' : null})
+				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
 		}
 		if(verification){
 				await create_post(req, res);
@@ -249,7 +249,7 @@ app.get('/friends/recommendations', async(req, res) => {
 		}
 		else{
 				verification = false;
-				res.json({'verification': 'failed', 'result' : null})
+				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
 		}
 		console.log(req.body);
 		if (verification) {
@@ -268,7 +268,7 @@ app.get('/friends/invitations', async(req, res) => {
 		}
 		else{
 				verification = false;
-				res.json({'verification': 'failed', 'result' : null})
+				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
 		}
 		console.log(req.body);
 		if (verification) {
@@ -277,6 +277,51 @@ app.get('/friends/invitations', async(req, res) => {
 				let ans = await get_invitations(user_id);
 				res.json(ans);
 		}
+});
+
+app.post('/friends/accept', async(req, res) => {
+	console.log('In Accept Friend Requests');
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+			verification = true;
+	}
+	else{
+			verification = false;
+			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+	}
+	if (verification) {
+			accept_request(req, res);
+	}
+});
+
+app.post('/friends/send', async(req, res) => {
+	console.log('In Send Friend Requests');
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+			verification = true;
+	}
+	else{
+			verification = false;
+			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+	}
+	if (verification) {
+			send_request(req, res);
+	}
+});
+
+app.post('/friends/decline', async(req, res) => {
+	console.log('In Decline Friend Requests');
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+			verification = true;
+	}
+	else{
+			verification = false;
+			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+	}
+	if (verification) {
+			decline_request(req, res);
+	}
 });
 
 // TODO: merge this with homepage
