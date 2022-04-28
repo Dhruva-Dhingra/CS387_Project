@@ -34,10 +34,10 @@ const Like = (post_id) => {
     }
 
     return <div className='mb-4'>
-    <h1 style = {head2}>Like Button </h1>
+
     <form action="">
         <div className="form-row">
-          <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn-lg">Like</button></center>          
+          <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn">Like</button></center>          
         </div>
     </form>
 </div>;
