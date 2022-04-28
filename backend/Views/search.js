@@ -24,14 +24,23 @@ const session = driver.session();
 const get_search_results = async (req, res) => {
     console.log('Getting Search Results')
     try {
-        
         let user_id = req.cookies.user_id;
-        let input = req.body.input;
+        let input = String(req.body.input).trim();
+        console.log(input);
         var strings_list = input.split(/(\s+)/);
         let len = strings_list.length;
+        for(var idx = len; idx >= 0; idx--){
+            strings_list[idx] = String(strings_list[idx]);
+            if(strings_list[idx].trim() == ""){
+                strings_list[idx] = strings_list[len - 1];
+                len--;
+            }
+        }
         // TODO : empty input
-        if (len == 0)
+        if (len == 0){
             res.status(200).json({"status" : "failure", "result" : null});
+            return;
+        }
             
         var query = 'select User_ID, first_name, last_name from AppUser where ';
         var array = [];
@@ -46,10 +55,10 @@ const get_search_results = async (req, res) => {
             }
             array.push("%" + strings_list[idx] + "%");
         }
-        console.log(query);
-        console.log(array);
+        // console.log(query);
+        // console.log(array);
         let ans = await pool.query(query, array);
-        console.log(ans.rows);
+        // console.log(ans.rows);
         res.status(200).json({"status" : "success", "result" : ans.rows});
         return ans.rows;
     }

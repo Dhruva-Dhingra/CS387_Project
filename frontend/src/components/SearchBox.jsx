@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import HomepageFinder from '../apis/HomepageFinder';
 import { Context } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ const SearchBox = () => {
         'textAlign': 'center'
       }
 
-    const {searchBox} = useContext(Context)
+    const {resultSB, searchBox} = useContext(Context)
     const [search, setSearchBox] = useState("")
     let navigate= useNavigate();
     
@@ -28,12 +28,10 @@ const SearchBox = () => {
         try {
           const response = await SearchBoxFinder.post("/", {
             'input' : search
-          });
-          console.log(response);
-          searchBox(response.data.data.search);
-          console.log(response);
+          }).then(response => {searchBox(response.data.result); console.log("resultSB = ",resultSB);});
+          return true;
         } catch (err) {
-  
+          
         }
     }
 
@@ -49,6 +47,33 @@ const SearchBox = () => {
           <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn-lg">Search</button></center>          
         </div>
     </form>
+    <div className='list-group'>
+    <table className="table table-hover table-dark table-striped table-bordered">
+        <thead>
+          <tr className='bg-primary'>
+              <th scope = "col">User ID</th>
+              <th scope = "col">First Name</th>
+              <th scope = "col">Last Name</th>
+
+              {/* <th scope = "col">F</th> */}
+          </tr>
+        </thead>
+        <tbody>
+            {resultSB && resultSB.map(res=> {
+                return (
+                  //   @T - Do we need more key attributes?
+                  <tr  >
+                  <td>{res.user_id}  </td>
+                  <td>{res.first_name}</td>
+                  <td>{res.last_name}</td>
+                 </tr>
+                )
+                
+            })}
+        </tbody>
+    </table>
+
+</div>
 </div>;
 }
 
