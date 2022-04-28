@@ -25,11 +25,18 @@ console.log('Pool made');
 const react_to_post = async (req, res) => {
     console.log('liking post');
     var reaction = req.body.reaction;
+    reaction = parseInt(reaction);
     var post_id = req.body.post_id;
+    post_id = parseInt(post_id);
     let user_id = req.cookies.user_id;
-    let time_stamp = new Date();
+    user_id = parseInt(user_id);
+    let time_stamp = req.cookies.time;
+
+    var rightNow = new Date();
+    var dateTime = rightNow.toISOString().slice(0,19).replace("T"," ");
+    time = dateTime;
     pool.query(`select * from reaction where user_id = $1 and post_id = $2 and reaction = $3`,
-    [user_id, post_id,reaction, time_stamp],
+    [user_id, post_id,reaction],
     (err, result) => {
         if (err) {
             res.status(200).json({"status" : "failure", "message" : "Query Failed"});
@@ -52,6 +59,7 @@ const react_to_post = async (req, res) => {
                         return console.error('Query Failed', err.stack);
                     }
                     else{
+                        console.log("Post Liked");
                         res.status(200).json({"status" : "success", "message" : "success"});
                     }
                 }
