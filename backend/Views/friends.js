@@ -238,12 +238,46 @@ const accept_request = async (req, res) => {
 	}
 }
 
+const decline_request = async (req, res) => {
+	try {
+		let acceptor_id = req.cookies.user_id;
+		let sender_id = req.body.user_id;
+		let accept_time = req.body.time;
+		pool.query('select sender, acceptor, status from friend where sender = $1 and acceptor = $2 and status = false;', [sender_id, acceptor_id],
+		(err, result) => {
+			if(err){
+				res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+				console.log(err.stack);
+			} else {
+				if(result.rows.length == 0){
+					res.status(200).json({"status" : "failure", "message" : "No such (pending) request"});
+				} else {
+					pool.query(`delete from friend where 
+								sender = $1 and acceptor = $2`,
+								[sender_id, acceptor_id, accept_time], (err, result) => {
+								if(err){
+									res.status(200).json({"status" : "failure", "message" : "Could not decline request"});
+									console.log(err.stack);
+								} else {
+									res.status(200).json({"status" : "success", "message" : "Request Declined"});
+								}
+					})
+				}
+			}
+		})
+	} catch (err){
+		res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+		console.log(err.stack);
+	}
+}
+
 module.exports = {
-		get_invitations,
-		sync_graphdb,
-		get_recommendations,
-		get_friends,
-		reset_graph,
-		send_request,
-		accept_request,
+	get_invitations,
+	sync_graphdb,
+	get_recommendations,
+	get_friends,
+	reset_graph,
+	send_request,
+	accept_request,
+	decline_request,
 }
