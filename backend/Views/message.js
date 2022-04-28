@@ -84,7 +84,7 @@ const last_message_list = async (req, res) => {
   try {
       
       let user_id = req.cookies.user_id;
-      let ans = await pool.query(
+      const ans = await pool.query(
                        `
                        with message_list as 
                        (
@@ -98,7 +98,8 @@ const last_message_list = async (req, res) => {
                        message_list.message_id = message.message_id;
                        `
                        , [user_id]);
-      return ans.rows;
+        console.log(ans.rows);
+      res.status(200).json(ans.rows);
   }
   catch (err) {
   return err.stack;

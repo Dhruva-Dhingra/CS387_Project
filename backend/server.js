@@ -210,9 +210,7 @@ app.get('/messenger', async(req,res)=> {
 		let id1  = req.cookies.user_id;
 		console.log(req.cookies);
 		console.log(id1);
-		let ans = await last_message_list (req,res);
-		console.log('Received response', ans);
-		res.status(200).json({'result' : ans.rows});
+		await last_message_list (req,res);
 });
 
 app.get('/messenger/:user', async(req,res)=> {
