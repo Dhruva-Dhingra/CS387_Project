@@ -172,7 +172,7 @@ Create Table Reaction (
   Post_ID bigint,
   Reaction int NOT NULL,
   PRIMARY KEY (User_ID, Post_ID),
-  Timestamp timestamp NOT NULL,
+  Timestamp timestamp,
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Post_ID) REFERENCES Post (Post_ID)
 );

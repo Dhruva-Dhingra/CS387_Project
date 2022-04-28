@@ -81,7 +81,7 @@ const signup = async (req, res) => {
 			residence, bday, sgndate, pfp, pvt, autoadd],
 			(err, result) => {
 				if (err) {
-					res.status(400).json({"status" : "failure"});
+					res.status(200).json({"status" : "failure"});
 					return console.error('Error executing query', err.stack);
 				}
 				else{
@@ -102,14 +102,15 @@ const login = async (req, res) => {
 		`, [email],
 		(err, result) => {
 			if (err) {
-				res.status(400).json({"status" : "failure"});
+				res.status(200).json({"status" : "failure"});
 				return console.error('Error executing query', err.stack);
 			}
 			else{
 				if(result.rows.length == 0){
-					res.status(400).json({
+					res.status(200).json({
 						accessToken: null,
-						message: "User doesn't exist"
+						message: "User doesn't exist",
+						status : "failure",
 					});
 				}
 				else{
@@ -118,8 +119,9 @@ const login = async (req, res) => {
 						// var isValid = bcrypt.compareSync(bcrypt.hash(password), refpswd);
 						var isValid = (password.localeCompare(refpswd)) == 0;
 						if (!isValid) {
-								res.status(400).json({
-										message: "Invalid Password"
+								res.status(200).json({
+										message: "Invalid Password",
+										status : "failure",
 								});
 						}
 						else {

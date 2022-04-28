@@ -37,7 +37,7 @@ const get_timeline = async (req, res) => {
             [user_id, start, end],
 			(err, result) => {
 				if (err) {
-					res.status(400).json({"status" : "failure", "message" : "SQL query failed"});
+					res.status(200).json({"status" : "failure", "message" : "SQL query failed"});
 					return console.error('Error executing query', err.stack);
 				}
 				else{

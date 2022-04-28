@@ -30,7 +30,7 @@ const get_homepage_posts = async (req, res) => {
         let start = req.body.start;
         let end = req.body.end;
         if(start < 0 || end < 0){
-            res.status(400).json({"status" : "failure", "message" : "start or end < 0"});
+            res.status(200).json({"status" : "failure", "message" : "start or end < 0"});
         }  
         
         pool.query(
@@ -51,7 +51,7 @@ const get_homepage_posts = async (req, res) => {
             [user_id, start, end],
 			(err, result) => {
 				if (err) {
-					res.status(400).json({"status" : "failure", "message" : "SQL query failed"});
+					res.status(200).json({"status" : "failure", "message" : "SQL query failed"});
 					return console.error('Error executing query', err.stack);
 				}
 				else{
