@@ -28,6 +28,8 @@ const {
 	get_recommendations,
 	get_friends,
 	reset_graph,
+	send_request,
+	accept_request,
 } = require('./Views/friends');
 
 const {
