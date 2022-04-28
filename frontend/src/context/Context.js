@@ -16,6 +16,9 @@ export const ContextProvider = (props) => {
     const [hidden, setprivate] = useState("");
     const [autoadd, setautoadd] = useState("");
     const [friends, setFriends] = useState("");
+    const [itemOffset, setItemOffset] = useState(0);
+    const [pageCount, setPageCount] = useState(0);
+    const [postscount, spostscount] = useState(0);
     const [L1, SL1] = useState([]);
     const [L2, SL2] = useState([]);
     const [D1, SD1] = useState([]);
@@ -43,7 +46,10 @@ export const ContextProvider = (props) => {
                 D3, SD3,
                 D4, SD4,
                 L5, SL5,
-                D5, SD5
+                D5, SD5,
+                itemOffset, setItemOffset,
+                pageCount, setPageCount,
+                postscount, spostscount
             }}
         >
             {props.children}
