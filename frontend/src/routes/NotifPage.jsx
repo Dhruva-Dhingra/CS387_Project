@@ -4,7 +4,6 @@ import { Context } from '../context/Context';
 const NotifPage = () => {
     return (
 <div>
-    Your notifications!
 </div>
     
     );

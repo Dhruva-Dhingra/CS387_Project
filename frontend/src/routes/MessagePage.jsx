@@ -5,7 +5,7 @@ import { Context } from '../context/Context';
 import DM from "../components/DM";
 const MessagePage = () => {
     return (
-<div>Messages!
+<div>
 <SendMessage/>
 <DM></DM>
 </div>

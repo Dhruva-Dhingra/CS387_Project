@@ -5,7 +5,7 @@ import Messenger from "../components/Messenger";
 
 const MessageBasePage = () => {
     return (
-<div>Your Messages!
+<div>
     <Messenger/>
 </div>
     );

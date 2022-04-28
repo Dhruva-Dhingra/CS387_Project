@@ -5,7 +5,7 @@ import EditForm from "../components/EditForm";
 const EditProfile = () => {
     return (
 <div>
-    Edit Profile!
+  
     <EditForm></EditForm></div>
     
     );
