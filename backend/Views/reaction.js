@@ -23,6 +23,7 @@ const pool = new Pool({
 console.log('Pool made');
 
 const react_to_post = async (req, res) => {
+    console.log('liking post');
     var reaction = req.body.reaction;
     var post_id = req.body.post_id;
     let user_id = req.cookies.user_id;

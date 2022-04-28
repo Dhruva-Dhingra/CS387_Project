@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import HomepageFinder from '../apis/HomepageFinder';
 import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
+import Like from "../components/Like";
 
 
 
@@ -93,6 +94,7 @@ const DisplayPostHomepage = () => {
               <th scope = "col">Content</th>
               <th scope = "col">Posted By </th>
               <th scope = "col">Total Likes</th>
+              <th scope = "col">Like!</th>
           </tr>
         </thead>
         <tbody>
@@ -104,6 +106,7 @@ const DisplayPostHomepage = () => {
                     <td>{post.content}</td>
                     <td>{post.first_name} {post.last_name}</td>
                     <td>{post.reaction_count}</td>
+                    <td><Like/></td>
                 </tr>
                 )
             })}

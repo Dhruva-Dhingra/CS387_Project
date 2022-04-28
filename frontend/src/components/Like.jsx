@@ -21,7 +21,7 @@ const Like = (post_id) => {
               'post_id' : post_id,
               'reaction' : 0,
           }).then(response => {
-            let data = await response.json(); 
+            let data = response.json(); 
             if(data.state == "success"){
               alert("Post " + toString(post_id) + " Liked!");
             } else {
