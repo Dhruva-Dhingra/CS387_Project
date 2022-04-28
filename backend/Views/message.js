@@ -25,38 +25,66 @@ const send_message = async (req, res) => {
 		console.log('Adding message to backend');
     try {
 		let content = req.body.content;
-        let sender = ParseInt(req.cookies.user_id);
-        // let receiver = req.body.receiver;
+		let sender = req.cookies.user_id;
+		sender = parseInt(sender);
+		// let receiver = req.body.receiver;
 		let receiver = 2;
-        // let time = new Date(); 
-		let time = req.body.time;
-        let view_once = 0;  // TODO  -- currently default is set to false
-        let deleted = 0;
-        // let group_id =  req.body.group_id;
-		console.log("Values = ", [content, time, view_once, deleted, sender,receiver]);
-		console.log("Hi");
-        pool.multi(
-            `
-			BEGIN;
-            INSERT into message (content, time, view_once, deleted) VALUES ($1, $2, $3, $4);
-			with mid as (select max(message_id), $5, $6 from message where content = $1 and time = $2)
-            INSERT into private_chat (message_id, sender_id, receiver_id) select * from mid;
-            COMMIT;
-			`,
-			[content, time, view_once, deleted, sender,receiver],
-            (err, result) => {
-              if(err){
-				console.log("Failed to add message");
-                console.log(err.stack);
-                res.status(200).json({"status" : "failure", "message" : "Message Coult not be sent"});
-              } else{
-				console.log("Added Message");
-				res.status(200).json({"status" : "success", "message" : "Message Sent!"});
-              }
-            }
-		);
+        let time = req.body.time;
+        let view_once = false;  // TODO  -- currently default is set to false
+        let deleted = false;
+		// let group_id =  req.body.group_id;
+		
+		const pool_1 = new Pool({user: user,
+			host: host,
+			database: database,
+			password: password,
+			port: port});
+		;(async () => {
+		// note: we don't try/catch this because if connecting throws an exception
+		// we don't need to dispose of the client (it will be undefined)
+		const client = await pool_1.connect()
+		try {
+			await client.query('BEGIN');
+			const queryText = 'INSERT into message (content, time, view_once, deleted) VALUES ($1, $2, $3, $4) returning message_id;';
+			const res = await client.query(queryText, [content, time, view_once, deleted]);
+			console.log("Insert into message done");
+			const insertDM = 'INSERT into private_chat (message_id, sender_id, receiver_id) VALUES ($1, $2, $3);';
+			const insertDMValues = [res.rows[0].message_id, sender, receiver];
+			await client.query(insertDM, insertDMValues);
+			console.log("Insert into private chat done");
+			await client.query('COMMIT');
+			console.log("Commit done");
+		} catch (e) {
+			await client.query('ROLLBACK');
+			console.log("Rollback");
+			throw e
+		} finally {
+			client.release();
+		}
+		})().catch(e => console.error(e.stack))
+    //     pool.query(
+    //         `
+	// 		BEGIN;
+    //         INSERT into message (content, time, view_once, deleted) VALUES ($1, $2, $3, $4);
+	// 		with mid as (select max(message_id), $5, $6 from message where content = $1 and time = $2)
+    //         INSERT into private_chat (message_id, sender_id, receiver_id) select * from mid;
+    //         COMMIT;
+	// 		`,
+	// 		[content, time, view_once, deleted, sender,receiver],
+    //         (err, result) => {
+    //           if(err){
+	// 			console.log("Failed to add message");
+    //             console.log(err.stack);
+    //             res.status(200).json({"status" : "failure", "message" : "Message Coult not be sent"});
+    //           } else{
+	// 			console.log("Added Message");
+	// 			res.status(200).json({"status" : "success", "message" : "Message Sent!"});
+    //           }
+    //         }
+	// 	);
     }
     catch (err) {
+		console.log(err.stack);
 		return err.stack;
     }
 }
