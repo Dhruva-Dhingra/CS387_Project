@@ -56,22 +56,33 @@ const display_chat = async (req,res) =>{
   try{
   // user1 and user2
   let user1 = req.cookies.user_id;
-  let user2 = req.body.id;
+  let user2 = req.params.user;
+  // console.log(req.params);
+  // user2 = 2;
+  console.log("User1 %s", user1)
+  console.log("User2 %s", user2)
+
   let ans = await pool.query(` 
+
   with T1  as 
   (SELECT message_id, 1 as rec from private_chat
    where sender_id = $1 and receiver_id = $2),  
   T2 as (
     SELECT message_id,0 as rec from private_chat 
     where sender_id = $2 and receiver_id = $1),
-  R1 as (select T1.message_id, content, time, rec from T1, message where message.message_id = T1.message_id),
-  R2 as (select T2.message_id, content, time, rec from T2, message where message.message_id = T2.message_id),
+  R1 as (select T1.message_id as message_id, content, time, rec from T1, message where message.message_id = T1.message_id),
+  R2 as (select T2.message_id as message_id, content, time, rec from T2, message where message.message_id = T2.message_id),
   R3 as ((select * from R1) union (select * from R2))
   select * from R3 order by time asc;
        `, [user1, user2]);
     
+  console.log(ans.rows[0]);
   return  {
       message : 'Successful',
+      data : {
+        data: ans.rows
+
+      },
   }
 }
   catch (err) {

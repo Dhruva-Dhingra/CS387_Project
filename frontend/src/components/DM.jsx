@@ -2,20 +2,23 @@ import React, { useState, useContext, useEffect } from 'react';
 import MessageFinder from '../apis/MessageFinder';
 import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 const DM = (props) => {
     const {msgs, setMsg} = useContext(Context);
+    const { id } = useParams()
     let history = useNavigate();
-    useEffect( (id)=> {
+    useEffect( ()=> {
         const fetchData = async () => {
             try {
-                const response = await  MessageFinder.get("/:id"); // TODO : add id as request parameter
-                console.log(response.data);
-                setMsg(response.data.data.result);
+                console.log("HI");
+                const response = await  MessageFinder.get(`/${id}`); // TODO : add id as request parameter
+                console.log("HI %s", response);
+                setMsg(response.data.data);
             } catch (err) {}
         }
 
         fetchData();
-   },[]) 
+   },[msgs, setMsg]) 
 
 //    const handleMsgSelect = (id) => {
 //     history.push(`/messenger/${id}`);
@@ -33,8 +36,8 @@ const DM = (props) => {
           {msgs && msgs.map(msg => {
               return (
                 <tr
-                key={msg.msg_id}>
-                  <td>{msg.msg_content}</td>
+                key={msg.message_id}>
+                  <td>{msg.content}</td>
                   <td>{msg.time}</td>
               </tr>
               )
