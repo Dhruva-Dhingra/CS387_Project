@@ -64,11 +64,16 @@ const last_message_list = async (req, res) => {
       let user_id = req.body.user_id;
       let ans = await pool.query(
                        `
-                       select message, content, time, user_1, user_2
-                       from
-                       Last_Time_Conversation_User
-                       where 
-                       user_1 = $1;
+                       with message_list as 
+                       (
+                         select message_id, sender_id as sender, receiver_id as receiver 
+                         from private_chat where
+                         sender_id = $1 or receiver_id = $1
+                       ),
+                       select message.message_id, message.content, message.time, message.view_once, message.deleted, message.invitation, message.group_id, message_list.sender, message_list.receiver
+                       from message_list, message
+                       where
+                       message_list.message_id = message.message_id;
                        `
                        , [user_id]);
       return ans.rows;
