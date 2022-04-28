@@ -15,7 +15,7 @@ const DisplayPostTimleine = () => {
 
     const [isDisabledtm, setisDisabledtm] = useState(true);
     let history = useNavigate();
-    useEffect( ()=> {
+    useEffect( (id)=> {
          const fetchData = async () => {
              try {
               if(pageCounttm === 0){
@@ -25,7 +25,7 @@ const DisplayPostTimleine = () => {
             }
           
     
-                 const response = await  TimelineFinder.post("/");
+                 const response = await  TimelineFinder.post(`/:${id}/`);
                  console.log(response.data);
                  const endOffsettm = itemOffsettm + 20;
                  spostscounttm(response.data.data.postscount);
