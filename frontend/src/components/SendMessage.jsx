@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import MessageFinder from '../apis/MessageFinder';
 import { Context } from '../context/Context';
+import { useLocation } from 'react-router-dom';
 
 const SendMessage = () => {
     const head = {
@@ -18,10 +19,14 @@ const SendMessage = () => {
     const [text_message, setTextMessage] = useState("")
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         try {
+			var rightNow = new Date();
+			var dateTime = rightNow.toISOString().slice(0,19).replace("T"," ");
+		  console.log("Sending Post to backend");
           const response = await MessageFinder.post("/:id2", {
-              text_message: text_message,
+              content : text_message,
+			  time : dateTime
           })
           sendMessage(response.data.data.venue);
           console.log(response);

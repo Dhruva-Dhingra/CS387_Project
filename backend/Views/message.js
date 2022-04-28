@@ -24,18 +24,25 @@ console.log('Pool made');
 const send_message = async (req, res) => {
 		console.log('Adding message to backend');
     try {
-        let content = req.body.content;
-        let sender = req.cookies.sender;
-        let receiver = req.body.receiver;
-        let time = new Date(); 
+		let content = req.body.content;
+        let sender = ParseInt(req.cookies.user_id);
+        // let receiver = req.body.receiver;
+		let receiver = 2;
+        // let time = new Date(); 
+		let time = req.body.time;
         let view_once = 0;  // TODO  -- currently default is set to false
         let deleted = 0;
-        let group_id =  req.body.group_id;
+        // let group_id =  req.body.group_id;
+		console.log("Values = ", [content, time, view_once, deleted, sender,receiver]);
+		console.log("Hi");
         pool.multi(
-            `BEGIN;
+            `
+			BEGIN;
             INSERT into message (content, time, view_once, deleted) VALUES ($1, $2, $3, $4);
-            INSERT into private_chat (sender_id, receiver_id) VALUES ($5,$6);
-            COMMIT;`,
+			with mid as (select max(message_id), $5, $6 from message where content = $1 and time = $2)
+            INSERT into private_chat (message_id, sender_id, receiver_id) select * from mid;
+            COMMIT;
+			`,
 			[content, time, view_once, deleted, sender,receiver],
             (err, result) => {
               if(err){

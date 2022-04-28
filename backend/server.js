@@ -262,6 +262,10 @@ app.get('/messenger/:user', async(req,res)=> {
 app.post('/messenger/:user', async(req,res)=> {
 	console.log('Received request for Sending Message');
 	let verification = false;
+	console.log(req.user);
+	console.log(req.url);
+	console.log(req.params);
+	let receiver = req.params.user;
 	if (verifyToken(req.cookies.accessToken)){
 			verification = true;
 	}
