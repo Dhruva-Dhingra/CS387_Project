@@ -25,6 +25,7 @@ export const ContextProvider = (props) => {
     const [L2, SL2] = useState([]);
     const [D1, SD1] = useState([]);
     const [D2, SD2] = useState([]);
+    const [msgs, setMsg] =  useState([]);
     const [L3, SL3] = useState([]);
     const [L4, SL4] = useState([]);
     const [D3, SD3] = useState([]);
@@ -37,6 +38,7 @@ export const ContextProvider = (props) => {
         <Context.Provider
             value={{
                 search, setSearchBox,
+                msgs, setMsg,
                 friendRequest, setFriendRequest,
                 text_message, setTextMessage,
                 friends, setFriends,
