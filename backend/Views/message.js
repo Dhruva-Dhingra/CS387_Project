@@ -87,15 +87,21 @@ const last_message_list = async (req, res) => {
       const ans = await pool.query(
                        `
                        with message_list as 
-                       (
-                         select message_id, sender_id as sender, receiver_id as receiver 
-                         from private_chat where
-                         sender_id = $1 or receiver_id = $1
-                       )
-                       select message.message_id, message.content, message.time, message.view_once, message.deleted, message.invitation, message.group_id, message_list.sender, message_list.receiver
-                       from message_list, message
-                       where
-                       message_list.message_id = message.message_id;
+(
+  select (case when sender_id = $1 then receiver_id else sender_id end) as user_id, message_id
+  from private_chat where
+  sender_id = $1 or receiver_id = $1
+),
+history as (
+ select message.message_id, message.content, message.time, message.view_once, message.deleted, message.invitation, message.group_id, message_list.user_id,
+ row_number() over (partition by (user_id) order by message.time desc) as message_rank
+ from message_list, message
+ where
+ message_list.message_id = message.message_id
+ )
+ select message_id, content, time, view_once, deleted, invitation, group_id, user_id
+ from history 
+ where message_rank <= 1 order by time desc;
                        `
                        , [user_id]);
         console.log(ans.rows);

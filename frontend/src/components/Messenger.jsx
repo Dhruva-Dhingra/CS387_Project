@@ -13,7 +13,6 @@ const Messenger = (props) => {
     useEffect( ()=> {
         const fetchData = async () => {
             try {
-                console.log('Sending to backend!');
 				const requestOptions = {
 						method: 'get',
 						mode: 'cors',
@@ -26,10 +25,8 @@ const Messenger = (props) => {
 				};
 				// console.log(requestOptions);
 			    const res =  await MessageFinder.get("/");
-                console.log(res);
-                console.log("received response from backend");
+                setFriends(res.data);
                 console.log(res.data);
-                setFriends(res.data.data.friends);
             } catch (err) {}
         }
 

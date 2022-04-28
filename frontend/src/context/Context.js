@@ -17,15 +17,7 @@ export const ContextProvider = (props) => {
     const [dp, setdp] = useState("");
     const [hidden, setprivate] = useState("");
     const [autoadd, setautoadd] = useState("");
-    const [friends, setFriends] = useState("");
-    const {poststm, setPoststm} =  useState([]);
-    // const {offset, setOffset} = useContext(Context);
-    const [itemOffsettm, setItemOffsettm] = useState(0);
-    const [pageCounttm, setPageCounttm] = useState(0);
-    const [postscounttm, spostscounttm] = useState(0);
-    const [isNextDisabledtm, setisNextDisabledtm] = useState(false);
-
-    const [isDisabledtm, setisDisabledtm] = useState(true);
+    const [friends, setFriends] = useState([]);
     const [itemOffset, setItemOffset] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [postscount, spostscount] = useState(0);
@@ -63,14 +55,8 @@ export const ContextProvider = (props) => {
                 pageCount, setPageCount,
                 postscount, spostscount,
                 isDisabled, setisDisabled,
-                posts, setPosts,
-                itemOffsettm, setItemOffsettm,
-                pageCounttm, setPageCounttm,
-                postscounttm, spostscounttm,
-                isDisabledtm, setisDisabledtm,
-                poststm, setPoststm
+                posts, setPosts
             }}
-
         >
             {props.children}
         </Context.Provider>
