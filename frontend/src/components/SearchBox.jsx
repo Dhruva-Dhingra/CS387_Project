@@ -28,7 +28,8 @@ const SearchBox = () => {
         try {
           const response = await SearchBoxFinder.post("/", {
             'input' : search
-          })
+          });
+          console.log(response);
           searchBox(response.data.data.search);
           console.log(response);
         } catch (err) {
