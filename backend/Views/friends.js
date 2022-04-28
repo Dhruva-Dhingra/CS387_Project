@@ -178,7 +178,8 @@ const send_request = async (req, res) => {
 		let sender_id = req.cookies.user_id;
 		let acceptor_id = req.body.user_id;
 		let sending_time = req.body.time;
-		pool.query('select sender, acceptor, status from friend where sender = $1 and acceptor = $2;', [sender_id, acceptor_id],
+		pool.query('select sender, acceptor, status from friend where (sender = $1 and acceptor = $2) or (sender = $2 and acceptor = $1);'
+		, [sender_id, acceptor_id],
 		(err, result) => {
 			if(err){
 				res.status(200).json({"status" : "failure", "message" : "Query Failed"});
