@@ -53,6 +53,7 @@ const WebAdminPage = () => {
                  type: 'line',
                  datasets : [
                  {
+                   label: 'Frequency vs Number of Friends',
                   type: 'line',
                   fill: false,
                   lineTension: 0.5,
@@ -63,13 +64,9 @@ const WebAdminPage = () => {
                 data: D1
                     }],}}
       options = {{plugins:{title:{
-        display:true,
-        text:'Number of Friends Vs Frequency',
+        display:false,
+        text:'Frequency vs Number of Friends',
         fontSize:50
-      },
-      legend:{
-        display:true,
-        position:'top'
       },}}}/>
 
 <Line
@@ -78,6 +75,7 @@ const WebAdminPage = () => {
                  type: 'line',
                  datasets : [
                  {
+                  label : 'Number of Likes vs Number of Friends',
                   type: 'line',
                   fill: false,
                   lineTension: 0.5,
@@ -88,7 +86,7 @@ const WebAdminPage = () => {
                 data: D2
                     }],}}
       options = {{plugins:{title:{
-        display:true,
+        display:false,
         text:'Number of Friends Vs Frequency',
         fontSize:50
       },
@@ -103,6 +101,7 @@ const WebAdminPage = () => {
                  type: 'line',
                  datasets : [
                  {
+                  label : 'Hourly Frequency of Posts',
                   type: 'line',
                   fill: false,
                   lineTension: 0.5,
@@ -113,7 +112,7 @@ const WebAdminPage = () => {
                 data: D3
                     }],}}
       options = {{plugins:{title:{
-        display:true,
+        display:false,
         text:'Number of Friends Vs Frequency',
         fontSize:50
       },
@@ -128,6 +127,7 @@ const WebAdminPage = () => {
                  type: 'line',
                  datasets : [
                  {
+                  label : 'Weekday Frequency of Posts',
                   type: 'line',
                   fill: false,
                   lineTension: 0.5,
@@ -138,7 +138,7 @@ const WebAdminPage = () => {
                 data: D4
                     }],}}
       options = {{plugins:{title:{
-        display:true,
+        display:false,
         text:'Number of Friends Vs Frequency',
         fontSize:50
       },
@@ -153,6 +153,7 @@ const WebAdminPage = () => {
                  type: 'line',
                  datasets : [
                  {
+                   label : 'Daily Frequency of Posts',
                   type: 'line',
                   fill: false,
                   lineTension: 0.5,
@@ -163,8 +164,8 @@ const WebAdminPage = () => {
                 data: D5
                     }],}}
       options = {{plugins:{title:{
-        display:true,
-        text:'Number of Friends Vs Frequency',
+        display:false,
+        text:'Daily Frequency of Posts',
         fontSize:50
       },
       legend:{
