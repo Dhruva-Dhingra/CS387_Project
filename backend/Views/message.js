@@ -73,7 +73,7 @@ const display_chat = async (req,res) =>{
   R1 as (select T1.message_id as message_id, content, time, rec from T1, message where message.message_id = T1.message_id),
   R2 as (select T2.message_id as message_id, content, time, rec from T2, message where message.message_id = T2.message_id),
   R3 as ((select * from R1) union (select * from R2))
-  select * from R3 order by time asc;
+  select * from R3 order by time desc;
        `, [user1, user2]);
     
   console.log(ans.rows[0]);
@@ -110,9 +110,9 @@ history as (
  where
  message_list.message_id = message.message_id
  )
- select message_id, content, time, view_once, deleted, invitation, group_id, user_id
- from history 
- where message_rank <= 1 order by time desc;
+ select message_id, content, time, view_once, deleted, invitation, group_id, history.user_id, first_name, last_name, email
+ from history, appuser
+ where message_rank <= 1 and appuser.user_id = history.user_id order by time desc;
                        `
                        , [user_id]);
         console.log(ans.rows);

@@ -45,7 +45,7 @@ const Messenger = (props) => {
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
           <tr className='bg-primary'>
-              <th scope = "col">User ID</th>
+              <th scope = "col">Name</th>
               <th scope = "col">Last Message</th>
               <th scope = "col">Time</th>
 
@@ -59,7 +59,7 @@ const Messenger = (props) => {
                   <tr 
                   onClick={() => handleFriendSelect(friend.user_id)} 
                   key={friend.user_id} >
-                  <td>{friend.user_id}  </td>
+                  <td>{friend.first_name} {friend.last_name}  </td>
                   <td>{friend.content}</td>
                   <td>{friend.time}</td>
                  </tr>
