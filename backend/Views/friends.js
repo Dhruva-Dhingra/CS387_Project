@@ -205,7 +205,7 @@ const send_request = async (req, res) => {
 	}
 }
 
-const acccept_request = async (req, res) => {
+const accept_request = async (req, res) => {
 	try {
 		let acceptor_id = req.cookies.user_id;
 		let sender_id = req.body.user_id;
