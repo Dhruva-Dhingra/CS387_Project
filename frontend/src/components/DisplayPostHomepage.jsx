@@ -11,11 +11,20 @@ const DisplayPostHomepage = () => {
     const [itemOffset, setItemOffset] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [postscount, spostscount] = useState(0);
+    const [isNextDisabled, setisNextDisabled] = useState(false);
 
+    const [isDisabled, setisDisabled] = useState(true);
     let history = useNavigate();
     useEffect( ()=> {
          const fetchData = async () => {
              try {
+              if(pageCount == 0){
+                setisDisabled(true);
+            } else {
+                setisDisabled(false);
+            }
+          
+    
                  const response = await  HomepageFinder.post("/");
                  console.log(response.data);
                  const endOffset = itemOffset + 20;
@@ -24,6 +33,12 @@ const DisplayPostHomepage = () => {
                 //  setPosts(response.data.data.postList);
                  setPageCount(pageCount+1);
                  console.log(posts)
+                 // TODO: check this once
+                 if(pageCount*20 > postscount){
+                  setisNextDisabled(true);
+              } else {
+                  setisNextDisabled(false);
+              }
       
              } catch (err) {}
          }
@@ -56,6 +71,7 @@ const DisplayPostHomepage = () => {
           newOffset = 0;
           setPageCount(0);
           setItemOffset(newOffset);
+          history(`/homepage`);
         }
         else
         {
@@ -89,7 +105,8 @@ const DisplayPostHomepage = () => {
             })}
         </tbody>
     </table>
-    <left><button className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button></left>
+   
+    <left><button   disabled={isDisabled} className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button></left> 
     <right><button className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button></right>
 </div>;
 

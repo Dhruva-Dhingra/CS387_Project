@@ -8,6 +8,8 @@ export const ContextProvider = (props) => {
     const [text_message, setTextMessage] = useState("");
     const [first, setfirst] = useState("");
     const [last, setlast] = useState("");
+    const [isDisabled, setisDisabled] = useState(true);
+    const [isNextDisabled, setisNextDisabled] = useState(false);
     const [email, setemail] = useState("");
     const [pswd, setpswd] = useState("");
     const [residence, setresidence] = useState("");
@@ -38,6 +40,7 @@ export const ContextProvider = (props) => {
                 friendRequest, setFriendRequest,
                 text_message, setTextMessage,
                 friends, setFriends,
+                isNextDisabled, setisNextDisabled,
                 L1, SL1,
                 L2, SL2,
                 D1, SD1,
@@ -51,6 +54,7 @@ export const ContextProvider = (props) => {
                 itemOffset, setItemOffset,
                 pageCount, setPageCount,
                 postscount, spostscount,
+                isDisabled, setisDisabled,
                 posts, setPosts
             }}
         >
