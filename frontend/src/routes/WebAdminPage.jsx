@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const WebAdminPage = () => {
     
   
-    const {L1, SL1, D1, SD1, L2, SL2, D2, SD2} = useContext(Context);
+    const {L1, SL1, D1, SD1, L2, SL2, D2, SD2, L3, SL3, D3, SD3, L4, SL4, D4, SD4, L5, SL5, D5, SD5} = useContext(Context);
     
     useEffect( ()=> {
          const fetchData = async () => {
@@ -19,8 +19,24 @@ const WebAdminPage = () => {
                  console.log(response)
                  const arr1 = response.data.data.r1.map(x => x.num_friends);
                  const arr2 = response.data.data.r1.map(x => x.frequency);
+                 const arr3 = response.data.data.r2.map(x => x.num_friends);
+                 const arr4 = response.data.data.r2.map(x => x.avg_likes);
+                 const arr5 = response.data.data.r3.map(x => x.hour);
+                 const arr6 = response.data.data.r3.map(x => x.hourly_frequency);
+                 const arr7 = response.data.data.r4.map(x => x.weekday);
+                 const arr8 = response.data.data.r4.map(x => x.weekday_frequency);
+                 const arr9 = response.data.data.r5.map(x => x.day);
+                 const arr10 = response.data.data.r5.map(x => x.day_frequency);
                  SL1(arr1);
                  SD1(arr2);
+                 SL2(arr3);
+                 SD2(arr4);
+                 SL3(arr5);
+                 SD3(arr6);
+                 SL4(arr7);
+                 SD4(arr8);
+                 SL5(arr9);
+                 SD5(arr10);
              } catch (err) {console.log(err.stack);}
          }
           fetchData();
@@ -56,10 +72,9 @@ const WebAdminPage = () => {
         position:'top'
       },}}}/>
 
-{/* NUMBER OF FRIENDS VS AVG NUMBER OF LIKES */}
-{/* <Line
+<Line
       data = {{
-                 labels: L2.map((B) => B.num_friends),
+                 labels: L2,
                  type: 'line',
                  datasets : [
                  {
@@ -70,18 +85,92 @@ const WebAdminPage = () => {
                   backgroundColor: 'rgb(54, 162, 235)',
                   borderWidth: 2,
                   pointRadius: 0,
-                data: D2.map ((A) => A.num_likes)
+                data: D2
                     }],}}
       options = {{plugins:{title:{
         display:true,
-        text:'Number of Friends Vs Number of Likes',
+        text:'Number of Friends Vs Frequency',
         fontSize:50
       },
       legend:{
         display:true,
         position:'top'
-      },}}}/> */}
+      },}}}/>
 
+<Line
+      data = {{
+                 labels: L3,
+                 type: 'line',
+                 datasets : [
+                 {
+                  type: 'line',
+                  fill: false,
+                  lineTension: 0.5,
+                  borderColor:'rgb(54, 162, 235)',
+                  backgroundColor: 'rgb(54, 162, 235)',
+                  borderWidth: 2,
+                  pointRadius: 0,
+                data: D3
+                    }],}}
+      options = {{plugins:{title:{
+        display:true,
+        text:'Number of Friends Vs Frequency',
+        fontSize:50
+      },
+      legend:{
+        display:true,
+        position:'top'
+      },}}}/>
+
+<Line
+      data = {{
+                 labels: L4,
+                 type: 'line',
+                 datasets : [
+                 {
+                  type: 'line',
+                  fill: false,
+                  lineTension: 0.5,
+                  borderColor:'rgb(54, 162, 235)',
+                  backgroundColor: 'rgb(54, 162, 235)',
+                  borderWidth: 2,
+                  pointRadius: 0,
+                data: D4
+                    }],}}
+      options = {{plugins:{title:{
+        display:true,
+        text:'Number of Friends Vs Frequency',
+        fontSize:50
+      },
+      legend:{
+        display:true,
+        position:'top'
+      },}}}/>
+
+<Line
+      data = {{
+                 labels: L5,
+                 type: 'line',
+                 datasets : [
+                 {
+                  type: 'line',
+                  fill: false,
+                  lineTension: 0.5,
+                  borderColor:'rgb(54, 162, 235)',
+                  backgroundColor: 'rgb(54, 162, 235)',
+                  borderWidth: 2,
+                  pointRadius: 0,
+                data: D5
+                    }],}}
+      options = {{plugins:{title:{
+        display:true,
+        text:'Number of Friends Vs Frequency',
+        fontSize:50
+      },
+      legend:{
+        display:true,
+        position:'top'
+      },}}}/>
 
 </div>
     
