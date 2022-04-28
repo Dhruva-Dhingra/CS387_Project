@@ -260,13 +260,19 @@ app.get('/messenger/:user', async(req,res)=> {
 });
 
 app.post('/messenger/:user', async(req,res)=> {
-
-	console.log('Received request');
-	// console.log(req.params.id);
-	let id1  = req.cookies.user_id;
-	console.log(id1);
-	let ans = await send_message (req,res);
-	console.log('Received response', ans);
+	console.log('Received request for Sending Message');
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+			verification = true;
+	}
+	else{
+			verification = false;
+			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+	}
+	// console.log(req.body);
+	if (verification) {
+		send_message (req,res);
+	}
 });
 
 app.get('/friends/recommendations', async(req, res) => {

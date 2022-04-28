@@ -20,7 +20,7 @@ const SendMessage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-          const response = await MessageFinder.post("/:id1/:id2", {
+          const response = await MessageFinder.post("/:id2", {
               text_message: text_message,
           })
           sendMessage(response.data.data.venue);

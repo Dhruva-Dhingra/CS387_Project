@@ -24,27 +24,30 @@ console.log('Pool made');
 const send_message = async (req, res) => {
 		console.log('Adding message to backend');
     try {
-        
         let content = req.body.content;
-        let sender = req.body.sender;
+        let sender = req.cookies.sender;
         let receiver = req.body.receiver;
         let time = new Date(); 
         let view_once = 0;  // TODO  -- currently default is set to false
         let deleted = 0;
-        let group_id =  req.body.group_id 
-        
-		
-        let ans = await pool.query(
-                         `BEGIN;
-                         INSERT into message (content, time, view_once, deleted) VALUES ($1, $2, $3, $4);
-                         INSERT into private_chat (sender_id, receiver_id) VALUES ($5,$6);
-                         COMMIT;`,
-						[content, time, view_once, deleted, sender,receiver]
-
-				);
-        return {
-                message: 'Successful'
-             };
+        let group_id =  req.body.group_id;
+        pool.multi(
+            `BEGIN;
+            INSERT into message (content, time, view_once, deleted) VALUES ($1, $2, $3, $4);
+            INSERT into private_chat (sender_id, receiver_id) VALUES ($5,$6);
+            COMMIT;`,
+			[content, time, view_once, deleted, sender,receiver],
+            (err, result) => {
+              if(err){
+				console.log("Failed to add message");
+                console.log(err.stack);
+                res.status(200).json({"status" : "failure", "message" : "Message Coult not be sent"});
+              } else{
+				console.log("Added Message");
+				res.status(200).json({"status" : "success", "message" : "Message Sent!"});
+              }
+            }
+		);
     }
     catch (err) {
 		return err.stack;

@@ -18,7 +18,7 @@ const DM = (props) => {
         }
 
         fetchData();
-   },[msgs, setMsg]) 
+   },[]) 
 
 //    const handleMsgSelect = (id) => {
 //     history.push(`/messenger/${id}`);
