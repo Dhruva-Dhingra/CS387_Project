@@ -144,8 +144,10 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/logout', async (req, res) => {
+		console.log('At logout');
 		res.clearCookie('accessToken');
 		res.clearCookie('user_id');
+		res.json({'status': 'cleared'});
 })
 
 app.post('/homepage', async (req, res) => {

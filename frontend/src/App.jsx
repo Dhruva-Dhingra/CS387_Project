@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as BrowserRouter, Outlet, Routes, Route} from "react-router-dom";
+import {BrowserRouter as BrowserRouter, Routes, Route} from "react-router-dom";
 import { Navigate } from 'react-router';
 import { ContextProvider } from './context/Context';
 // import Main from './Main';
@@ -14,6 +14,8 @@ import MessagePage from './routes/MessagePage';
 import WebAdminPage from './routes/WebAdminPage';
 import NotifPage from './routes/NotifPage';
 import RecomInvit from './routes/FriendsPage';
+import { useNavigate } from 'react-router-dom';
+import LogOut from './routes/Logout';
 
 
 const PrivateRoute = ({children}) => {
@@ -23,7 +25,6 @@ const PrivateRoute = ({children}) => {
 		let b2 = cookie_ls.some((el) => el.includes('accessToken'));
 		return (b1 && b2)? children: <Navigate to='/' />;
 }
-
 
 const App = () => {
 	
@@ -48,7 +49,7 @@ return (
 <a className="nav-link" href="http://localhost:3000/notif">Notifications</a>
 </li>
 <li className="nav-item">
-<a className="nav-link" href="http://localhost:3000/logout">Logout</a>
+<a className="nav-link" href = "http://localhost:3000/logout">Logout</a>
 </li>
 </ul>
 </div>
@@ -61,13 +62,13 @@ return (
 <BrowserRouter>
 <Routes>
 <Route path = '/' element = {< LoginSignup />} /> 
-<Route path = "/homepage" element = {<HomePage/>} />
-<Route path = "/editprofile" element = {<EditProfile/>} />
-<Route path = "/timeline/:id" element = {<TimelinePage/>} />
-<Route path = "/messenger/" element = {<MessageBasePage/>} />
-<Route path = "/messenger/:id" element = {<MessagePage/>} />
-<Route path = "/admin" element = {<WebAdminPage/>} />
-
+<Route path = '/logout' element = {< LogOut />} />
+<Route path = "/homepage" element = {<PrivateRoute><HomePage/></PrivateRoute>} />
+<Route path = "/editprofile" element = {<PrivateRoute><EditProfile/></PrivateRoute>} />
+<Route path = "/timeline/:id" element = {<PrivateRoute><TimelinePage/></PrivateRoute>} />
+<Route path = "/messenger/" element = {<PrivateRoute><MessageBasePage/></PrivateRoute>} />
+<Route path = "/messenger/:id" element = {<PrivateRoute><MessagePage/></PrivateRoute>} />
+<Route path = "/admin" element = {<PrivateRoute><WebAdminPage/></PrivateRoute>} />
 <Route path = "/notif" element = {<PrivateRoute><NotifPage /></PrivateRoute>} />
 <Route path = "/friends" element = {<PrivateRoute><RecomInvit /></PrivateRoute>} />
 </Routes>
@@ -79,4 +80,5 @@ return (
 
 
 export default App;
+
 
