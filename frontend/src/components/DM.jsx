@@ -39,10 +39,10 @@ const DM = (props) => {
                 key={msg.message_id}>
                   <td>{msg.content}</td>
                   <td>{msg.time}</td>
-                  <div>
+                
          {/* { msg.rec ? (<div id = "sent"  style="background-color:green" >chat.content</div>):(<div id = "received">chat.content</div>)
          } */}
-     </div>
+   
               </tr>
               )
           })}
