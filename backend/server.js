@@ -14,54 +14,60 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
 const {
-		checkIfExists,
-    signup,
-    login,
-		verifyToken,
-		verifyTokenWithUserID,
-} = require('./Views/login_signup');
-
-const {
-		get_invitations,
-		sync_graphdb,
-		get_recommendations,
-		get_friends,
-		reset_graph,
-} = require('./Views/friends');
-
-const {
 	plots,
-		plot1,
-		plot2,
-		plot3,
-		plot4,
-		plot5
-
+	plot1,
+	plot2,
+	plot3,
+	plot4,
+	plot5,
 } = require('./Views/admin');
 
 const {
-	get_search_results,
-
-} = require('./Views/search');
+	get_invitations,
+	sync_graphdb,
+	get_recommendations,
+	get_friends,
+	reset_graph,
+} = require('./Views/friends');
 
 const {
-		get_homepage_posts,
+	get_homepage_posts,
 } = require('./Views/homepage');
+
+const {
+	checkIfExists,
+    signup,
+    login,
+	verifyToken,
+	verifyTokenWithUserID,
+} = require('./Views/login_signup');
+
+const {
+	send_message,
+	display_chat,
+	last_message_list,	
+} = require('./Views/message');
+
+const {
+	create_post
+} = require('./Views/post');
+
+const {
+	react_to_post,
+	remove_reaction_from_post,
+   	get_reaction_count,
+   	remove_post_reaction,
+} = require('./Views/reaction');
+
+const {
+	get_search_results,
+} = require('./Views/search');
 
 const {
 		get_timeline
 } = require('./Views/timeline');
 
-const {
-		create_post
-} = require('./Views/post');
 
-const {
-		send_message,
-		display_chat,
-		last_message_list,
-		
-} = require('./Views/message');
 
 app.use(function(req, res, next) {
 		res.header('Content-Type', 'application/json')

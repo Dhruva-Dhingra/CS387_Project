@@ -120,5 +120,5 @@ module.exports = {
    react_to_post,
    remove_reaction_from_post,
    get_reaction_count,
-   remove_post_reaction ,
+   remove_post_reaction,
 }
