@@ -24,9 +24,9 @@ const session = driver.session();
 const get_search_results = async (req, res) => {
     console.log('Getting Search Results')
     try {
-        
         let user_id = req.cookies.user_id;
         let input = String(req.body.input).trim();
+        console.log(input);
         var strings_list = input.split(/(\s+)/);
         let len = strings_list.length;
         for(var idx = len; idx >= 0; idx--){
@@ -37,8 +37,10 @@ const get_search_results = async (req, res) => {
             }
         }
         // TODO : empty input
-        if (len == 0)
+        if (len == 0){
             res.status(200).json({"status" : "failure", "result" : null});
+            return;
+        }
             
         var query = 'select User_ID, first_name, last_name from AppUser where ';
         var array = [];
