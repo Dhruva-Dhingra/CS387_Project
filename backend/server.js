@@ -115,17 +115,23 @@ app.post('/signup', async(req, res) => {
 
 app.get('/checklogin', async (req, res) => {
 		console.log('Checking for login');
-		if (req.cookies.accessToken) {
-				if (verifyToken(req.cookies.accesssToken)) {
-						res.json({'logged_in': true});
-				}
-				else {
-						res.json({'logged_in': false});
-				}
-		}
-		else {
-				res.json({'logged_in': false});
-		}
+		console.log(req.cookies);
+		if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success', logged_in: true});
+		else res.json({'result': 'failure', logged_in: false});
+		// if (req.cookies.accessToken) {
+		// 		if (verifyToken(req.cookies.accesssToken)) {
+		// 				console.log('Token verified');
+		// 				res.json({'logged_in': true});
+		// 		}
+		// 		else {
+		// 				console.log('Token not verified');
+		// 				res.json({'logged_in': false});
+		// 		}
+		// }
+		// else {
+		// 		console.log("Token doesn't exist");
+		// 		res.json({'logged_in': false});
+		// }
 })
 
 app.post('/login', async (req, res) => {

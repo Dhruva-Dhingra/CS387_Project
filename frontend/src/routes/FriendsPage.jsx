@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 class Recommendations extends Component {
-
 		constructor (props) {
 				super(props);
 				this.state = {
@@ -30,6 +29,7 @@ class Recommendations extends Component {
 		componentDidMount() {
 				this.getRecoms();
 		}
+
 		render() {
 				console.log('Recommendations', this.state.recommendations);
 				let recoms = null;
@@ -75,6 +75,7 @@ class Invitations extends Component {
 		componentDidMount() {
 				this.getInvits();
 		}
+
 		render() {
 				console.log('Invitations', this.state.invitations);
 				let invits = null;
