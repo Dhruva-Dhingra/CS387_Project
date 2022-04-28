@@ -194,6 +194,7 @@ app.get('/messenger', async(req,res)=> {
 		console.log(id1);
 		let ans = await last_message_list (req,res);
 		console.log('Received response', ans);
+		res.status(200).json({'result' : ans.rows});
 });
 
 app.get('/messenger/:user', async(req,res)=> {

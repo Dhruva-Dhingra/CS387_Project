@@ -61,7 +61,7 @@ const last_message_list = async (req, res) => {
   console.log('Getting Message List')
   try {
       
-      let user_id = req.body.user_id;
+      let user_id = req.cookies.user_id;
       let ans = await pool.query(
                        `
                        with message_list as 
