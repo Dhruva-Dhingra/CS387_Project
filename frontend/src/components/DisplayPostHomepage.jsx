@@ -11,17 +11,34 @@ const DisplayPostHomepage = () => {
     const [itemOffset, setItemOffset] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [postscount, spostscount] = useState(0);
+    const [isNextDisabled, setisNextDisabled] = useState(false);
 
+    const [isDisabled, setisDisabled] = useState(true);
     let history = useNavigate();
     useEffect( ()=> {
          const fetchData = async () => {
              try {
+              if(pageCount == 0){
+                setisDisabled(true);
+            } else {
+                setisDisabled(false);
+            }
+          
+    
                  const response = await  HomepageFinder.post("/");
                  console.log(response.data);
                  const endOffset = itemOffset + 20;
                  spostscount(response.data.data.postscount);
                  setPosts(response.data.data.postList.slice(itemOffset, endOffset));
+                //  setPosts(response.data.data.postList);
                  setPageCount(pageCount+1);
+                 console.log(posts)
+                 // TODO: check this once
+                 if(pageCount*20 > postscount){
+                  setisNextDisabled(true);
+              } else {
+                  setisNextDisabled(false);
+              }
       
              } catch (err) {}
          }
@@ -46,15 +63,26 @@ const DisplayPostHomepage = () => {
 
       // 1 : newoffset 0 2: newoffset 0
       const handlePrevPosts = () => {
-        setPageCount(pageCount-2);
-        var newOffset = (pageCount * 20);
+       
+        var newOffset;
 
-        if (newOffset < 0)
+        if ((pageCount -2) < 0)
         {
           newOffset = 0;
+          setPageCount(0);
+          setItemOffset(newOffset);
+          history(`/homepage`);
         }
-        setItemOffset(newOffset);
+        else
+        {
+         newOffset = ((pageCount-2) * 20);
+         setPageCount(pageCount-2);
+         setItemOffset(newOffset);
         history(`/homepage`);
+        }
+        
+        
+        
       };
 
     return <div className='list-group'>
@@ -68,17 +96,18 @@ const DisplayPostHomepage = () => {
         <tbody>
             {posts && posts.map(post => {
                 return (
-                  <tr onClick={() => handlePostSelect(posts.post_id)} 
-                  key={posts.post_id}>
+                  <tr onClick={() => handlePostSelect(post.post_id)} 
+                  key={post.post_id}>
                     {/* <td>{posts.post_id}</td> */}
-                    <td>{posts.content}</td>
+                    <td>{post.post_id}</td>
                 </tr>
                 )
             })}
         </tbody>
     </table>
-    <left><button className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button></left>
-    <right><button className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button></right>
+   
+    <left><button   disabled={isDisabled} className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button></left> 
+    <right><button  disabled={isNextDisabled} className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button></right>
 </div>;
 
 };

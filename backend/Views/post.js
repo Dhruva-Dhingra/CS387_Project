@@ -37,7 +37,7 @@ const create_post = async (req, res) => {
             [page_id, user_id, content_type, content, time, validity],
 			(err, result) => {
 				if (err) {
-					res.status(400).json({"status" : "failure", "message" : "Insert SQL query failed"});
+					res.status(200).json({"status" : "failure", "message" : "Insert SQL query failed"});
 					return console.error('Error executing query', err.stack);
 				}
 				else{
@@ -50,7 +50,6 @@ const create_post = async (req, res) => {
 		return err.stack;
     }
 }
-
 
 			
 module.exports = {

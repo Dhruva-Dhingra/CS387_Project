@@ -14,54 +14,62 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
 const {
-		checkIfExists,
-    signup,
-    login,
-		verifyToken,
-		verifyTokenWithUserID,
-} = require('./Views/login_signup');
-
-const {
-		get_invitations,
-		sync_graphdb,
-		get_recommendations,
-		get_friends,
-		reset_graph,
-} = require('./Views/friends');
-
-const {
 	plots,
-		plot1,
-		plot2,
-		plot3,
-		plot4,
-		plot5
-
+	plot1,
+	plot2,
+	plot3,
+	plot4,
+	plot5,
 } = require('./Views/admin');
 
 const {
-	get_search_results,
-
-} = require('./Views/search');
+	get_invitations,
+	sync_graphdb,
+	get_recommendations,
+	get_friends,
+	reset_graph,
+	send_request,
+	accept_request,
+} = require('./Views/friends');
 
 const {
-		get_homepage_posts,
+	get_homepage_posts,
 } = require('./Views/homepage');
+
+const {
+	checkIfExists,
+    signup,
+    login,
+	verifyToken,
+	verifyTokenWithUserID,
+} = require('./Views/login_signup');
+
+const {
+	send_message,
+	display_chat,
+	last_message_list,	
+} = require('./Views/message');
+
+const {
+	create_post
+} = require('./Views/post');
+
+const {
+	react_to_post,
+	remove_reaction_from_post,
+   	get_reaction_count,
+   	remove_post_reaction,
+} = require('./Views/reaction');
+
+const {
+	get_search_results,
+} = require('./Views/search');
 
 const {
 		get_timeline
 } = require('./Views/timeline');
 
-const {
-		create_post
-} = require('./Views/post');
 
-const {
-		send_message,
-		display_chat,
-		last_message_list,
-		
-} = require('./Views/message');
 
 app.use(function(req, res, next) {
 		res.header('Content-Type', 'application/json')
@@ -162,7 +170,7 @@ app.post('/homepage', async (req, res) => {
 				res.json({'verification': 'failed', 'result' : null})
 		}
 		if(verification){
-				get_homepage_posts(req, res);
+				await get_homepage_posts(req, res);
 		}
 });
 
@@ -180,7 +188,8 @@ app.post('/timeline/:user', async (req, res) => {
 		console.log(req.cookies);
 		console.log("Called Post Timeline");
 		if(verification){
-				get_timeline(req, res);
+			console.log("calling get_timetamp");
+				await get_timeline(req, res);
 		}
 });
 
@@ -195,7 +204,7 @@ app.post('/create_post', async (req, res) => {
 				res.json({'verification': 'failed', 'result' : null})
 		}
 		if(verification){
-				create_post(req, res);
+				await create_post(req, res);
 		}
 });
 
@@ -206,9 +215,7 @@ app.get('/messenger', async(req,res)=> {
 		let id1  = req.cookies.user_id;
 		console.log(req.cookies);
 		console.log(id1);
-		let ans = await last_message_list (req,res);
-		console.log('Received response', ans);
-		res.status(200).json({'result' : ans.rows});
+		await last_message_list (req,res);
 });
 
 app.get('/messenger/:user', async(req,res)=> {
@@ -271,9 +278,8 @@ app.get('/friends/invitations', async(req, res) => {
 });
 
 // TODO: merge this with homepage
-app.get('/search',async(req, res) => {
-		let ans = await get_search_results(req,res);
-		res.json(ans);
+app.post('/search',async(req, res) => {
+		await get_search_results(req,res);
 } )
 
 app.get('/admin', async(req, res) => {

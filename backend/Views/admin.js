@@ -52,7 +52,7 @@ const plot1 = async (req, res) => {
     `, [], 
     (err, result) => {
         if (err) {
-            res.status(400).json({"status" : "failure"});
+            res.status(200).json({"status" : "failure"});
             return console.error('Error executing query', err.stack);
         }
         else{
@@ -71,7 +71,7 @@ const plot2 = async (req, res) => {
     `, [], 
     (err, result) => {
         if (err) {
-            res.status(400).json({"status" : "failure"});
+            res.status(200).json({"status" : "failure"});
             return console.error('Error executing query', err.stack);
         }
         else{
@@ -90,7 +90,7 @@ const plot3 = async (req, res) => {
     `, [], 
     (err, result) => {
         if (err) {
-            res.status(400).json({"status" : "failure"});
+            res.status(200).json({"status" : "failure"});
             return console.error('Error executing query', err.stack);
         }
         else{
@@ -109,7 +109,7 @@ const plot4 = async (req, res) => {
     `, [], 
     (err, result) => {
         if (err) {
-            res.status(400).json({"status" : "failure"});
+            res.status(200).json({"status" : "failure"});
             return console.error('Error executing query', err.stack);
         }
         else{
@@ -128,7 +128,7 @@ const plot5 = async (req, res) => {
     `, [], 
     (err, result) => {
         if (err) {
-            res.status(400).json({"status" : "failure"});
+            res.status(200).json({"status" : "failure"});
             return console.error('Error executing query', err.stack);
         }
         else{

@@ -56,22 +56,33 @@ const display_chat = async (req,res) =>{
   try{
   // user1 and user2
   let user1 = req.cookies.user_id;
-  let user2 = req.body.id;
+  let user2 = req.params.user;
+  // console.log(req.params);
+  // user2 = 2;
+  console.log("User1 %s", user1)
+  console.log("User2 %s", user2)
+
   let ans = await pool.query(` 
+
   with T1  as 
   (SELECT message_id, 1 as rec from private_chat
    where sender_id = $1 and receiver_id = $2),  
   T2 as (
     SELECT message_id,0 as rec from private_chat 
     where sender_id = $2 and receiver_id = $1),
-  R1 as (select T1.message_id, content, time, rec from T1, message where message.message_id = T1.message_id),
-  R2 as (select T2.message_id, content, time, rec from T2, message where message.message_id = T2.message_id),
+  R1 as (select T1.message_id as message_id, content, time, rec from T1, message where message.message_id = T1.message_id),
+  R2 as (select T2.message_id as message_id, content, time, rec from T2, message where message.message_id = T2.message_id),
   R3 as ((select * from R1) union (select * from R2))
   select * from R3 order by time asc;
        `, [user1, user2]);
     
+  console.log(ans.rows[0]);
   return  {
       message : 'Successful',
+      data : {
+        data: ans.rows
+
+      },
   }
 }
   catch (err) {
@@ -84,21 +95,28 @@ const last_message_list = async (req, res) => {
   try {
       
       let user_id = req.cookies.user_id;
-      let ans = await pool.query(
+      const ans = await pool.query(
                        `
                        with message_list as 
-                       (
-                         select message_id, sender_id as sender, receiver_id as receiver 
-                         from private_chat where
-                         sender_id = $1 or receiver_id = $1
-                       ),
-                       select message.message_id, message.content, message.time, message.view_once, message.deleted, message.invitation, message.group_id, message_list.sender, message_list.receiver
-                       from message_list, message
-                       where
-                       message_list.message_id = message.message_id;
+(
+  select (case when sender_id = $1 then receiver_id else sender_id end) as user_id, message_id
+  from private_chat where
+  sender_id = $1 or receiver_id = $1
+),
+history as (
+ select message.message_id, message.content, message.time, message.view_once, message.deleted, message.invitation, message.group_id, message_list.user_id,
+ row_number() over (partition by (user_id) order by message.time desc) as message_rank
+ from message_list, message
+ where
+ message_list.message_id = message.message_id
+ )
+ select message_id, content, time, view_once, deleted, invitation, group_id, user_id
+ from history 
+ where message_rank <= 1 order by time desc;
                        `
                        , [user_id]);
-      return ans.rows;
+        console.log(ans.rows);
+      res.status(200).json(ans.rows);
   }
   catch (err) {
   return err.stack;

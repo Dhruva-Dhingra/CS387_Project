@@ -45,7 +45,9 @@ f.close()
 
 message_id = 1
 
+ind = 1
 with open("facebook_combined.txt", "r") as infile:
+    
     for line in infile:
         data = [str(int(x) + 1) for x in line.strip().split()]
         send_date = random_date(d3, d4)
@@ -55,17 +57,21 @@ with open("facebook_combined.txt", "r") as infile:
         l = range(0,len(chat))
         l = random.sample(l,num_conv)
         time_stamp = accept_date
+        ind +=1
+        content = content + ",".join(arr) + "\n"
+        if ind >1000:
+            continue
         for x in l:
             time_stamp = random_date(time_stamp, time_stamp + timedelta(days=10))
             for i in range(len(chat[x])):
                 time_stamp = random_date(time_stamp,  time_stamp + timedelta(hours=16))
-                message_arr = [ chat[x][i], time_stamp.strftime("%Y-%m-%d %H:%M:%S"), 'false' , 'false', 'false', 'null']
-                message_csv_content = message_csv_content + ",".join(message_arr) + "\n"
+                message_arr = [ "\"" +chat[x][i].replace('"', '')+ "\"", time_stamp.strftime("%Y-%m-%d %H:%M:%S"), 'false' , 'false', 'false', "null"]
+                message_csv_content =  message_csv_content +  ",".join(message_arr) + "\n"
                 # print(senders[x])
                 private_chat_arr= [str(message_id), data[senders[x][i]], data[1-senders[x][i]]]
                 private_chat =private_chat + ",".join(private_chat_arr) + "\n"
                 message_id = message_id +1
-        content = content + ",".join(arr) + "\n"
+        # content = content + ",".join(arr) + "\n"
 with open("Friend.csv", "w") as outfile:
     outfile.write(content.strip())
 with open("Message.csv", "w") as outfile:

@@ -26,29 +26,37 @@ const get_search_results = async (req, res) => {
     try {
         
         let user_id = req.cookies.user_id;
-        let inp = req.body.input;
+        let input = req.body.input;
         var strings_list = input.split(/(\s+)/);
         let len = strings_list.length;
         // TODO : empty input
         if (len == 0)
-            strings_list.push("");
-        // get friends , match first and last name
-        var q_string = '(first_name like %' + strings_list[0] +'%s or last_name like %'  + strings_list[0] +'%s )';
-        for (var idx = 1; idx < len; idx ++){
-            var str = 'or (first_name like %' + strings_list[idx] +'%s or last_name like %'  + strings_list[idx] +'%s )';
-            q_string = q_string + str;
+            res.status(200).json({"status" : "failure", "result" : null});
+            
+        var query = 'select User_ID, first_name, last_name from AppUser where ';
+        var array = [];
+        for(var idx = 0; idx < len; idx++){
+            var idx_str = (idx + 1).toString();
+            console.log(idx_str);
+            query = query + "first_name like $" + idx_str + " or last_name like $" + idx_str;
+            if(idx != len - 1){
+                query = query + " or ";
+            } else {
+                query = query + ";";
+            }
+            array.push("%" + strings_list[idx] + "%");
         }
-        let ans = await pool.query(
-                         ` with T as select sender User_ID from Friend where Acceptor = $1 and not null(sender) and status = true, 
-                         R as select Acceptor User_ID from Friend where sender = $1 and not null(Acceptor) and status = true,
-                         S as ((select * from R) union (select * from T)),
-                         U as (select * from S natural join (select User_ID, first_name, last_name from AppUser) where $2)
-                         `
-                         , [user_id, q_string]);
+        console.log(query);
+        console.log(array);
+        let ans = await pool.query(query, array);
+        console.log(ans.rows);
+        res.status(200).json({"status" : "success", "result" : ans.rows});
         return ans.rows;
     }
     catch (err) {
-    return err.stack;
+        console.log(err.stack);
+        res.status(200).json({"status" : "failure", "result" : null});
+        return err.stack;
     }
   }
 module.exports = {

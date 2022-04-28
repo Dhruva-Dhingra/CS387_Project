@@ -85,7 +85,8 @@ Create Table Post (
 	Page_ID bigint,
 	User_ID bigint,
 	Content_Type int NOT NULL,
-	Content  bytea NOT NULL,
+	Content  text,
+  Content_Picture bytea,
 	Time  timestamp NOT NULL,
 	Validity  int NOT NULL,
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
@@ -171,7 +172,7 @@ Create Table Reaction (
   Post_ID bigint,
   Reaction int NOT NULL,
   PRIMARY KEY (User_ID, Post_ID),
-  Timestamp timestamp NOT NULL,
+  Timestamp timestamp,
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
   FOREIGN KEY (Post_ID) REFERENCES Post (Post_ID)
 );
@@ -235,6 +236,29 @@ Create Table Group_Admin (
   FOREIGN KEY (Group_ID) REFERENCES UserGroup (Group_ID)
 );
 
+Create Materialized View Homepage
+as
+with actual_friends as (
+        (select Friend.Sender a, Friend.Acceptor b from Friend where Friend.Accept_Time is not null)
+        union
+        (select Friend.Acceptor a, Friend.Sender b from Friend where Friend.Accept_Time is not null)
+    )
+select AppUser.User_ID as homepage_user, Post.Post_ID as post_id, Post.Page_ID as poster_page_id, Post.User_ID as poster_user_id , Post.Content_Type as content_type, Post.Content as content, Post.Time as time
+    from Post, AppUser where 
+        (
+            Post.User_ID is not null and
+            Post.User_ID in 
+                (select actual_friends.b from actual_friends where actual_friends.a = AppUser.User_ID)
+        )
+        or
+        (
+            Post.Post_ID is not null and
+            Post.Post_ID in 
+                (select Follower.Page_ID from Follower where Follower.User_ID = AppUser.User_ID)
+        )
+    order by Post.Time desc limit 20
+;
+
 Create Materialized View Timeline
 as
 select * 
@@ -244,7 +268,6 @@ from
 ) as intermediate
 where Post_Rank <= 50
 ;
-refresh materialized view concurrently timeline;
 
 Create Materialized View Reaction_Count
 as
@@ -252,7 +275,6 @@ as
 	from Reaction
 	group by (Post_ID, Reaction)
 ;
-refresh materialized view concurrently Reaction_Count;
 
 Create Materialized View Top_Comments
 as
@@ -262,7 +284,6 @@ as
 	from Comment) as intermediate
 	where Comment_Rank <= 10
 ;
-refresh materialized view concurrently Top_Comments;
 
 Create Materialized View Invitations
 as
@@ -273,6 +294,7 @@ as
 	where not Status) as intermediate
 	where Invitation_Rank <= 20
 ;
+create unique index on Invitations (Sender, Acceptor);
 refresh materialized view concurrently Invitations;
 
 Create Materialized View DM_Cached_Messages
@@ -285,7 +307,6 @@ as
 		where Message.Message_ID = Private_Chat.Message_ID) as intermediate
     where Message_rank <= 50
 ;
-refresh materialized view concurrently DM_Cached_Messages;
 
 Create Materialized View Group_Cached_Messages
 as
@@ -297,7 +318,6 @@ as
 		where Message.Message_ID = Group_Chat.Message_ID) as intermediate
     where Message_rank <= 50
 ;
-refresh materialized view concurrently Group_Cached_Messages;
 
 create Materialized View Last_Time_Conversation_User
 as
@@ -315,28 +335,6 @@ as
   union
   (select content, time, user_2, user_1 from single_directional_view)
 ;
-refresh materialized view concurrently Last_Time_Conversation_User;
-
-Create Materialized View Homepage
-as
-with actual_friends as (
-  (select Friend.Sender a, Friend.Acceptor b from Friend where Friend.Accept_Time is not null)
-  union
-  (select Friend.Acceptor a, Friend.Sender b from Friend where Friend.Accept_Time is not null)
-),
-user_page as (
-  select AppUser.User_ID as homepage_user, Post.Post_ID as post_id, Post.Page_ID as poster_page_id, Post.User_ID as poster_user_id , Post.Content_Type as content_type, Post.Content as content, Post.Time as time
-    from Post, AppUser, actual_friends where 
-      Post.User_ID is not null and
-      (Post.User_ID = actual_friends.b and actual_friends.a = AppUser.User_ID)
-      or
-      (Post.User_ID = actual_friends.a and actual_friends.b = AppUser.User_ID)
-    order by Post.Time desc limit 20
-)
-select user_page.homepage_user as homepage_user, user_page.post_id as post_id, user_page.poster_page_id as poster_page_id, user_page.poster_user_id as poster_user_id, user_page.content_type as content_type, user_page.content as content, user_page.time as time, Reaction_Count.Reaction_Count as Reaction_Count
-from user_page join Reaction_Count on user_page.post_id = Reaction_Count.Post_ID order by user_page.time desc
-;
-refresh materialized view concurrently homepage;
 
 create sequence if not exists seq_user_id
 start with 1

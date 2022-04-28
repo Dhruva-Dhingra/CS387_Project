@@ -2,24 +2,27 @@ import React, { useState, useContext, useEffect } from 'react';
 import MessageFinder from '../apis/MessageFinder';
 import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 const DM = (props) => {
     const {msgs, setMsg} = useContext(Context);
+    const { id } = useParams()
     let history = useNavigate();
     useEffect( ()=> {
         const fetchData = async () => {
             try {
-                const response = await  MessageFinder.get("/message/:id"); // TODO : add id as request parameter
-                // console.log(response.data);
-                setMsg(response.data.data.result);
+                console.log("HI");
+                const res = await  MessageFinder.get(`/${id}`); // TODO : add id as request parameter
+                console.log("HI %s", res);
+                // setMsg(response.data.data);
             } catch (err) {}
         }
 
         fetchData();
-   },[]) 
+   },[msgs, setMsg]) 
 
-   const handleMsgSelect = (id) => {
-    history.push(`/message/${id}`);
-  };
+//    const handleMsgSelect = (id) => {
+//     history.push(`/messenger/${id}`);
+//   };
 
   return <div className='list-group'>
   <table className="table table-hover table-dark table-striped table-bordered">
@@ -32,9 +35,9 @@ const DM = (props) => {
       <tbody>
           {msgs && msgs.map(msg => {
               return (
-                <tr onClick={() => handleMsgSelect(msg.user_id)} 
-                key={msg.msg_id}>
-                  <td>{msg.msg_content}</td>
+                <tr
+                key={msg.message_id}>
+                  <td>{msg.content}</td>
                   <td>{msg.time}</td>
               </tr>
               )
