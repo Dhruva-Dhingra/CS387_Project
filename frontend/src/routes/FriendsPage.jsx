@@ -27,13 +27,10 @@ class Recommendations extends Component {
 						.then(dat => this.setState({recommendations: dat}));
 		}
 
+		componentDidMount() {
+				this.getRecoms();
+		}
 		render() {
-				if (!this.state.loaded) {
-						this.setState({
-								loaded: true
-						});
-						this.getRecoms();
-				}
 				console.log('Recommendations', this.state.recommendations);
 				let recoms = null;
 				if (this.state.recommendations) {
@@ -57,7 +54,6 @@ class Invitations extends Component {
 						invitations: null
 				}
 				this.getInvits = this.getInvits.bind(this);
-				this.getInvits();
 		}
 
 		async getInvits() {
@@ -76,13 +72,10 @@ class Invitations extends Component {
 						.then(dat => this.setState({invitations: dat}));
 		}
 
+		componentDidMount() {
+				this.getInvits();
+		}
 		render() {
-				if (!this.state.loaded) {
-						this.setState({
-								loaded: true
-						});
-						this.getInvits();
-				}
 				console.log('Invitations', this.state.invitations);
 				let invits = null;
 				if (this.state.invitations) {

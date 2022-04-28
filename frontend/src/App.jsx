@@ -14,7 +14,7 @@ import NotifPage from './routes/NotifPage';
 import RecomInvit from './routes/FriendsPage';
 
 
-const checkLogin = async(nextState, replace, next) => {
+const checkLogin = (nextState, replace, next) => {
 		console.log('In checkLogin()');
 		const requestOptions = {
 				method: 'GET',
@@ -25,14 +25,16 @@ const checkLogin = async(nextState, replace, next) => {
 						'Content-Type': 'application/json'
 				},
 		};
-		const res = await fetch('http://localhost:8080/checklogin', requestOptions)
-		let data = await res.json();
-		if (!data.logged_in) {
-				replace({
-						pathname: '/',
-						state: {nextPathname: nextState.location.pathname}
-				});
-		}
+		const res = fetch('http://localhost:8080/checklogin', requestOptions)
+					.then(res => res.json())
+					.then(data => {
+							if (!data.logged_in) {
+									replace({
+											pathname: '/',
+											state: {nextPathname: nextState.location.pathname}
+									});
+							}
+					});
 		next();
 }
 
