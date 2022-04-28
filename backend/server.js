@@ -160,7 +160,7 @@ app.post('/homepage', async (req, res) => {
 				res.json({'verification': 'failed', 'result' : null})
 		}
 		if(verification){
-				get_homepage_posts(req, res);
+				await get_homepage_posts(req, res);
 		}
 });
 
@@ -178,7 +178,7 @@ app.post('/timeline/:user', async (req, res) => {
 		console.log(req.cookies);
 		console.log("Called Post Timeline");
 		if(verification){
-				get_timeline(req, res);
+				await get_timeline(req, res);
 		}
 });
 
@@ -193,7 +193,7 @@ app.post('/create_post', async (req, res) => {
 				res.json({'verification': 'failed', 'result' : null})
 		}
 		if(verification){
-				create_post(req, res);
+				await create_post(req, res);
 		}
 });
 

@@ -29,6 +29,7 @@ export const ContextProvider = (props) => {
     const [D4, SD4] = useState([]);
     const [L5, SL5] = useState([]);
     const [D5, SD5] = useState([]);
+    const [posts, setPosts] = useState([]);
     
     return (
         <Context.Provider
@@ -49,7 +50,8 @@ export const ContextProvider = (props) => {
                 D5, SD5,
                 itemOffset, setItemOffset,
                 pageCount, setPageCount,
-                postscount, spostscount
+                postscount, spostscount,
+                posts, setPosts
             }}
         >
             {props.children}
