@@ -7,7 +7,6 @@ import { Context } from '../context/Context';
 const HomePage = () => {
     return (
 <div>
-    <SearchBox/>
     <DisplayPostHomepage></DisplayPostHomepage>
     Homepage!</div>
     );

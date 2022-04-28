@@ -72,6 +72,7 @@ return (
 <Route path = "/admin" element = {<PrivateRoute><WebAdminPage/></PrivateRoute>} />
 <Route path = "/notif" element = {<PrivateRoute><NotifPage /></PrivateRoute>} />
 <Route path = "/friends" element = {<PrivateRoute><RecomInvit /></PrivateRoute>} />
+<Route path = "/search" element = {<PrivateRoute><SearchPage /></PrivateRoute>} />
 </Routes>
 </BrowserRouter>
 </div>
