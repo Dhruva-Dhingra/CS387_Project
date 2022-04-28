@@ -10,6 +10,7 @@ import EditProfile from './routes/EditProfile';
 import TimelinePage from './routes/TimelinePage';
 // import Messenger from './components/Messenger';
 import MessageBasePage from './routes/MessageBasePage';
+import MessagePage from './routes/MessagePage';
 import WebAdminPage from './routes/WebAdminPage';
 import NotifPage from './routes/NotifPage';
 import RecomInvit from './routes/FriendsPage';
@@ -63,7 +64,8 @@ return (
 <Route path = "/homepage" element = {<HomePage/>} />
 <Route path = "/editprofile" element = {<EditProfile/>} />
 <Route path = "/timeline/:id" element = {<TimelinePage/>} />
-<Route path = "/messenger/:id" element = {<MessageBasePage/>} />
+<Route path = "/messenger/" element = {<MessageBasePage/>} />
+<Route path = "/messenger/:id" element = {<MessagePage/>} />
 <Route path = "/admin" element = {<WebAdminPage/>} />
 
 <Route path = "/notif" element = {<PrivateRoute><NotifPage /></PrivateRoute>} />

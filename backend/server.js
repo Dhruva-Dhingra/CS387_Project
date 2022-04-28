@@ -198,6 +198,7 @@ app.get('/messenger', async(req,res)=> {
 		console.log('Received request');
 		// console.log(req.params.id);
 		let id1  = req.cookies.user_id;
+		console.log(req.cookies);
 		console.log(id1);
 		let ans = await last_message_list (req,res);
 		console.log('Received response', ans);
