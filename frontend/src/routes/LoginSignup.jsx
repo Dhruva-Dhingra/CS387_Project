@@ -190,7 +190,7 @@ class LoginSignup extends Component {
 						 		<button onClick = {this.loginClick} class="btn btn-success">Login</button>
 						 		<button onClick = {this.signupClick} class="btn btn-primary">Signup</button>
 						</div>
-				)
+				);
 		}
 }
 

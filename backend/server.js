@@ -103,8 +103,21 @@ app.post('/signup', async(req, res) => {
 	}
 });
 
+app.post('/checklogin', async (req, res) => {
+		if (req.cookies.accessToken) {
+				if verifyToken(req.cookies.accesssToken) {
+						res.json({'status': 'logged_in'});
+				}
+				else {
+						res.json({'status': 'not_logged_in'});
+				}
+		}
+		else {
+				res.json({'status': 'not_logged_in'});
+		}
+})
+
 app.post('/login', async (req, res) => {
-		console.log(req.body);
 		login(req, res);
 });
 
