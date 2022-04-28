@@ -39,9 +39,13 @@ const {
 
 } = require('./Views/admin');
 
+const {
+	get_search_results,
+
+} = require('./Views/search');
 
 const {
-		get_homepage_posts
+		get_homepage_posts,
 } = require('./Views/homepage');
 
 const {
@@ -263,6 +267,12 @@ app.get('/friends/invitations', async(req, res) => {
 				res.json(ans);
 		}
 });
+
+// TODO: merge this with homepage
+app.get('/search',async(req, res) => {
+		let ans = await get_search_results(req,res);
+		res.json(ans);
+} )
 
 app.get('/admin', async(req, res) => {
 		await plots(req, res);
