@@ -192,8 +192,18 @@ app.get('/messenger', async(req,res)=> {
 		// console.log(req.params.id);
 		let id1  = req.cookies.user_id;
 		console.log(id1);
-		let ans = await get_friends (req,res);
+		let ans = await last_message_list (req,res);
 		console.log('Received response', ans);
+});
+
+app.get('/messenger/:user', async(req,res)=> {
+
+	console.log('Received request');
+	// console.log(req.params.id);
+	let id1  = req.cookies.user_id;
+	console.log(id1);
+	let ans = await display_chat (req,res);
+	console.log('Received response', ans);
 });
 
 app.get('/friends/recommendations', async(req, res) => {
