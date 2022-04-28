@@ -3,9 +3,10 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
 import TimelineFinder from '../apis/TimelineFinder';
-
+import { useParams } from 'react-router-dom';
 
 const DisplayPostTimleine = () => {
+  const { id } = useParams()
     const {poststm, setPoststm} = useContext(Context);
     // const {offset, setOffset} = useContext(Context);
     const [itemOffsettm, setItemOffsettm] = useState(0);
@@ -15,7 +16,7 @@ const DisplayPostTimleine = () => {
 
     const [isDisabledtm, setisDisabledtm] = useState(true);
     let history = useNavigate();
-    useEffect( (id)=> {
+    useEffect( ()=> {
          const fetchData = async () => {
              try {
               if(pageCounttm === 0){
@@ -25,7 +26,7 @@ const DisplayPostTimleine = () => {
             }
           
     
-                 const response = await  TimelineFinder.post(`/:${id}/`);
+                 const response = await  TimelineFinder.post(`/${id}`);
                  console.log(response.data);
                  const endOffsettm = itemOffsettm + 20;
                  spostscounttm(response.data.data.postscount);
@@ -57,7 +58,7 @@ const DisplayPostTimleine = () => {
           newOffsettm = newOffsettm -20;
         }
         setItemOffsettm(newOffsettm);
-        history(`/timeline`);
+        history(`/timeline/${id}`);
       };
 
 
@@ -71,7 +72,7 @@ const DisplayPostTimleine = () => {
           newOffsettm = 0;
           setPageCounttm(0);
           setItemOffsettm(newOffsettm);
-          history(`/timeline`);
+          history(`/timeline/${id}`);
         }
         else
         {

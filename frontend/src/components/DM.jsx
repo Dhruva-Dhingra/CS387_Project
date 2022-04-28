@@ -11,7 +11,7 @@ const DM = (props) => {
         const fetchData = async () => {
             try {
                 console.log("HI");
-                const res= await  MessageFinder.get(`/${id}`); // TODO : add id as request parameter
+                const res = await  MessageFinder.get(`/${id}`); // TODO : add id as request parameter
                 console.log("HI %s", res);
                 // setMsg(response.data.data);
             } catch (err) {}

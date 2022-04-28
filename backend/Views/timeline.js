@@ -24,7 +24,7 @@ console.log('Pool made');
 
 const get_timeline = async (req, res) => {
     try {
-        let user_id = req.body.user_id;
+        let user_id = req.params.user;
         let start = req.body.start;
         let end = req.body.end;
         pool.query(

@@ -184,6 +184,7 @@ app.post('/timeline/:user', async (req, res) => {
 		console.log(req.cookies);
 		console.log("Called Post Timeline");
 		if(verification){
+			console.log("calling get_timetamp");
 				await get_timeline(req, res);
 		}
 });
