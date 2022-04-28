@@ -20,8 +20,8 @@ const DisplayPostHomepage = () => {
                  console.log(response.data);
                  const endOffset = itemOffset + 20;
                  spostscount(response.data.data.postscount);
-                //  setPosts(response.data.data.postList.slice(itemOffset, endOffset));
-                 setPosts(response.data.data.postList);
+                 setPosts(response.data.data.postList.slice(itemOffset, endOffset));
+                //  setPosts(response.data.data.postList);
                  setPageCount(pageCount+1);
                  console.log(posts)
       
@@ -48,15 +48,25 @@ const DisplayPostHomepage = () => {
 
       // 1 : newoffset 0 2: newoffset 0
       const handlePrevPosts = () => {
-        setPageCount(pageCount-2);
-        var newOffset = (pageCount * 20);
+       
+        var newOffset;
 
-        if (newOffset < 0)
+        if ((pageCount -2) < 0)
         {
           newOffset = 0;
+          setPageCount(0);
+          setItemOffset(newOffset);
         }
-        setItemOffset(newOffset);
+        else
+        {
+         newOffset = ((pageCount-2) * 20);
+         setPageCount(pageCount-2);
+         setItemOffset(newOffset);
         history(`/homepage`);
+        }
+        
+        
+        
       };
 
     return <div className='list-group'>
