@@ -41,13 +41,13 @@ return (
 <div className="collapse navbar-collapse" id="navbarResponsive">
 <ul className="navbar-nav ms-auto">
 <li className="nav-item active">
-<a className="nav-link" href="http://localhost:3000/messenger">MessageBasePage</a>
+<a className="nav-link" href="http://localhost:3000/messenger">Messenger</a>
 </li>
 <li className="nav-item">
 <a className="nav-link" href="http://localhost:3000/friends">Friend Requests</a>
 </li>
 <li className="nav-item">
-<a className="nav-link" href="http://localhost:3000/notif">Notifications</a>
+<a className="nav-link" href="http://localhost:3000/admin">Analytics</a>
 </li>
 <li className="nav-item">
 <a className="nav-link" href = "http://localhost:3000/logout">Logout</a>
