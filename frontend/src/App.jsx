@@ -14,13 +14,10 @@ import MessagePage from './routes/MessagePage';
 import WebAdminPage from './routes/WebAdminPage';
 import NotifPage from './routes/NotifPage';
 import RecomInvit from './routes/FriendsPage';
-<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
 import LogOut from './routes/Logout';
-=======
 import SearchPage from './routes/SearchPage';
 import SearchBoxFinder from './apis/SearchBoxFinder';
->>>>>>> 9d7c3e200fcfbc1076fc647ebc398f0a312e44c6
 
 
 const PrivateRoute = ({children}) => {

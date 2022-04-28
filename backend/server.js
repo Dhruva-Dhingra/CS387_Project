@@ -227,6 +227,7 @@ app.get('/messenger/:user', async(req,res)=> {
 	console.log(id1);
 	let ans = await display_chat (req,res);
 	console.log('Received response', ans);
+		res.json(ans);
 });
 
 app.post('/messenger/:user', async(req,res)=> {
