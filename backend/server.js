@@ -199,6 +199,7 @@ app.get('/messenger', async(req,res)=> {
 
 app.get('/messenger/:user', async(req,res)=> {
 
+	console.log(req.url);
 	console.log('Received request');
 	// console.log(req.params.id);
 	let id1  = req.cookies.user_id;
@@ -256,8 +257,7 @@ app.get('/friends/invitations', async(req, res) => {
 });
 
 app.get('/admin', async(req, res) => {
-		console.log("ADMIN ENTERED");
-		plot1(req, res);
+		await plot1(req, res);
 });
 
 // app.post('/signup', (req, res) => {
