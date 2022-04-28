@@ -14,6 +14,7 @@ import MessagePage from './routes/MessagePage';
 import WebAdminPage from './routes/WebAdminPage';
 import NotifPage from './routes/NotifPage';
 import RecomInvit from './routes/FriendsPage';
+import SearchPage from './routes/SearchPage';
 import SearchBoxFinder from './apis/SearchBoxFinder';
 
 
@@ -68,7 +69,7 @@ return (
 <Route path = "/messenger/" element = {<MessageBasePage/>} />
 <Route path = "/messenger/:id" element = {<MessagePage/>} />
 <Route path = "/admin" element = {<WebAdminPage/>} />
-{/* <Route path = "/search" element = {SearchBoxFinder} /> */}
+<Route path = "/search" element = {<SearchPage/>} />
 
 <Route path = "/notif" element = {<PrivateRoute><NotifPage /></PrivateRoute>} />
 <Route path = "/friends" element = {<PrivateRoute><RecomInvit /></PrivateRoute>} />
