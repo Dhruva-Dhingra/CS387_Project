@@ -63,7 +63,6 @@ return (
 <BrowserRouter>
 <Routes>
 <Route path = '/' element = {< LoginSignup />} /> 
-<<<<<<< HEAD
 <Route path = '/logout' element = {< LogOut />} />
 <Route path = "/homepage" element = {<PrivateRoute><HomePage/></PrivateRoute>} />
 <Route path = "/editprofile" element = {<PrivateRoute><EditProfile/></PrivateRoute>} />
@@ -71,16 +70,6 @@ return (
 <Route path = "/messenger/" element = {<PrivateRoute><MessageBasePage/></PrivateRoute>} />
 <Route path = "/messenger/:id" element = {<PrivateRoute><MessagePage/></PrivateRoute>} />
 <Route path = "/admin" element = {<PrivateRoute><WebAdminPage/></PrivateRoute>} />
-=======
-<Route path = "/homepage" element = {<HomePage/>} />
-<Route path = "/editprofile" element = {<EditProfile/>} />
-<Route path = "/timeline/:id" element = {<TimelinePage/>} />
-<Route path = "/messenger/" element = {<MessageBasePage/>} />
-<Route path = "/messenger/:id" element = {<MessagePage/>} />
-<Route path = "/admin" element = {<WebAdminPage/>} />
-<Route path = "/search" element = {<SearchPage/>} />
-
->>>>>>> 9d7c3e200fcfbc1076fc647ebc398f0a312e44c6
 <Route path = "/notif" element = {<PrivateRoute><NotifPage /></PrivateRoute>} />
 <Route path = "/friends" element = {<PrivateRoute><RecomInvit /></PrivateRoute>} />
 </Routes>
