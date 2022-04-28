@@ -30,6 +30,7 @@ const {
 	reset_graph,
 	send_request,
 	accept_request,
+	decline_request,
 } = require('./Views/friends');
 
 const {

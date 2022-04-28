@@ -180,7 +180,7 @@ Create Table Reaction (
 Create Table Friend (
   Sender bigint,  
   Acceptor bigint,  
-  Sending_Time Timestamp NOT NULL,
+  Sending_Time Timestamp,-- NOT NULL,
   Accept_Time Timestamp,
   Status boolean NOT NULL,
   PRIMARY KEY (Sender, Acceptor),
