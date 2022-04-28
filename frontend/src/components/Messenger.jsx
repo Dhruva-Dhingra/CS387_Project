@@ -38,7 +38,7 @@ const Messenger = (props) => {
    },[]) 
 
    const handleFriendSelect = (id2) => {
-       let id1  = document.cookie ['user_id']
+       let id1  = document.cookie ['user_id'];
     navigate(`messenger/${id1}/${id2}`); // TODO
   };
 

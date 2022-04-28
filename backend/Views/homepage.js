@@ -1,5 +1,5 @@
 const Pool = require('pg').Pool;
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 const config = require('../config/auth.config')
 require('dotenv').config();
 
@@ -55,7 +55,7 @@ const get_homepage_posts = async (req, res) => {
 					return console.error('Error executing query', err.stack);
 				}
 				else{
-                    res.status(200).json({"status" : "success", "result" : result.rows});
+                    res.status(200).json({"status" : "success", "result" : result.rows.length, data: {postList : result.rows, postscount : result.rowCount}});
 				}
 			}
         );
