@@ -195,18 +195,46 @@ app.post('/timeline/:user', async (req, res) => {
 });
 
 app.post('/create_post', async (req, res) => {
-		let verification = false;
-		let user_id = req.body.user_id;
-		if (verifyTokenWithUserID(req.cookies.accessToken, user_id)){
-				verification = true;
-		}
-		else{
-				verification = false;
-				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-		}
-		if(verification){
-				await create_post(req, res);
-		}
+	let verification = false;
+	let user_id = req.body.user_id;
+	if (verifyTokenWithUserID(req.cookies.accessToken, user_id)){
+			verification = true;
+	}
+	else{
+			verification = false;
+			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+	}
+	if(verification){
+			await create_post(req, res);
+	}
+});
+
+app.post('/react', async (req, res) => {
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+			verification = true;
+	}
+	else{
+			verification = false;
+			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+	}
+	if(verification){
+			await react_to_post(req, res);
+	}
+});
+
+app.post('/unreact', async (req, res) => {
+	let verification = false;
+	if (verifyToken(req.cookies.accessToken)){
+			verification = true;
+	}
+	else{
+			verification = false;
+			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+	}
+	if(verification){
+			await remove_reaction_from_post(req, res);
+	}
 });
 
 app.get('/messenger', async(req,res)=> {

@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import TimelineFinder from '../apis/TimelineFinder';
+import LikeFinder from '../apis/LikeFinder';
 import { Context } from '../context/Context';
 
-const Like = () => {
+const Like = (post_id) => {
     const head = {
         color: '#7c795d', 'fontFamily': 'Trocchi', 
         'fontSize': '60px', 'fontWeight': 'normal', 'lineHeight': '48px', 
@@ -14,17 +14,20 @@ const Like = () => {
         'textAlign': 'center'
       }
 
-    const {like} = useContext(Context)
-
-
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-          const response = await TimelineFinder.post("/:id", {
-              text_message: text_message,
-          })
-          like(response.data.data.venue);
-          console.log(response);
+          const response = await LikeFinder.post("/", {
+              'post_id' : post_id,
+              'reaction' : 0,
+          }).then(response => {
+            let data = await response.json(); 
+            if(data.state == "success"){
+              alert("Post " + toString(post_id) + " Liked!");
+            } else {
+              alert("Post " + toString(post_id) + " coult not be Liked");
+            }
+          });
         } catch (err) {
   
         }
