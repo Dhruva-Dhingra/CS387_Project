@@ -24,13 +24,26 @@ const DisplayPostTimleine = () => {
             } else {
                 setisDisabledtm(false);
             }
-          
+            const requestOptions = {
+              method: 'post',
+              mode: 'cors',
+              credentials: 'include',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              },
+              body: {
+                'start': pageCounttm *20,
+                'end' :  pageCounttm *20 + 20
+              } 
+          };
     
-                 const response = await  TimelineFinder.post(`/${id}`);
+          console.log(requestOptions);
+                 const response = await  TimelineFinder.post(`/${id}`, requestOptions);
                  console.log(response.data);
                  const endOffsettm = itemOffsettm + 20;
                  spostscounttm(response.data.data.postscount);
-                 setPoststm(response.data.data.postList.slice(itemOffsettm, endOffsettm));
+                 setPoststm(response.data.data.postList);
                 //  setPosts(response.data.data.postList);
                  setPageCounttm(pageCounttm+1);
                  console.log(poststm)
@@ -79,7 +92,7 @@ const DisplayPostTimleine = () => {
          newOffsettm = ((pageCounttm-2) * 20);
          setPageCounttm(pageCounttm-2);
          setItemOffsettm(newOffsettm);
-        history(`/homepage`);
+        history(`/timeline/${id}`);
         }
         
         
