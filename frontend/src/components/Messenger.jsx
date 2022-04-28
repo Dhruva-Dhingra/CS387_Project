@@ -26,16 +26,16 @@ const Messenger = (props) => {
 				// console.log(requestOptions);
 			    const res =  await MessageFinder.get("/");
                 setFriends(res.data);
-                console.log(res.data);
+                console.log(friends);
             } catch (err) {}
         }
 
         fetchData();
-   },[]) 
+   },[friends, setFriends]) 
 
    const handleFriendSelect = (id2) => {
-       let id1  = document.cookie ['user_id'];
-    navigate(`messenger/${id1}/${id2}`); // TODO
+     
+    navigate(`${id2}`); // TODO
   };
 
     return (
@@ -45,8 +45,9 @@ const Messenger = (props) => {
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
           <tr className='bg-primary'>
-              <th scope = "col"></th>
-              <th scope = "col"></th>
+              <th scope = "col">User ID</th>
+              <th scope = "col">Last Message</th>
+              <th scope = "col">Time</th>
 
               {/* <th scope = "col">F</th> */}
           </tr>
@@ -58,8 +59,9 @@ const Messenger = (props) => {
                   <tr 
                   onClick={() => handleFriendSelect(friend.user_id)} 
                   key={friend.user_id} >
-                  <td>{friend.first_name}  </td>
-                  <td>{friend.last_name}</td>
+                  <td>{friend.user_id}  </td>
+                  <td>{friend.content}</td>
+                  <td>{friend.time}</td>
                  </tr>
                 )
                 
