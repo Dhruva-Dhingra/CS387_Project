@@ -39,7 +39,7 @@ for data in relation:
     signup_times.append(data[10])
 File.close()
 
-content = "Page_ID,User_ID,Content_Type,Content,Time,Validity\n"
+content = "Page_ID,User_ID,Content_Type,Content,Content_Picture,Time,Validity\n"
 File = open('Post_backup.csv', newline='')
 reader = csv.reader(File, quotechar='"', delimiter=',')
 relation, header = get_data(reader)
@@ -72,6 +72,9 @@ for i in range(len(relation)):
     data[1] = str(user_id_to_user_id_mapping[user_id])
     data[3] = "\"" + data[3].replace('"', '') + "\""
     data[4] = random_date(datetime.strptime(signup_times[user_id - 1], "%Y-%m-%d %H:%M:%S"), d4).strftime("%Y-%m-%d %H:%M:%S")
+    data.append(data[5])
+    data[5] = data[4]
+    data[4] = ""
     content += ",".join(data) + "\n"
 File.close()
 

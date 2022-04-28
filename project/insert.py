@@ -1,3 +1,4 @@
+from numpy import binary_repr
 import psycopg2, csv, sys, argparse
 import psycopg2.extensions
 from psycopg2 import extras
@@ -28,8 +29,8 @@ args = parser.parse_args()
 
 database = "dbname=" + args.name +" user=" + args.user + " host=" + args.host + " password="+args.pswd+ " port="+args.port
 database = "dbname=" + args.name +" user=" + args.user + " password="+args.pswd+ " port="+args.port
-# conn = psycopg2.connect(database)
-conn =psycopg2.connect(database="projectdb", user="postgres" , password = "1234" , host="127.0.0.1")
+conn = psycopg2.connect(database)
+#conn =psycopg2.connect(database="projectdb", user="postgres" , password = "1234" , host="127.0.0.1")
 c = conn.cursor()
 
 ddl_file = open(args.ddl)
@@ -44,7 +45,7 @@ q1 = "INSERT INTO "
 q2 = " VALUES %s;"
 
 order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv", "Friend.csv", "Post.csv"]
-bytea_fields = [('Post', 'Content')]
+bytea_fields = [('Post', 'Content_Picture')]
 
 for file in order:
     print(file)
@@ -62,7 +63,14 @@ for file in order:
             if entry is None or len(entry) == 0:
                 temp.append(None)
             elif (file[:-4], header[j]) in bytea_fields:
-                temp.append(bytes(entry, 'ascii'))
+                temp.append(bytes(entry, "utf8"))
+                # temp.append(entry.encode('utf-8'))
+                # byte_array = bytearray(entry, "utf8")
+                # byte_list = []
+                # for byte in byte_array:
+                #     binary_representation = bin(byte)
+                #     byte_list.append(binary_representation)
+                # temp.append(byte_list)
             else:
                 temp.append(entry)
         _relation.append(temp)
