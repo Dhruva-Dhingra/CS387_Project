@@ -172,10 +172,78 @@ const reset_graph = async () => {
 				return err.stack;
 		}
 }
+
+const send_request = async (req, res) => {
+	try {
+		let sender_id = req.cookies.user_id;
+		let acceptor_id = req.body.user_id;
+		let sending_time = req.body.time;
+		pool.query('select sender, acceptor, status from friend where sender = $1 and acceptor = $2;', [sender_id, acceptor_id],
+		(err, result) => {
+			if(err){
+				res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+				console.log(err.stack);
+			} else {
+				if(result.rows.length != 0){
+					res.status(200).json({"status" : "failure", "message" : "Request already pending"});
+				} else {
+					pool.query('insert into friend (sender, acceptor, sending_time, accept_time, status) values ($1, $2, $3, null, false);',
+					[sender_id, acceptor_id, sending_time], (err, result) => {
+						if(err){
+							res.status(200).json({"status" : "failure", "message" : "Could not send request"});
+							console.log(err.stack);
+						} else {
+							res.status(200).json({"status" : "success", "message" : "Request Sent"});
+						}
+					})
+				}
+			}
+		})
+	} catch (err){
+		res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+		console.log(err.stack);
+	}
+}
+
+const acccept_request = async (req, res) => {
+	try {
+		let acceptor_id = req.cookies.user_id;
+		let sender_id = req.body.user_id;
+		let accept_time = req.body.time;
+		pool.query('select sender, acceptor, status from friend where sender = $1 and acceptor = $2 and status = false;', [sender_id, acceptor_id],
+		(err, result) => {
+			if(err){
+				res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+				console.log(err.stack);
+			} else {
+				if(result.rows.length == 0){
+					res.status(200).json({"status" : "failure", "message" : "No such (pending) request"});
+				} else {
+					pool.query(`update friend set accept_time = $3, status = true where 
+								sender = $1 and acceptor = $2 and status = false;`,
+								[sender_id, acceptor_id, accept_time], (err, result) => {
+								if(err){
+									res.status(200).json({"status" : "failure", "message" : "Could not accept request"});
+									console.log(err.stack);
+								} else {
+									res.status(200).json({"status" : "success", "message" : "Request Accepted"});
+								}
+					})
+				}
+			}
+		})
+	} catch (err){
+		res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+		console.log(err.stack);
+	}
+}
+
 module.exports = {
 		get_invitations,
 		sync_graphdb,
 		get_recommendations,
 		get_friends,
 		reset_graph,
+		send_request,
+		accept_request,
 }
