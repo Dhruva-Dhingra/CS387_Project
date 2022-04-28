@@ -30,7 +30,7 @@ const get_homepage_posts = async (req, res) => {
         let start = req.body.start;
         let end = req.body.end;
         if(start < 0 || end < 0){
-            res.status(400).json({"status" : "failure", "message" : "start or end < 0"});
+            res.status(200).json({"status" : "failure", "message" : "start or end < 0"});
         }  
         
         pool.query(
@@ -42,7 +42,7 @@ const get_homepage_posts = async (req, res) => {
             )
             select post_info.post_id, post_info.poster_page_id, post_info.poster_user_id, post_info.content_type, post_info.content, post_info.time, coalesce(reaction_count.reaction_count, 0)
             from (
-                select post_id, page_id as poster_page_id, user_id as poster_user_id, content_type, content, time, rank() over (order by time) as post_rank
+                select post_id, page_id as poster_page_id, user_id as poster_user_id, content_type, content, time, row_number() over (order by time) as post_rank
                 from post, actual_friends
                 where
                 Post.User_ID is not null and Post.User_ID = actual_friends.other_friend
@@ -51,7 +51,7 @@ const get_homepage_posts = async (req, res) => {
             [user_id, start, end],
 			(err, result) => {
 				if (err) {
-					res.status(400).json({"status" : "failure", "message" : "SQL query failed"});
+					res.status(200).json({"status" : "failure", "message" : "SQL query failed"});
 					return console.error('Error executing query', err.stack);
 				}
 				else{
