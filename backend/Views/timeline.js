@@ -30,7 +30,7 @@ const get_timeline = async (req, res) => {
         pool.query(
             `select post_info.post_id, post_info.poster_page_id, post_info.poster_user_id, post_info.content_type, post_info.content, post_info.time, coalesce(reaction_count.reaction_count, 0)
             from 
-            (select Post.Post_id, Post.Page_ID as poster_page_id, Post.User_ID as poster_user_id, Post.Content_Type, Post.Content, Post.Time, rank() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
+            (select Post.Post_id, Post.Page_ID as poster_page_id, Post.User_ID as poster_user_id, Post.Content_Type, Post.Content, Post.Time, row_number() over (Partition By Post.User_ID order by Post.Time desc) as Post_Rank
                 from Post where Post.User_ID = $1
             ) as post_info left outer join reaction_count
             on post_info.post_rank between $2 and $3 and (post_info.post_id = reaction_count.post_id or reaction_count.post_id is null);`,
