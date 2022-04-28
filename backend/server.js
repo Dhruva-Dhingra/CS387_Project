@@ -206,6 +206,16 @@ app.get('/messenger/:user', async(req,res)=> {
 	console.log('Received response', ans);
 });
 
+app.post('/messenger/:user', async(req,res)=> {
+
+	console.log('Received request');
+	// console.log(req.params.id);
+	let id1  = req.cookies.user_id;
+	console.log(id1);
+	let ans = await send_message (req,res);
+	console.log('Received response', ans);
+});
+
 app.get('/friends/recommendations', async(req, res) => {
 		console.log('In recommendations endpoint');
 		let verification = false;
