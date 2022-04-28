@@ -1,7 +1,10 @@
 import React, { useState, useContext } from 'react';
 import HomepageFinder from '../apis/HomepageFinder';
 import { Context } from '../context/Context';
+import { useNavigate } from 'react-router-dom';
+import SearchBoxFinder from '../apis/SearchBoxFinder';
 
+// import { Navigate } from 'react-router-dom';
 const SearchBox = () => {
 
     const head = {
@@ -17,12 +20,14 @@ const SearchBox = () => {
 
     const {searchBox} = useContext(Context)
     const [search, setSearchBox] = useState("")
+    let navigate= useNavigate();
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-          const response = await HomepageFinder.post("/:id", {
-              search: search,
+          const response = await SearchBoxFinder.get("/", {
+            input : e
           })
           searchBox(response.data.data.search);
           console.log(response);
@@ -31,8 +36,9 @@ const SearchBox = () => {
         }
     }
 
+
     return <div className='mb-4'>
-    <h1 style = {head2}>Search your friends and pages! </h1>
+    <h1 style = {head2}>Search your friends! </h1>
     <form action="">
         <div className="form-row">
           <div className="col">
