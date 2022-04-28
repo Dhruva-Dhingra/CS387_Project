@@ -5,8 +5,8 @@ class LoginForm extends Component {
 				super();
 
 				this.state = {
-						email: null,
-						password: null,
+						email: '',
+						password: '',
 				};
 				this.handleSubmit = this.handleSubmit.bind(this);
 				this.handleChange = this.handleChange.bind(this);
@@ -36,26 +36,8 @@ class LoginForm extends Component {
 				const res = await fetch('http://localhost:8080/login', requestOptions)
 				let data = await res.json();
 
-				document.cookie = `user_id=${data.id}`;
 				console.log(data);
 
-				const reqOpt = {
-						method: 'GET',
-						mode: 'cors',
-						credentials: 'include',
-						headers: {
-								'Accept': 'application/json',
-								'Content-Type': 'application/json'
-						},
-				};
-
-				let resp = await fetch('http://localhost:8080/friends/recommendations', reqOpt)
-				let dat = await resp.json();
-				console.log(dat);
-
-				resp = await fetch('http://localhost:8080/friends/invitations', reqOpt)
-				dat = await resp.json();
-				console.log(dat);
 		}
 
 		render() {
@@ -92,8 +74,8 @@ class SignupForm extends Component {
 						// branch: null,
 						// degree: null,
 						// batch: null,
-						email: null,
-						password: null,
+						email: '',
+						password: '',
 						// residence: null,
 						// birthday: null,
 						// profile_pic: null,
@@ -135,8 +117,8 @@ class SignupForm extends Component {
 								<p>Please sign up!</p>
 								<br/>
 								<form onSubmit = {this.handleSubmit}  class="was-validated">
-							
-									
+										
+										
 										<label class="col-sm-12 controls">
 												Email:
 												<input type = 'text' name = 'email' value = {this.state.email} placeholder = 'Enter email' onChange = {this.handleChange} />
@@ -179,6 +161,7 @@ class LoginSignup extends Component {
 				console.log(this.state.isLogin);
 		}
 
+
 		render () {
 				let form;
 				form = this.state.isLogin? <LoginForm />: <SignupForm />;
@@ -186,7 +169,7 @@ class LoginSignup extends Component {
 				return (
 						<div>
 						 		{form}
-							
+								
 						 		<button onClick = {this.loginClick} class="btn btn-success">Login</button>
 						 		<button onClick = {this.signupClick} class="btn btn-primary">Signup</button>
 						</div>

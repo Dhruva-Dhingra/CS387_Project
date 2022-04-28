@@ -46,8 +46,7 @@ const checkIfExists = async (email) => {
 }
 
 const signup = async (req, res) => {
-	console.log('Signing up in backend')
-        let email = req.body.email;
+    let email = req.body.email;
 		let password = req.body.password;
 		let firstname = req.body.firstname;
 		let lastname = req.body.lastname;
@@ -114,27 +113,25 @@ const login = async (req, res) => {
 					});
 				}
 				else{
-					ans = result.rows[0];
-					refpswd = ans['hash_of_password'];
-					// var isValid = bcrypt.compareSync(bcrypt.hash(password), refpswd);
-					var isValid = (password.localeCompare(refpswd)) == 0;
-					if (!isValid) {
-						res.status(400).json({
-							accessToken: null,
-							message: "Invalid Password"
-						});
-					}
-					else {
-						var token = jwt.sign({id: ans['user_id']}, config.secret, {
-							expiresIn: 86400
-						});
-						res.cookie('accessToken', token);
-						res.status(200).json({
-							id: ans['user_id'],
-							email: ans['email'],
-							accessToken: token,
-							message: "Success"
-						});
+						ans = result.rows[0];
+						refpswd = ans['hash_of_password'];
+						// var isValid = bcrypt.compareSync(bcrypt.hash(password), refpswd);
+						var isValid = (password.localeCompare(refpswd)) == 0;
+						if (!isValid) {
+								res.status(400).json({
+										message: "Invalid Password"
+								});
+						}
+						else {
+								var token = jwt.sign({id: ans['user_id']}, config.secret, {
+										expiresIn: 86400
+								});
+								res.cookie('accessToken', token);
+								res.cookie('user_id', ans['user_id']);
+								res.status(200).json({
+										email: ans['email'],
+										message: "Success"
+								});
 					} 
 				}
 			}

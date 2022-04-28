@@ -1,0 +1,126 @@
+import React, { Component } from 'react';
+
+class Recommendations extends Component {
+		constructor () {
+				super();
+				this.state = {
+						recommendations: null
+				}
+				this.handleSubmit = this.handleSubmit.bind(this);
+		}
+
+		async handleSubmit(e) {
+				e.preventDefault();
+
+				const reqOpt = {
+						method: 'GET',
+						mode: 'cors',
+						credentials: 'include',
+						headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
+				};
+
+				let resp = await fetch('http://localhost:8080/friends/recommendations', reqOpt)
+				let dat = await resp.json();
+				this.setState({
+						recommendations: dat
+				});
+				console.log(dat);
+		}
+
+		render() {
+				const recoms = this.state.recommendations((el) => {
+						<li> el.user_id </li
+				});
+				return (
+						<div>
+								<p> Friend recommendations!</p>
+								<br/>
+								<ul>{recoms}</ul>
+						</div>
+				);
+		}
+}
+
+class Invitations extends Component {
+		constructor () {
+				super();
+
+				this.state = {
+						invitations: null
+				}
+				this.handleSubmit = this.handleSubmit.bind(this);
+		}
+
+		async handleSubmit(e) {
+				e.preventDefault();
+
+				const reqOpt = {
+						method: 'GET',
+						mode: 'cors',
+						credentials: 'include',
+						headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
+				};
+
+				let resp = await fetch('http://localhost:8080/friends/invitations', reqOpt)
+				let dat = await resp.json();
+				this.setState({
+						invitations: dat
+				});
+				console.log(dat);
+		}
+
+		render() {
+				const invits = this.state.invitations((el) => {
+						<li> el.user_id </li
+				});
+				return (
+						<div>
+								<p> Friend invitations!</p>
+								<br/>
+								<ul>{invits}</ul>
+						</div>
+				);
+		}
+}
+
+class RecomInvit extends Component {
+		constructor() {
+				super();
+				this.state = {
+						isRecom: true,
+				}
+				this.recomClick = this.recomClick.bind(this);
+				this.invitClick = this.invitClick.bind(this);
+		}
+
+		recomClick() {
+				this.setState({
+						isRecom: true,
+				});
+		}
+
+		invitClick() {
+				this.setState({
+						isRecom: false,
+				});
+		}
+
+		render() {
+				let disp = this.state.isRecom? <Recommendations />: <Invitations />;
+				return (
+						<div>
+								<button onClick = {this.invitClick} class = 'btn btn-primary'>Invitations</button
+								<button onClick = {this.recomClick} class = 'btn btn-secondary'>Recommendations</button>
+						{disp}
+						</div>
+				);
+		}
+}
+
+export default RecomInvit;

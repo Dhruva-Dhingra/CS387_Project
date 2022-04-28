@@ -11,7 +11,30 @@ import TimelinePage from './routes/TimelinePage';
 import MessageBasePage from './routes/MessageBasePage';
 import WebAdminPage from './routes/WebAdminPage';
 import NotifPage from './routes/NotifPage';
+import RecomInvit from './routes/FriendsPage';
 
+
+const checkLogin = async(nextState, replace, next) => {
+		console.log('In checkLogin()');
+		const requestOptions = {
+				method: 'GET',
+				mode: 'cors',
+				credentials: 'include',
+				headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+				},
+		};
+		const res = await fetch('http://localhost:8080/checklogin', requestOptions)
+		let data = await res.json();
+		if (!data.logged_in) {
+				replace({
+						pathname: '/',
+						state: {nextPathname: nextState.location.pathname}
+				});
+		}
+		next();
+}
 
 const App = () => {
 	
@@ -30,7 +53,7 @@ return (
 <a className="nav-link" href="http://localhost:3000/messenger">MessageBasePage</a>
 </li>
 <li className="nav-item">
-<a className="nav-link" href="http://localhost:3000/requests">Friend Requests</a>
+<a className="nav-link" href="http://localhost:3000/friends">Friend Requests</a>
 </li>
 <li className="nav-item">
 <a className="nav-link" href="http://localhost:3000/notif">Notifications</a>
@@ -48,13 +71,14 @@ return (
 <div className="container" >
 <BrowserRouter>
 <Routes>
-<Route path = "/homepage" element = {<HomePage/>}></Route>
-<Route path = "/editprofile" element = {<EditProfile/>}></Route>
-<Route path = "/timeline/:id" element = {<TimelinePage/>}></Route>
-<Route path = "/messenger/:id" element = {<MessageBasePage/>}></Route>
-<Route path = "/admin" element = {<WebAdminPage/>}></Route>
-<Route path = "/notif" element = {<NotifPage/>}></Route>
-<Route path = '/ls' element = {< LoginSignup />}></Route> 
+		<Route path = "/homepage" element = {<HomePage/>} onEnter={checkLogin}></Route>
+<Route path = "/editprofile" element = {<EditProfile/>} onEnter={checkLogin}></Route>
+<Route path = "/timeline/:id" element = {<TimelinePage/>} onEnter={checkLogin}></Route>
+<Route path = "/messenger/:id" element = {<MessageBasePage/>} onEnter={checkLogin}></Route>
+<Route path = "/admin" element = {<WebAdminPage/>} onEnter={checkLogin}></Route>
+<Route path = "/notif" element = {<NotifPage/>} onEnter={checkLogin}></Route>
+<Route path = '/' element = {< LoginSignup />}></Route> 
+<Route path = '/friends' element = {<RecomInvit />} onEnter={checkLogin}></Route>
 </Routes>
 </BrowserRouter>
 </div>

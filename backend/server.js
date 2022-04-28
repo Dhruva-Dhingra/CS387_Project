@@ -14,11 +14,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
 const {
-	checkIfExists,
+		checkIfExists,
     signup,
     login,
-	verifyToken,
-	verifyTokenWithUserID,
+		verifyToken,
+		verifyTokenWithUserID,
 } = require('./Views/login_signup');
 
 const {
@@ -30,32 +30,32 @@ const {
 } = require('./Views/friends');
 
 const {
-	plot1,
-	plot2,
-	plot3,
-	plot4,
-	plot5
+		plot1,
+		plot2,
+		plot3,
+		plot4,
+		plot5
 
 } = require('./Views/admin');
 
 
 const {
-	get_homepage_posts
+		get_homepage_posts
 } = require('./Views/homepage');
 
 const {
-	get_timeline
+		get_timeline
 } = require('./Views/timeline');
 
 const {
-	create_post
+		create_post
 } = require('./Views/post');
 
 const {
-	send_message,
-	display_chat,
-	last_message_list,
-	
+		send_message,
+		display_chat,
+		last_message_list,
+		
 } = require('./Views/message');
 
 app.use(function(req, res, next) {
@@ -91,15 +91,15 @@ app.use(function(req, res, next) {
 // }, seconds);
 
 app.post('/test', async (req, res) => {
-	if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
-	else res.json({'result': 'failed'})
-	console.log(req.body);
-	console.log(req.cookies);
+		if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
+		else res.json({'result': 'failed'})
+		console.log(req.body);
+		console.log(req.cookies);
 });
 
 const PORT = 8080
 app.listen(PORT, async () => {
-	console.log(`Server running on port ${PORT}`);
+		console.log(`Server running on port ${PORT}`);
 });
 
 app.post('/signup', async(req, res) => {
@@ -108,22 +108,23 @@ app.post('/signup', async(req, res) => {
 				signup(req, res);
 		}
 		else{
-			console.log('Could not sign up!');
-			res.status(400).json({"status" : "failure"});
-	}
+				console.log('Could not sign up!');
+				res.status(400).json({"status" : "failure"});
+		}
 });
 
-app.post('/checklogin', async (req, res) => {
+app.get('/checklogin', async (req, res) => {
+		console.log('Checking for login');
 		if (req.cookies.accessToken) {
-				if verifyToken(req.cookies.accesssToken) {
-						res.json({'status': 'logged_in'});
+				if (verifyToken(req.cookies.accesssToken)) {
+						res.json({'logged_in': true});
 				}
 				else {
-						res.json({'status': 'not_logged_in'});
+						res.json({'logged_in': false});
 				}
 		}
 		else {
-				res.json({'status': 'not_logged_in'});
+				res.json({'logged_in': false});
 		}
 })
 
@@ -131,62 +132,68 @@ app.post('/login', async (req, res) => {
 		login(req, res);
 });
 
+app.get('/logout', async (req, res) => {
+		res.clearCookie('accessToken');
+		res.clearCookie('user_id');
+})
+
 app.post('/homepage', async (req, res) => {
-	console.log("Get Homepage");
-	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
-		verification = true;
-	}
-	else{
-		verification = false;
-		res.json({'verification': 'failed', 'result' : null})
-	}
-	if(verification){
-		get_homepage_posts(req, res);
-	}
+		console.log("Get Homepage");
+		let verification = false;
+		if (verifyToken(req.cookies.accessToken) && req.cookies.user_id){
+				verification = true;
+				console.log('Verified user', req.cookies.user_id);
+		}
+		else{
+				verification = false;
+				res.json({'verification': 'failed', 'result' : null})
+		}
+		if(verification){
+				get_homepage_posts(req, res);
+		}
 });
 
 app.post('/timeline/:user', async (req, res) => {
-	console.log('Getting Timeline Posts');
-	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
-		verification = true;
-	}
-	else{
-		verification = false;
-		res.json({'verification': 'failed', 'result' : null})
-	}
-	console.log(req.body);
-	console.log(req.cookies);
-	console.log("Called Post Timeline");
-	if(verification){
-		get_timeline(req, res);
-	}
+		console.log('Getting Timeline Posts');
+		let verification = false;
+		if (verifyToken(req.cookies.accessToken)){
+				verification = true;
+		}
+		else{
+				verification = false;
+				res.json({'verification': 'failed', 'result' : null})
+		}
+		console.log(req.body);
+		console.log(req.cookies);
+		console.log("Called Post Timeline");
+		if(verification){
+				get_timeline(req, res);
+		}
 });
 
 app.post('/create_post', async (req, res) => {
-	let verification = false;
-	let user_id = req.body.user_id;
-	if (verifyTokenWithUserID(req.cookies.accessToken, user_id)){
-		verification = true;
-	}
-	else{
-		verification = false;
-		res.json({'verification': 'failed', 'result' : null})
-	}
-	if(verification){
-		create_post(req, res);
-	}
+		let verification = false;
+		let user_id = req.body.user_id;
+		if (verifyTokenWithUserID(req.cookies.accessToken, user_id)){
+				verification = true;
+		}
+		else{
+				verification = false;
+				res.json({'verification': 'failed', 'result' : null})
+		}
+		if(verification){
+				create_post(req, res);
+		}
 });
 
 app.get('/messenger', async(req,res)=> {
 
-	console.log('Received request');
-	// console.log(req.params.id);
-	let id1  = req.cookies.user_id;
-	console.log(id1);
-	let ans = await get_friends (req,res);
-	console.log('Received response', ans);
+		console.log('Received request');
+		// console.log(req.params.id);
+		let id1  = req.cookies.user_id;
+		console.log(id1);
+		let ans = await get_friends (req,res);
+		console.log('Received response', ans);
 });
 
 app.get('/friends/recommendations', async(req, res) => {
@@ -228,8 +235,8 @@ app.get('/friends/invitations', async(req, res) => {
 });
 
 app.get('/admin', async(req, res) => {
-	console.log("ADMIN ENTERED");
-	plot1(req, res);
+		console.log("ADMIN ENTERED");
+		plot1(req, res);
 });
 
 // app.post('/signup', (req, res) => {
