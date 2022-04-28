@@ -65,8 +65,8 @@ with open("facebook_combined.txt", "r") as infile:
             time_stamp = random_date(time_stamp, time_stamp + timedelta(days=10))
             for i in range(len(chat[x])):
                 time_stamp = random_date(time_stamp,  time_stamp + timedelta(hours=16))
-                message_arr = [ chat[x][i], time_stamp.strftime("%Y-%m-%d %H:%M:%S"), 'false' , 'false', 'false', 'null']
-                message_csv_content = message_csv_content + ",".join(message_arr) + "\n"
+                message_arr = [ "\"" +chat[x][i]+ "\"", time_stamp.strftime("%Y-%m-%d %H:%M:%S"), 'false' , 'false', 'false', 'null']
+                message_csv_content =  message_csv_content +  ",".join(message_arr) + "\n"
                 # print(senders[x])
                 private_chat_arr= [str(message_id), data[senders[x][i]], data[1-senders[x][i]]]
                 private_chat =private_chat + ",".join(private_chat_arr) + "\n"
