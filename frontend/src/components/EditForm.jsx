@@ -66,16 +66,16 @@ const EditForm = () => {
                 <input value = {last} onChange={(e) => setlast(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
             </div>
             <div className="col">
-                <input value = {rolln} onChange={(e) => setrolln(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
+                <input value = {rolln} onChange={(e) => setrolln(e.target.value)} type="text" className='form-control' placeholder='Roll Number'/>
             </div>
             <div className="col">
-                <input value = {branch} onChange={(e) => setbranch(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
+                <input value = {branch} onChange={(e) => setbranch(e.target.value)} type="text" className='form-control' placeholder='Branch'/>
             </div>
             <div className="col">
-                <input value = {degree} onChange={(e) => setdegree(e.target.value)} type="text" className='form-control' placeholder='Last Name'/>
+                <input value = {degree} onChange={(e) => setdegree(e.target.value)} type="text" className='form-control' placeholder='Degree'/>
             </div>
             <div className="col">
-                <input value = {batch} onChange={(e) => setbatch(e.target.value)} type="number" className='form-control' placeholder='Last Name'/>
+                <input value = {batch} onChange={(e) => setbatch(e.target.value)} type="number" className='form-control' placeholder='Batch'/>
             </div>
             <div className="col">
                 <input value = {email} onChange={(e) => setemail(e.target.value)} type="email" className='form-control' placeholder='Email-ID'/>
