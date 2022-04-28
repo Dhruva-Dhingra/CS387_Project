@@ -128,6 +128,7 @@ const login = async (req, res) => {
 						var token = jwt.sign({id: ans['user_id']}, config.secret, {
 							expiresIn: 86400
 						});
+						res.cookie('accessToken', token);
 						res.status(200).json({
 							id: ans['user_id'],
 							email: ans['email'],
@@ -142,17 +143,28 @@ const login = async (req, res) => {
 }
 
 const verifyToken = (token) => {
-		let ver = jwt.verify(token, config.secret, (err, verified) => {
-				if (err) return false;
-				return true;
-		});
-		console.log(ver);
-		return ver;
+	let ver = jwt.verify(token, config.secret, (err, verified) => {
+			if (err) return false;
+			return true;
+	});
+	console.log(ver);
+	return ver;
+}
+
+const verifyTokenWithUserID = (token, user_id) => {
+	let ver = jwt.verify(token, config.secret);
+	console.log(ver);
+	if(ver.id != user_id){
+		return false;
+	} else {
+		return true;
 	}
+}
 
 module.exports = {
     checkIfExists,
     signup,
     login,
-		verifyToken,
+	verifyToken,
+	verifyTokenWithUserID,
 }

@@ -10,8 +10,9 @@ const DisplayPostHomepage = () => {
     useEffect( ()=> {
          const fetchData = async () => {
              try {
-                 const response = await  HomepageFinder.get("/");
-                 setPost(response.data.data.result);
+                 const response = await  HomepageFinder.post("/");
+                 console.log(response.data);
+                //  setPost(response.data.data.result);
              } catch (err) {}
          }
  

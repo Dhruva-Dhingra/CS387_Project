@@ -9,9 +9,6 @@ var database = process.env.DATABASE;
 var password = process.env.PASSWORD;
 var port = process.env.PORT;
 
-
-console.log(user, host, database, password, port);
-
 const pool = new Pool({
     user: user,
     host: host,
@@ -20,33 +17,33 @@ const pool = new Pool({
     port: port
 });
 
-console.log('Pool made');
-
-
 const create_post = async (req, res) => {
     try {
-        // Post_ID bigint PRIMARY KEY ,
-        // Page_ID bigint,
-        // User_ID bigint,
-        // Content_Type int NOT NULL,
-        // Content  bytea NOT NULL,
-        // Time  timestamp NOT NULL,
-        // Validity  int NOT NULL,
-        // FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
-        // FOREIGN KEY (Page_ID) REFERENCES Page (Page_ID)
-        var result;
-        let page_id = parseInt(req.body.page_id);
+        let page_id = req.body.page_id;
+        page_id = page_id == undefined ? null : parseInt(page_id);
         let user_id = parseInt(req.body.user_id);
+        user_id = user_id == undefined ? null : parseInt(user_id);
         let content_type = parseInt(req.body.content_type);
+        content_type = content_type == undefined ? null : parseInt(content_type);
         let content = req.body.content;
-        let time = Date.parse(req.body.time);
+        content = content == undefined ? null : content
+        let time = req.body.time;
         let validity = 1;
 
-        let insert_result = pool.query(
-            `insert into Post(Page_ID, User_ID, Content_Type, Content, Time)
+        pool.query(
+            `insert into Post(Page_ID, User_ID, Content_Type, Content, Time, Validity)
             values
             ($1, $2, $3, $4, $5, $6)`,
-            [page_id, user_id, content_type, content, time, validity]
+            [page_id, user_id, content_type, content, time, validity],
+			(err, result) => {
+				if (err) {
+					res.status(400).json({"status" : "failure", "message" : "Insert SQL query failed"});
+					return console.error('Error executing query', err.stack);
+				}
+				else{
+                    res.status(200).json({"status" : "success", "message" : "Post Created"});
+				}
+			}
         );
     }
     catch (err) {

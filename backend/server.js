@@ -18,7 +18,7 @@ const {
     signup,
     login,
 	verifyToken,
-
+	verifyTokenWithUserID,
 } = require('./Views/login_signup');
 
 const {
@@ -28,6 +28,16 @@ const {
 		get_friends,
 		reset_graph,
 } = require('./Views/friends');
+
+const {
+	plot1,
+	plot2,
+	plot3,
+	plot4,
+	plot5
+
+} = require('./Views/admin');
+
 
 const {
 	get_homepage_posts
@@ -58,27 +68,27 @@ app.use(function(req, res, next) {
 		next()
 })
 
-let seconds = 500 * 1000;
-let user_arr = [];
-let friend_arr = [];
-setTimeout(async () => {
-		let ans = await reset_graph();
-		console.log('First delete');
-		console.log('Calling periodic function');
-		uf = await sync_graphdb(user_arr, friend_arr);
-		user_arr = uf.user_arr;
-		friend_arr = uf.friend_arr;
-		console.log('friend_arr =', friend_arr);
-		console.log('user_arr =', user_arr);
-});
-setInterval(async () => {
-		console.log('Calling periodic function');
-		uf = await sync_graphdb(user_arr, friend_arr);
-		user_arr = uf.user_arr;
-		friend_arr = uf.friend_arr;
-		console.log('friend_arr =', friend_arr);
-		console.log('user_arr =', user_arr);
-}, seconds);
+// let seconds = 500 * 1000;
+// let user_arr = [];
+// let friend_arr = [];
+// setTimeout(async () => {
+// 		let ans = await reset_graph();
+// 		console.log('First delete');
+// 		console.log('Calling periodic function');
+// 		uf = await sync_graphdb(user_arr, friend_arr);
+// 		user_arr = uf.user_arr;
+// 		friend_arr = uf.friend_arr;
+// 		console.log('friend_arr =', friend_arr);
+// 		console.log('user_arr =', user_arr);
+// });
+// setInterval(async () => {
+// 		console.log('Calling periodic function');
+// 		uf = await sync_graphdb(user_arr, friend_arr);
+// 		user_arr = uf.user_arr;
+// 		friend_arr = uf.friend_arr;
+// 		console.log('friend_arr =', friend_arr);
+// 		console.log('user_arr =', user_arr);
+// }, seconds);
 
 app.post('/test', async (req, res) => {
 	if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
@@ -122,7 +132,7 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/homepage', async (req, res) => {
-	console.log('Getting Homepage Posts');
+	console.log("Get Homepage");
 	let verification = false;
 	if (verifyToken(req.cookies.accessToken)){
 		verification = true;
@@ -131,16 +141,9 @@ app.post('/homepage', async (req, res) => {
 		verification = false;
 		res.json({'verification': 'failed', 'result' : null})
 	}
-	console.log(req.body);
-	console.log(req.cookies);
-	console.log("Called Post Homepage");
 	if(verification){
-		let ans = get_homepage_posts(req, res);
-		console.log(ans);
-		let result = {'verification' : 'success', 'result' : ans};
-		res.json(result);
+		get_homepage_posts(req, res);
 	}
-	res.json()
 });
 
 app.post('/timeline/:user', async (req, res) => {
@@ -157,17 +160,14 @@ app.post('/timeline/:user', async (req, res) => {
 	console.log(req.cookies);
 	console.log("Called Post Timeline");
 	if(verification){
-		let ans = get_timeline(req, res);
-		console.log(ans);
-		let result = {'verification' : 'success', 'result' : ans};
-		res.json(result);
+		get_timeline(req, res);
 	}
-	res.json()
 });
 
 app.post('/create_post', async (req, res) => {
 	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
+	let user_id = req.body.user_id;
+	if (verifyTokenWithUserID(req.cookies.accessToken, user_id)){
 		verification = true;
 	}
 	else{
@@ -175,11 +175,8 @@ app.post('/create_post', async (req, res) => {
 		res.json({'verification': 'failed', 'result' : null})
 	}
 	if(verification){
-		let ans = create_post(req, res);
-		let result = {'verification' : 'success', 'result' : ans};
-		res.json(result);
+		create_post(req, res);
 	}
-	res.json()
 });
 
 app.get('/messenger', async(req,res)=> {
@@ -228,6 +225,11 @@ app.get('/friends/invitations', async(req, res) => {
 				let ans = await get_invitations(user_id);
 				res.json(ans);
 		}
+});
+
+app.get('/admin', async(req, res) => {
+	console.log("ADMIN ENTERED");
+	plot1(req, res);
 });
 
 // app.post('/signup', (req, res) => {
