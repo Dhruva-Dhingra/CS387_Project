@@ -1,8 +1,31 @@
+// const Pool = require('pg').Pool;
+const Pool = require('pg').Pool;
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const config = require('../config/auth.config')
+require('dotenv').config();
+
+var user = process.env.USR;
+var host = process.env.HOST;
+var database = process.env.DATABASE;
+var password = process.env.PASSWORD;
+var port = process.env.PORT;
+
+const pool = new Pool({
+    user: user,
+    host: host,
+    database: database,
+    password: password,
+    port: port
+});
+
+console.log('Pool made');
+
 const send_message = async (req, res) => {
 		console.log('Adding message to backend');
     try {
         
-        let content = req.body.conent;
+        let content = req.body.content;
         let sender = req.body.sender;
         let receiver = req.body.receiver;
         let time = new Date(); 
@@ -14,8 +37,7 @@ const send_message = async (req, res) => {
         let ans = await pool.query(
                          `BEGIN;
                          INSERT into message (content, time, view_once, deleted) VALUES ($1, $2, $3, $4);
-                         with T as SELECT count(*) as msg_id from message
-                         INSERT into private_chat (msg_id, sender_id, receiver_id) VALUES (msg_id,$5,$6);
+                         INSERT into private_chat (sender_id, receiver_id) VALUES ($5,$6);
                          COMMIT;`,
 						[content, time, view_once, deleted, sender,receiver]
 
@@ -42,10 +64,10 @@ const display_chat = async (req,res) =>{
   T2 as (
     SELECT message_id,0 as rec from private_chat 
     where sender_id = $2 and receiver_id = $1),
-  R1 as (select message_id, content, timestamp, rec from T1),
-  R2 as (select message_id, content, timestamp, rec from T2),
+  R1 as (select T1.message_id, content, time, rec from T1, message where message.message_id = T1.message_id),
+  R2 as (select T2.message_id, content, time, rec from T2, message where message.message_id = T2.message_id),
   R3 as ((select * from R1) union (select * from R2))
-  select * from R3 order by timestamp asc;
+  select * from R3 order by time asc;
        `, [user1, user2]);
     
   return  {

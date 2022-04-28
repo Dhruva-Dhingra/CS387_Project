@@ -115,17 +115,23 @@ app.post('/signup', async(req, res) => {
 
 app.get('/checklogin', async (req, res) => {
 		console.log('Checking for login');
-		if (req.cookies.accessToken) {
-				if (verifyToken(req.cookies.accesssToken)) {
-						res.json({'logged_in': true});
-				}
-				else {
-						res.json({'logged_in': false});
-				}
-		}
-		else {
-				res.json({'logged_in': false});
-		}
+		console.log(req.cookies);
+		if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success', logged_in: true});
+		else res.json({'result': 'failure', logged_in: false});
+		// if (req.cookies.accessToken) {
+		// 		if (verifyToken(req.cookies.accesssToken)) {
+		// 				console.log('Token verified');
+		// 				res.json({'logged_in': true});
+		// 		}
+		// 		else {
+		// 				console.log('Token not verified');
+		// 				res.json({'logged_in': false});
+		// 		}
+		// }
+		// else {
+		// 		console.log("Token doesn't exist");
+		// 		res.json({'logged_in': false});
+		// }
 })
 
 app.post('/login', async (req, res) => {
@@ -194,10 +200,12 @@ app.get('/messenger', async(req,res)=> {
 		console.log(id1);
 		let ans = await last_message_list (req,res);
 		console.log('Received response', ans);
+		res.status(200).json({'result' : ans.rows});
 });
 
 app.get('/messenger/:user', async(req,res)=> {
 
+	console.log(req.url);
 	console.log('Received request');
 	// console.log(req.params.id);
 	let id1  = req.cookies.user_id;
@@ -255,8 +263,7 @@ app.get('/friends/invitations', async(req, res) => {
 });
 
 app.get('/admin', async(req, res) => {
-		console.log("ADMIN ENTERED");
-		plot1(req, res);
+		await plot1(req, res);
 });
 
 // app.post('/signup', (req, res) => {

@@ -1,5 +1,6 @@
 import React from 'react';
-import {BrowserRouter as BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter as BrowserRouter, Outlet, Routes, Route} from "react-router-dom";
+import { Navigate } from 'react-router';
 import { ContextProvider } from './context/Context';
 // import Main from './Main';
 import LoginSignup from './routes/LoginSignup';
@@ -14,29 +15,14 @@ import NotifPage from './routes/NotifPage';
 import RecomInvit from './routes/FriendsPage';
 
 
-const checkLogin = (nextState, replace, next) => {
-		console.log('In checkLogin()');
-		const requestOptions = {
-				method: 'GET',
-				mode: 'cors',
-				credentials: 'include',
-				headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-				},
-		};
-		const res = fetch('http://localhost:8080/checklogin', requestOptions)
-					.then(res => res.json())
-					.then(data => {
-							if (!data.logged_in) {
-									replace({
-											pathname: '/',
-											state: {nextPathname: nextState.location.pathname}
-									});
-							}
-					});
-		next();
+const PrivateRoute = ({children}) => {
+		let cookie_ls = document.cookie.split(';');
+		cookie_ls.map((el) => el.split('=')[0]);
+		let b1 = cookie_ls.some((el) => el.includes('user_id'));
+		let b2 = cookie_ls.some((el) => el.includes('accessToken'));
+		return (b1 && b2)? children: <Navigate to='/' />;
 }
+
 
 const App = () => {
 	
@@ -73,14 +59,15 @@ return (
 <div className="container" >
 <BrowserRouter>
 <Routes>
-		<Route path = "/homepage" element = {<HomePage/>} onEnter={checkLogin}></Route>
-<Route path = "/editprofile" element = {<EditProfile/>} onEnter={checkLogin}></Route>
-<Route path = "/timeline/:id" element = {<TimelinePage/>} onEnter={checkLogin}></Route>
-<Route path = "/messenger/:id" element = {<MessageBasePage/>} onEnter={checkLogin}></Route>
-<Route path = "/admin" element = {<WebAdminPage/>} onEnter={checkLogin}></Route>
-<Route path = "/notif" element = {<NotifPage/>} onEnter={checkLogin}></Route>
-<Route path = '/' element = {< LoginSignup />}></Route> 
-<Route path = '/friends' element = {<RecomInvit />} onEnter={checkLogin}></Route>
+<Route path = '/' element = {< LoginSignup />} /> 
+<Route path = "/homepage" element = {<HomePage/>} />
+<Route path = "/editprofile" element = {<EditProfile/>} />
+<Route path = "/timeline/:id" element = {<TimelinePage/>} />
+<Route path = "/messenger/:id" element = {<MessageBasePage/>} />
+<Route path = "/admin" element = {<WebAdminPage/>} />
+
+<Route path = "/notif" element = {<PrivateRoute><NotifPage /></PrivateRoute>} />
+<Route path = "/friends" element = {<PrivateRoute><RecomInvit /></PrivateRoute>} />
 </Routes>
 </BrowserRouter>
 </div>
@@ -90,3 +77,4 @@ return (
 
 
 export default App;
+

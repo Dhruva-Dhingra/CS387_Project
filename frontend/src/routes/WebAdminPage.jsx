@@ -23,7 +23,7 @@ const WebAdminPage = () => {
              } catch (err) {console.log(err.stack);}
          }
           fetchData();
-    },[L1, SL1, D1, SD1]) 
+    },[]) 
     
     
     return (
