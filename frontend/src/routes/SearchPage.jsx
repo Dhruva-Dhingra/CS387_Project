@@ -20,6 +20,11 @@ const SearchPage = () => {
         fetchData();
     },[])
     
+    const handlePostSelect = (id) => {
+        history.push(`/search`);
+      };
+
+
     return <div className='list-group'>
         <SearchBox/>
         Your Searches.
