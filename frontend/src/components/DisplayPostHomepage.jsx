@@ -20,8 +20,10 @@ const DisplayPostHomepage = () => {
                  console.log(response.data);
                  const endOffset = itemOffset + 20;
                  spostscount(response.data.data.postscount);
-                 setPosts(response.data.data.postList.slice(itemOffset, endOffset));
+                //  setPosts(response.data.data.postList.slice(itemOffset, endOffset));
+                 setPosts(response.data.data.postList);
                  setPageCount(pageCount+1);
+                 console.log(posts)
       
              } catch (err) {}
          }
@@ -68,10 +70,10 @@ const DisplayPostHomepage = () => {
         <tbody>
             {posts && posts.map(post => {
                 return (
-                  <tr onClick={() => handlePostSelect(posts.post_id)} 
-                  key={posts.post_id}>
+                  <tr onClick={() => handlePostSelect(post.post_id)} 
+                  key={post.post_id}>
                     {/* <td>{posts.post_id}</td> */}
-                    <td>{posts.content}</td>
+                    <td>{post.post_id}</td>
                 </tr>
                 )
             })}
