@@ -19,7 +19,7 @@ const LogOut = () => {
 		fetch('http://localhost:8080/logout', reqOpt)
 				.then(resp => resp.json());
 		return (
-				<button onClick={handleClick}>Logout</button>
+			<center><button onClick={handleClick} className="btn btn-warning btn">Logout</button></center>	
 				
 		);
 }
