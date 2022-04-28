@@ -273,9 +273,8 @@ app.get('/friends/invitations', async(req, res) => {
 });
 
 // TODO: merge this with homepage
-app.get('/search',async(req, res) => {
-		let ans = await get_search_results(req,res);
-		res.json(ans);
+app.post('/search',async(req, res) => {
+		await get_search_results(req,res);
 } )
 
 app.get('/admin', async(req, res) => {
