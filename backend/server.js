@@ -198,8 +198,30 @@ app.get('/messenger', async(req,res)=> {
 		// console.log(req.params.id);
 		let id1  = req.cookies.user_id;
 		console.log(id1);
-		let ans = await get_friends (req,res);
+		let ans = await last_message_list (req,res);
 		console.log('Received response', ans);
+		res.status(200).json({'result' : ans.rows});
+});
+
+app.get('/messenger/:user', async(req,res)=> {
+
+	console.log(req.url);
+	console.log('Received request');
+	// console.log(req.params.id);
+	let id1  = req.cookies.user_id;
+	console.log(id1);
+	let ans = await display_chat (req,res);
+	console.log('Received response', ans);
+});
+
+app.post('/messenger/:user', async(req,res)=> {
+
+	console.log('Received request');
+	// console.log(req.params.id);
+	let id1  = req.cookies.user_id;
+	console.log(id1);
+	let ans = await send_message (req,res);
+	console.log('Received response', ans);
 });
 
 app.get('/friends/recommendations', async(req, res) => {
@@ -241,8 +263,7 @@ app.get('/friends/invitations', async(req, res) => {
 });
 
 app.get('/admin', async(req, res) => {
-		console.log("ADMIN ENTERED");
-		plot1(req, res);
+		await plot1(req, res);
 });
 
 // app.post('/signup', (req, res) => {
