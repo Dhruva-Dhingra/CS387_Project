@@ -82,27 +82,27 @@ app.use(function(req, res, next) {
 		next()
 })
 
-// let seconds = 500 * 1000;
-// let user_arr = [];
-// let friend_arr = [];
-// setTimeout(async () => {
-// 		let ans = await reset_graph();
-// 		console.log('First delete');
-// 		console.log('Calling periodic function');
-// 		uf = await sync_graphdb(user_arr, friend_arr);
-// 		user_arr = uf.user_arr;
-// 		friend_arr = uf.friend_arr;
-// 		console.log('friend_arr =', friend_arr);
-// 		console.log('user_arr =', user_arr);
-// });
-// setInterval(async () => {
-// 		console.log('Calling periodic function');
-// 		uf = await sync_graphdb(user_arr, friend_arr);
-// 		user_arr = uf.user_arr;
-// 		friend_arr = uf.friend_arr;
-// 		console.log('friend_arr =', friend_arr);
-// 		console.log('user_arr =', user_arr);
-// }, seconds);
+let seconds = 500 * 1000;
+let user_arr = [];
+let friend_arr = [];
+setTimeout(async () => {
+		let ans = await reset_graph();
+		console.log('First delete');
+		console.log('Calling periodic function');
+		uf = await sync_graphdb(user_arr, friend_arr);
+		user_arr = uf.user_arr;
+		friend_arr = uf.friend_arr;
+		console.log('friend_arr =', friend_arr);
+		console.log('user_arr =', user_arr);
+});
+setInterval(async () => {
+		console.log('Calling periodic function');
+		uf = await sync_graphdb(user_arr, friend_arr);
+		user_arr = uf.user_arr;
+		friend_arr = uf.friend_arr;
+		console.log('friend_arr =', friend_arr);
+		console.log('user_arr =', user_arr);
+}, seconds);
 
 app.post('/test', async (req, res) => {
 		if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
