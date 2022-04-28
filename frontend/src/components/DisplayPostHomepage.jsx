@@ -107,7 +107,7 @@ const DisplayPostHomepage = () => {
     </table>
    
     <left><button   disabled={isDisabled} className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button></left> 
-    <right><button className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button></right>
+    <right><button  disabled={isNextDisabled} className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button></right>
 </div>;
 
 };
