@@ -45,7 +45,9 @@ f.close()
 
 message_id = 1
 
+ind = 1
 with open("facebook_combined.txt", "r") as infile:
+    
     for line in infile:
         data = [str(int(x) + 1) for x in line.strip().split()]
         send_date = random_date(d3, d4)
@@ -55,6 +57,10 @@ with open("facebook_combined.txt", "r") as infile:
         l = range(0,len(chat))
         l = random.sample(l,num_conv)
         time_stamp = accept_date
+        ind +=1
+        content = content + ",".join(arr) + "\n"
+        if ind >1000:
+            continue
         for x in l:
             time_stamp = random_date(time_stamp, time_stamp + timedelta(days=10))
             for i in range(len(chat[x])):
