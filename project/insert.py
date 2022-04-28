@@ -30,7 +30,7 @@ args = parser.parse_args()
 database = "dbname=" + args.name +" user=" + args.user + " host=" + args.host + " password="+args.pswd+ " port="+args.port
 database = "dbname=" + args.name +" user=" + args.user + " password="+args.pswd+ " port="+args.port
 # conn = psycopg2.connect(database)
-conn =psycopg2.connect(database="postgres", user="manan" , password = "Manan@976" , host="127.0.0.1")
+conn =psycopg2.connect(database)
 c = conn.cursor()
 
 ddl_file = open(args.ddl)
@@ -44,7 +44,7 @@ tables = {}
 q1 = "INSERT INTO "
 q2 = " VALUES %s;"
 
-order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv", "Friend.csv", "Post.csv", "Message.csv", "Private_Chat.csv"]
+order = ["Hobby.csv", "AppUser.csv", "Website_Admin.csv", "Friend.csv", "Post.csv", "Message.csv", "Private_Chat.csv", "Reaction.csv"]
 bytea_fields = [('Post', 'Content_Picture')]
 
 for file in order:

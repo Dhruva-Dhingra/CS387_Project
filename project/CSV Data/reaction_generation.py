@@ -1,5 +1,6 @@
 # importing csv module
 import csv
+from dataclasses import replace
 import numpy
 import random, time, datetime
 from sqlite3 import Timestamp
@@ -61,13 +62,12 @@ with open(filename, 'r') as csvfile:
 content = "User_ID,Post_ID,Reaction,timestamp\n"
 post_id = 1
 n = 4039
-arr = [i + 1 for i in range(n)]
+n_arr = [i + 1 for i in range(n)]
 total = 0
 for i in range(len(rows)):
     row = rows[i]
-    num_reacts = random.choices(arr, k = random.randint(0, 10))
+    num_reacts = random.sample(n_arr, k = random.randint(0, 10))
     total += len(num_reacts)
-    print(total)
     for user_id in num_reacts:
         # user_id = row[2]
         # time_stamp = row[-2]
@@ -75,9 +75,7 @@ for i in range(len(rows)):
         # time_stamp = random_date(time_stamp, (time_stamp+timedelta(days=4)).strftime("%m/%d/%Y %I:%M %p") )
         time_stamp = random_date(datetime.strptime(posting_times[i], "%Y-%m-%d %H:%M:%S"), d4).strftime("%Y-%m-%d %H:%M:%S")
         reaction_type = 0
-        if reaction_type == 1:
-            reaction_type = 'null'
-        arr = [ str(user_id), str(post_id), str(reaction_type), str(time_stamp)]
+        arr = [str(user_id), str(post_id), str(reaction_type), str(time_stamp)]
         content = content + ",".join(arr) + "\n"
     post_id +=1 
 
