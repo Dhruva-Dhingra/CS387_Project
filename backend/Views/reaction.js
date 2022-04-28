@@ -21,7 +21,24 @@ const pool = new Pool({
 });
 
 console.log('Pool made');
+const remove_post_reaction = async (req,res) => {
+    try {
+        
+        var post_id = req.body.post_id;
+		let user_id = req.cookies.user_id;
+        const q1 = pool.query(`DELETE FROM reaction where post_id =  $1 and user_id = $2 `, [post_id, user_id]);
+        res.status(200).json({
+            data: {
+                status:  (await q1),
+            }
+        });
+    }
+    catch (err){
+        console.log(err);
+    }
 
+
+}
 const react_to_post = async (req, res) => {
     try {
         var reaction = req.body.reaction;
@@ -37,11 +54,29 @@ const react_to_post = async (req, res) => {
         });
     }
     catch (err){
-        console.log(err)
+        console.log(err);
     }
 }
 
 
+const get_reaction_count = async (req, res ) =>{
+    try {
+        var post_id = req.body.post_id;
+        const q1 = pool.query(`
+       select  reaction, coalesce(count(distinct User_id),0) from reaction where Post_id = $1 group by Reaction `, [post_id]);
+        res.status(200).json({
+            data: {
+                status:  (await q1),
+            }
+        });
+    }
+    catch (err){
+        console.log(err);
+    }
+
+}
 module.exports = {
    react_to_post,
+   get_reaction_count,
+   remove_post_reaction ,
 }
