@@ -91,7 +91,7 @@ const last_message_list = async (req, res) => {
                          select message_id, sender_id as sender, receiver_id as receiver 
                          from private_chat where
                          sender_id = $1 or receiver_id = $1
-                       ),
+                       )
                        select message.message_id, message.content, message.time, message.view_once, message.deleted, message.invitation, message.group_id, message_list.sender, message_list.receiver
                        from message_list, message
                        where
