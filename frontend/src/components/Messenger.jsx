@@ -24,10 +24,9 @@ const Messenger = (props) => {
 						},
 						// body: `id=${1}`,
 				};
-				console.log(requestOptions);
-			    const res =  await fetch(
-                    'http://localhost:8080/messenger',
-                    requestOptions); // TODO : add id as request parameter
+				// console.log(requestOptions);
+			    const res =  await MessageFinder.get("/");
+                console.log(res);
                 console.log("received response from backend");
                 console.log(res.data);
                 setFriends(res.data.data.friends);
