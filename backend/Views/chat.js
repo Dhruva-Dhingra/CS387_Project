@@ -13,12 +13,11 @@ var port = process.env.PORT;
 console.log(user, host, database, password, port);
 
 const pool = new Pool({
-    user: user,
-    host: host,
-    database: database,
-    password: password,
-    port: port
+	user: user,
+	host: host,
+	database: database,
+	password: password,
+	port: port
 });
 
 console.log('Pool made');
-
