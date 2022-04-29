@@ -24,7 +24,7 @@ const load_users = async () =>  {
 		// }
 		// console.log('All users inserted');
 		console.log('Inserting users');
-		query = `load csv with headers from "file:///AppUser.csv" as row
+		query = `load csv with headers from "file:///AppUserIDS.csv" as row
 CREATE (n: User {ID: toInteger(row.User_ID)})`
 		let res = await session.run(query);
 		console.log('All users inserted');
