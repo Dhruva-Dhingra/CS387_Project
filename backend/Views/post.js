@@ -21,7 +21,7 @@ const create_post = async (req, res) => {
     try {
         let page_id = req.body.page_id;
         page_id = page_id == undefined ? null : parseInt(page_id);
-        let user_id = parseInt(req.body.user_id);
+        let user_id = parseInt(req.cookie.user_id);
         user_id = user_id == undefined ? null : parseInt(user_id);
         let content_type = parseInt(req.body.content_type);
         content_type = content_type == undefined ? null : parseInt(content_type);
