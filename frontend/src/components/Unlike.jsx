@@ -38,7 +38,7 @@ const Unlike = (inp) => {
 
     <form action="">
         <div className="form-row">
-          <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn">Unike</button></center>          
+          <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn">Unlike</button></center>          
         </div>
     </form>
 </div>;
