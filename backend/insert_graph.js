@@ -2,7 +2,7 @@ const neo4j = require('neo4j-driver');
 const nconf = require('nconf');
 require('dotenv').config();
 
-const driver = neo4j.driver("neo4j://localhost:7687", neo4j.auth.basic("neo4j", "neo4j"));
+const driver = neo4j.driver("bolt://localhost:7687", neo4j.auth.basic("neo4j", "neo4j"));
 console.log('Connected to neo4j');
 const session = driver.session();
 
@@ -12,16 +12,21 @@ const clear = async() => {
 				let res = await session.run(query);
 				console.log('Cleared');
 		} catch(err) {
-				console.log(err).stack;
+				console.log(err.stack);
 		}
 }
 const load_users = async () =>  {
 		try {
-		for (let i = 1; i <= 4039; i++) {
-				console.log('User', i);
-				query = `CREATE (n: User {ID: ${i}})`;
-				let res = await session.run(query);
-		}
+		// for (let i = 1; i <= 4039; i++) {
+		// 		console.log('User', i);
+		// 		query = `CREATE (n: User {ID: ${i}})`;
+		// 		let res = await session.run(query);
+		// }
+		// console.log('All users inserted');
+		console.log('Inserting users');
+		query = `load csv with headers from "file:///AppUserIDS.csv" as row
+CREATE (n: User {ID: toInteger(row.User_ID)})`
+		let res = await session.run(query);
 		console.log('All users inserted');
 		} catch (err) {
 				console.log(err.stack);

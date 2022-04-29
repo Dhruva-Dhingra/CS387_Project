@@ -35,6 +35,10 @@ const {
 } = require('./Views/admin');
 
 const {
+	edit_profile
+} = require('./Views/editprofile');
+
+const {
 		get_invitations,
 		sync_node,
 		sync_graphdb,
@@ -222,4 +226,14 @@ app.get('/admin', async(req, res) => {
 
 app.post('/post', async(req, res) => {
 		await async_run(req, res, create_post);
+})
+
+app.post('/editprofile', async(req, res) => {
+
+	await async_run(req, res, edit_profile);
+})
+
+app.get('/about/:user', async(req, res) => {
+	console.log("Reached Backend")
+	await async_run(req, res, get_timeline);
 })

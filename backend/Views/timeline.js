@@ -24,9 +24,12 @@ console.log('Pool made');
 
 const get_timeline = async (req, res) => {
     try {
-        let user_id = req.cookies.user_id;
-        console.log("log request ", req);
-        // console.log(req.body.start, req.body.end);
+        let user_id = req.params.user;
+        if(user_id === undefined){
+            user_id = 10;
+        }
+        console.log("log request ", req.body);
+        console.log(req.body.start, req.body.end);
         let start = req.body.start === undefined ? 1 : req.body.start;
         let end = req.body.end === undefined ? 20 : req.body.end;
         console.log(user_id, start, end);
