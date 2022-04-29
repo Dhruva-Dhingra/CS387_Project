@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 
 class LoginForm extends Component {
 		constructor() {
@@ -42,23 +46,22 @@ class LoginForm extends Component {
 
 		render() {
 				return (
-						<div>
-								<p>Please Login!</p>
-								<br/>
-								<form onSubmit = {this.handleSubmit}>
-										<label>
-												Email:
-												<input type = 'email' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
-										</label>
-										<br/>
-										<label>
-												Password:
-												<input type = 'password' name = 'password' value = {this.state.password} onChange = {this.handleChange} />
-										</label>
-										<br/>
-										<input type = 'submit' value ='Submit'></input>
-								</form>
-						</div>
+						<Form>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+										<Form.Label>Email address</Form.Label>
+										<Form.Control type="email" placeholder="Enter email" />
+										<Form.Text className="text-muted">
+												We'll never share your email with anyone else.
+										</Form.Text>
+								</Form.Group>	
+								<Form.Group className="mb-3" controlId="formBasicPassword">
+										<Form.Label>Password</Form.Label>
+										<Form.Control type="password" placeholder="Password" />
+								</Form.Group>
+								<Button variant="primary" type="submit">
+										Submit
+								</Button>
+						</Form>
 				);
 		}
 }
@@ -68,19 +71,19 @@ class SignupForm extends Component {
 				super();
 
 				this.state = {
-						// firstname: null,
-						// lastname: null,
-						// rollno: null,
-						// branch: null,
-						// degree: null,
-						// batch: null,
+						firstname: null,
+						lastname: null,
+						rollno: null,
+						branch: null,
+						degree: null,
+						batch: null,
 						email: '',
 						password: '',
-						// residence: null,
-						// birthday: null,
-						// profile_pic: null,
-						// pvt: null,
-						// autoadd: null,
+						residence: null,
+						birthday: null,
+						profile_pic: null,
+						pvt: null,
+						autoadd: null,
 				}
 				this.handleSubmit = this.handleSubmit.bind(this);
 				this.handleChange = this.handleChange.bind(this);
@@ -203,12 +206,14 @@ class LoginSignup extends Component {
 				form = this.state.isLogin? <LoginForm />: <SignupForm />;
 
 				return (
-						<div>
-						 		{form}
-								
-						 		<button onClick = {this.loginClick} class="btn btn-success">Login</button>
-						 		<button onClick = {this.signupClick} class="btn btn-primary">Signup</button>
-						</div>
+						<Tabs defaultActiveKey="login" id="uncontrolled-tab-example" className="mb-3">
+								<Tab eventKey="login" title="Login">
+										<LoginForm />
+								</Tab>
+								<Tab eventKey="signup" title="Sign Up">
+										<SignupForm />
+								</Tab>
+						</Tabs>
 				);
 		}
 }
