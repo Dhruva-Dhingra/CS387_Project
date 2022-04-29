@@ -28,22 +28,24 @@ const DisplayAbout = () => {
     },[]);
 
     return <div className='list-group'>
+        <center>About</center>
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
           <tr className='bg-primary'>
               {/* <th scope = "col">Post ID</th> */}
               <th scope = "col">Details</th>
+              <th scope = 'col'>Value</th>
           </tr>
         </thead>
         <tbody>
-            <tr><td>Name</td></tr>
-            <tr><td>Email</td></tr>
-            <tr><td>Roll Number</td></tr>
-            <tr><td>Branch</td></tr>
-            <tr><td>Degree</td></tr>
-            <tr><td>Batch</td></tr>
-            <tr><td>Residence</td></tr>
-            <tr><td>Birthday</td></tr>
+            <tr><td>Name</td><td>HI</td></tr>
+            <tr><td>Email</td><td>HI</td></tr>
+            <tr><td>Roll Number</td><td>HI</td></tr>
+            <tr><td>Branch</td><td>HI</td></tr>
+            <tr><td>Degree</td><td>HI</td></tr>
+            <tr><td>Batch</td><td>HI</td></tr>
+            <tr><td>Residence</td><td>HI</td></tr>
+            <tr><td>Birthday</td><td>HI</td></tr>
         </tbody>
     </table>
     </div>
