@@ -34,6 +34,7 @@ const EditForm = () => {
         e.preventDefault()
         console.log(first);
         try {
+            console.log(first);
           const response = await EditFinder.post("/", {
               first: first,
               last: last,
