@@ -93,8 +93,7 @@ setTimeout(async () => {
 		uf = await sync_graphdb(user_arr, friend_arr);
 		user_arr = uf.user_arr;
 		friend_arr = uf.friend_arr;
-		console.log('friend_arr =', friend_arr);
-		console.log('user_arr =', user_arr);
+		console.log('First syncing done');
 });
 setInterval(async () => {
 		console.log('Calling periodic function');
@@ -181,6 +180,7 @@ app.post('/messenger/:user', async(req,res)=> {
 });
 
 app.get('/friends/recommendations', async(req, res) => {
+		console.log('Backend: getting recommendations');
 		await async_run(req, res, get_recommendations);
 });
 

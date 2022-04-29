@@ -57,9 +57,9 @@ const sync_graphdb = async (user_arr, friend_arr) => {
 				console.log('New users:', user_diff);
 				let queries = [];
 				for (let user of user_diff) {
-						console.log('User', user);
 						queries.push(`CREATE (n: User {ID: ${user}});`);
 				}
+				console.log("User queries inserted");
 				let friend_ans = await pool.query(`
 select Sender, Acceptor
 from Friend
@@ -67,13 +67,16 @@ where Status
 `);
 				friend_ans = friend_ans.rows.map((el) => JSON.stringify(el));
 				friend_diff = friend_ans.filter((el) => friend_arr.indexOf(el) == -1);
-				console.log('New friends:', friend_diff);
 				for (let friend of friend_diff) {
 						friend = JSON.parse(friend);
 						queries.push(`MATCH (n: User {ID: ${friend.sender}}), (m: User {ID: ${friend.acceptor}}) CREATE (n)-[:FRIEND]->(m);`)
 				}
+				console.log(queries.length);
+				let i = 0;
 				for (let query of queries) {
+						console.log(i);
 						let res = await session.run(query);
+						i += 1;
 				}
 				console.log('Syncing done');
 				let result = {
@@ -88,14 +91,14 @@ where Status
 const get_recommendations = async (req, res) => {
 		try {
 				let user_id = req.cookies.user_id;
-				console.log('Getting recommendations!');
+				console.log('Getting recommendations for', user_id);
 				let ans = await pool.query(`
 with linked as (
 select Sender as user_id from Friend where Acceptor = $1
 union
 select Acceptor as user_id from Friend where Sender = $1
 union
-select User_ID from AppUser where User_ID = ${user_id}
+select User_ID from AppUser where User_ID = $1
 ),
 res as (
 select User_ID
@@ -108,6 +111,7 @@ limit 20;
 `, [user_id]);
 				let wildcard = ans.rows;
 				wildcard = wildcard.map((el) => el.user_id);
+				console.log('wildcard:', wildcard);
 
 				let query = `MATCH p = (n: User {ID: ${user_id}})-[*2..3]-(m: User)
 UNWIND NODES(p) as nd
@@ -119,6 +123,7 @@ RETURN m.ID as id, factor
 order by factor desc`;
 				let res = await session.run(query);
 				res = res.records.map((el) => (el.get('id').low).toString());
+				console.log('Recommendations:', res)
 
 				ans = await pool.query(`
 select Sender as user_id from Friend where Acceptor = $1 and not Status
@@ -127,19 +132,19 @@ select Acceptor as user_id from Friend where Sender = $1 and not Status
 `, [user_id]);
 				let rem = ans.rows.map((el) => el.user_id);
 				res.push.apply(res, wildcard);
-				console.log(res);
+				console.log('Result:', res);
 				res = res.filter((el, index) => res.indexOf(el) === index);
 				res = res.filter((el) => !rem.includes(el));
 				res = res.slice(0, 20);
 				ret = []
 				for (let result of res) {
-						console.log(result);
+						console.log('Result int:', result);
 						let ans = await pool.query(`
 select AppUser.User_ID
 from AppUser
 where User_ID = $1
 `, [result]);
-						console.log(ans.rows);
+						console.log('Answer:', ans.rows);
 						ret.push(ans.rows[0]);
 				}
 				console.log(ret);
