@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import HomepageFinder from '../apis/HomepageFinder';
+import PostFinder from '../apis/PostFinder';
 import { Context } from '../context/Context';
 
 const AddPost = () => {
@@ -22,7 +22,7 @@ const AddPost = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-          const response = await HomepageFinder.post("/", {
+          const response = await PostFinder.post("/", {
               content: content,
               textcontent: textcontent
           })
