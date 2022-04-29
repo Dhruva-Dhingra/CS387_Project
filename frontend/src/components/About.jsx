@@ -17,7 +17,7 @@ const DisplayAbout = () => {
             start: 1,
             end : 2,
     });
-
+// console.log(response.data.result)
                 setPoststm(response.data.result);
                 console.log(poststm)
      
