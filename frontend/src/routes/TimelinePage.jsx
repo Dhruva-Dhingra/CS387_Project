@@ -6,7 +6,6 @@ import DisplayPostTimeline from "../components/DisplayPostTimeline";
 const TimelinePage = () => {
     return (
 <div>
-    <AddPost></AddPost>
     <DisplayPostTimeline></DisplayPostTimeline>
 </div>
     );
