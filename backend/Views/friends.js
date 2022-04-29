@@ -30,12 +30,13 @@ const get_invitations = async (req, res) => {
 				let ans = await pool.query(`
 -- select AppUser.User_ID, AppUser.First_Name, AppUser.Last_Name, AppUser.Roll_Number
 select AppUser.User_ID
-from AppUser, Invitations
-where Invitations.Sender = AppUser.User_ID
-and Invitations.Acceptor = $1;
+from AppUser, Friend
+where Friend.Acceptor = $1
+and Friend.Sender = AppUser.User_ID
+and not Status;
 `, [acceptor_id]);
-				console.log(ans.rows);
-				return ans.rows;
+				console.log('Invitations:', ans.rows);
+				res.json(ans.rows);
 		} catch (err) {
 				return err.stack;
 		}
@@ -112,7 +113,6 @@ where Status
 const get_recommendations = async (req, res) => {
 		try {
 				let user_id = req.cookies.user_id;
-				console.log('Getting recommendations for', user_id);
 				let ans = await pool.query(`
 with linked as (
 select Sender as user_id from Friend where Acceptor = $1
@@ -132,19 +132,21 @@ limit 20;
 `, [user_id]);
 				let wildcard = ans.rows;
 				wildcard = wildcard.map((el) => el.user_id);
-				console.log('wildcard:', wildcard);
+				console.log('wildcard', wildcard);
 
-				let query = `MATCH p = (n: User {ID: ${user_id}})-[*2..3]-(m: User)
+				let query = `MATCH p = (n: User {ID: ${user_id}})-[*2]-(m: User)
+where not (n)--(m)
 UNWIND NODES(p) as nd
 WITH p, size(collect(distinct(nd))) as distinctlen, m, size((m)--()) as degree
 where distinctlen = length(p) + 1
 WITH m, 1.0 * degree / (distinctlen - 1) as factor
-WHERE factor >= 0
-RETURN m.ID as id, factor
-order by factor desc`;
-				let res = await session.run(query);
-				res = res.records.map((el) => (el.get('id').low).toString());
-				console.log('Recommendations:', res)
+WHERE factor >= 1
+RETURN distinct m.ID as id, factor
+				order by factor desc`;
+				let results = await session.run(query);
+				results = results.records.map((el) => (el.get('id').low).toString());
+				results = results.slice(0, 15);
+				console.log('graph', results);
 
 				ans = await pool.query(`
 select Sender as user_id from Friend where Acceptor = $1 and not Status
@@ -152,27 +154,24 @@ union
 select Acceptor as user_id from Friend where Sender = $1 and not Status
 `, [user_id]);
 				let rem = ans.rows.map((el) => el.user_id);
-				res.push.apply(res, wildcard);
-				console.log('Result:', res);
-				res = res.filter((el, index) => res.indexOf(el) === index);
-				res = res.filter((el) => !rem.includes(el));
-				res = res.slice(0, 20);
+				results.push.apply(results, wildcard);
+				results = results.filter((el, index) => results.indexOf(el) === index);
+				results = results.filter((el) => !rem.includes(el));
+				results = results.slice(0, 20);
+				console.log('final', results);
 				ret = []
-				for (let result of res) {
-						console.log('Result int:', result);
+				for (let result of results) {
 						let ans = await pool.query(`
 select AppUser.User_ID
 from AppUser
 where User_ID = $1
 `, [result]);
-						console.log('Answer:', ans.rows);
 						ret.push(ans.rows[0]);
 				}
-				console.log(ret);
 				res.json(ret);
 		} catch (err) {
 				res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
-				return err.stack;
+				console.log(err.stack);
 		}
 }
 
@@ -214,6 +213,7 @@ const send_request = async (req, res) => {
 				let sender_id = req.cookies.user_id;
 				let acceptor_id = req.body.user_id;
 				let sending_time = req.body.time;
+				console.log('Sender:', sender_id, 'Acceptor:', acceptor_id);
 				pool.query('select sender, acceptor, status from friend where (sender = $1 and acceptor = $2) or (sender = $2 and acceptor = $1);'
 									 , [sender_id, acceptor_id],
 									 (err, result) => {
@@ -225,14 +225,14 @@ const send_request = async (req, res) => {
 															 res.status(200).json({"status" : "failure", "message" : "Request already pending"});
 													 } else {
 															 pool.query('insert into friend (sender, acceptor, sending_time, accept_time, status) values ($1, $2, $3, null, false);',
-																					[sender_id, acceptor_id, sending_time], (err, result) => {
-																							if(err){
-																									res.status(200).json({"status" : "failure", "message" : "Could not send request"});
-																									console.log(err.stack);
-																							} else {
-																									res.status(200).json({"status" : "success", "message" : "Request Sent"});
-																							}
-																					})
+																								[sender_id, acceptor_id, sending_time], (err, result) => {
+																										if(err){
+																												res.status(200).json({"status" : "failure", "message" : "Could not send request"});
+																												console.log(err.stack);
+																										} else {
+																												res.status(200).json({"status" : "success", "message" : "Request Sent"});
+																										}
+																								})
 													 }
 											 }
 									 })

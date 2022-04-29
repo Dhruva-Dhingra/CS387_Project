@@ -7,7 +7,7 @@ import DisplayAbout from "../components/About";
 const TimelinePage = () => {
     return (
 <div>
-    {/* <DisplayAbout></DisplayAbout> */}
+    <DisplayAbout></DisplayAbout>
     <DisplayPostTimeline></DisplayPostTimeline>
 </div>
     );

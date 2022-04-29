@@ -20,6 +20,14 @@ const DisplayAbout = () => {
     });
     console.log("HIHIHIHI");
 // console.log(response.data.result)
+			var imgobbj = document.getElementById("profile_photo_box");
+			// console.log("Created new image placeholder");
+			// var len = response.data.result[0].profile_picture.length;
+			// console.log(response.data.result[0].profile_picture.slice(len - 10, len - 1));
+			// imgobbj.src = "data:text/css;base64,"+response.data.result[0].profile_picture.slice(1, response.data.result[0].profile_picture.length - 1);
+			imgobbj.src = "data:text/css;base64,"+response.data.result[0].profile_picture;
+			console.log("Added source to image holder");
+			// var return_ = document.body.appendChild(newimg);
                 setPoststm(response.data.result);
                 console.log(poststm);
                 console.log("HI");
@@ -29,7 +37,9 @@ const DisplayAbout = () => {
         fetchData();
     },[]);
     return <div className='list-group'>
-        <center>About</center>
+        <img id="profile_photo_box" class="rounded float-left" width="200" height="200"></img>
+        <br>
+        </br>
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
           <tr className='bg-primary'>
@@ -49,6 +59,7 @@ const DisplayAbout = () => {
             <tr><td>Birthday</td><td>{poststm[0].birthday}</td></tr>
         </tbody>
     </table>
+  
     </div>
 
 }
