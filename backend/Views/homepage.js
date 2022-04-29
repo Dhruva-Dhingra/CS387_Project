@@ -13,30 +13,30 @@ var port = process.env.PORT;
 console.log(user, host, database, password, port);
 
 const pool = new Pool({
-    user: user,
-    host: host,
-    database: database,
-    password: password,
-    port: port
+	user: user,
+	host: host,
+	database: database,
+	password: password,
+	port: port
 });
 
 console.log('Pool made');
 
 
 const get_homepage_posts = async (req, res) => {
-    try {
-        var result;
-        let user_id = req.cookies.user_id;
-        console.log(req.body.start, req.body.end);
-        let start = req.body.start === undefined ? 1 : req.body.start;
-        let end = req.body.end === undefined ? 20 : req.body.end;
-        console.log(user_id, start, end);
-        if(start < 0 || end < 0){
-            res.status(200).json({"status" : "failure", "message" : "start or end < 0"});
-        }  
-        
-        pool.query(
-            `
+	try {
+		var result;
+		let user_id = req.cookies.user_id;
+		console.log(req.body.start, req.body.end);
+		let start = req.body.start === undefined ? 1 : req.body.start;
+		let end = req.body.end === undefined ? 20 : req.body.end;
+		console.log(user_id, start, end);
+		if (start < 0 || end < 0) {
+			res.status(200).json({ "status": "failure", "message": "start or end < 0" });
+		}
+
+		pool.query(
+			`
             with actual_friends as 
             (
                 select (case when friend.sender = $1 then friend.acceptor else friend.sender end) as other_friend from friend where
@@ -55,24 +55,25 @@ const get_homepage_posts = async (req, res) => {
             from (post_info_2 join appuser
             on post_info_2.user_id = appuser.user_id) WHERE post_rank BETWEEN $2 AND $3 order by time DESC
 		    ;`,
-            [user_id, start, end],
+			[user_id, start, end],
 			(err, result) => {
 				if (err) {
-					res.status(200).json({"status" : "failure", "message" : "SQL query failed"});
+					res.status(200).json({ "status": "failure", "message": "SQL query failed" });
 					return console.error('Error executing query', err.stack);
 				}
-				else{
-                    console.log(result.rowCount);
-                    res.status(200).json({"status" : "success", "result" : result.rows.length, data: {postList : result.rows, postscount : result.rowCount}});
+				else {
+					console.log(result.rowCount);
+					res.status(200).json({ "status": "success", "result": result.rows.length, data: { postList: result.rows, postscount: result.rowCount } });
 				}
 			}
-        );
-    }
-    catch (err) {
+		);
+	}
+	catch (err) {
+		res.status(200).json({ "status": "failure", "message": "SQL query failed" });
 		return err.stack;
-    }
+	}
 }
 
 module.exports = {
-    get_homepage_posts,
+	get_homepage_posts,
 }
