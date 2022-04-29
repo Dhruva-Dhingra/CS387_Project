@@ -71,12 +71,18 @@ const react_to_post = async (req, res) => {
 }
 
 const remove_reaction_from_post = async (req, res) => {
+    console.log('unliking post');
     var reaction = req.body.reaction;
+    reaction = parseInt(reaction);
     var post_id = req.body.post_id;
+    post_id = parseInt(post_id);
     let user_id = req.cookies.user_id;
+    user_id = parseInt(user_id);
+    let time_stamp = req.cookies.time;
+    console.log(post_id, user_id);
     
     pool.query(`select * from reaction where user_id = $1 and post_id = $2 and reaction = $3`,
-    [user_id, post_id,reaction, time_stamp],
+    [user_id, post_id,reaction],
     (err, result) => {
         if (err) {
             res.status(200).json({"status" : "failure", "message" : "Query Failed"});
@@ -92,7 +98,7 @@ const remove_reaction_from_post = async (req, res) => {
             }
             else{
                 pool.query(`
-                delete from reaction user_id = $1 and post_id = $2 and reaction = $3`, [user_id, post_id, reaction],
+                delete from reaction where user_id = $1 and post_id = $2 and reaction = $3`, [user_id, post_id, reaction],
                 (err, result) => {
                     if(err){
                         res.status(200).json({"status" : "failure", "message" : "Query Failed"});

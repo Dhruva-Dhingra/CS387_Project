@@ -19,6 +19,7 @@ const pool = new Pool({
 
 const create_post = async (req, res) => {
     try {
+        console.log("Create Post");
         let page_id = req.body.page_id;
         page_id = page_id == undefined ? null : parseInt(page_id);
         let user_id = parseInt(req.cookies.user_id);
@@ -30,6 +31,8 @@ const create_post = async (req, res) => {
         let time = req.body.time;
         let validity = 1;
 console.log("OK")
+console.log([page_id, user_id, content_type, content, time, validity]);
+console.log("Starting query execution");
         pool.query(
             `insert into Post(Page_ID, User_ID, Content_Type, Content, Time, Validity)
             values
@@ -42,7 +45,7 @@ console.log("OK")
 					return console.error('Error executing query', err.stack);
 				}
 				else{
-                    // console.log("Err")
+                    console.log("Added post");
                     res.status(200).json({"status" : "success", "message" : "Post Created"});
 				}
 			}

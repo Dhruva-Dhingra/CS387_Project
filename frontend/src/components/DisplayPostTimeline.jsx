@@ -24,15 +24,17 @@ const DisplayPostTimleine = () => {
          } else {
              setisDisabledtm(false);
          }
+         console.log(itemOffsettm)
          var end = itemOffsettm+19;
          const response = await  TimelineFinder.post(`/${id}`, {
           start: `${itemOffsettm}`,
-      end : `${end}`
+      end : `${end}`,
   });
-              console.log(response.data);
-              spostscounttm(response.data.data.postscount);
-              setPoststm(response.data.data.postList);
-              setPageCounttm(pageCounttm+1);
+              // console.log(response.data.result);
+              // spostscounttm(response.data.data.postscount);
+              setPoststm(response.data.result);
+              // setPageCounttm(pageCounttm+1);
+              // console.log(response.data);
 
               console.log(poststm)
    
@@ -88,12 +90,12 @@ const DisplayPostTimleine = () => {
           </tr>
         </thead>
         <tbody>
-            {poststm && poststm.map(post => {
+            {poststm && poststm.map(posttm => {
                 return (
                   <tr 
-                  key={post.post_id}>
+                  key={posttm.post_id}>
                     {/* <td>{posts.post_id}</td> */}
-                    <td>{post.post_id}</td>
+                    <td>{posttm.post_id}</td>
                 </tr>
                 )
             })}
