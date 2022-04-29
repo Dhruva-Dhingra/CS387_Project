@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import LikeFinder from '../apis/LikeFinder';
 import { Context } from '../context/Context';
 
-const Like = (post_id) => {
+const Like = (inp) => {
     const head = {
         color: '#7c795d', 'fontFamily': 'Trocchi', 
         'fontSize': '60px', 'fontWeight': 'normal', 'lineHeight': '48px', 
@@ -15,17 +15,18 @@ const Like = (post_id) => {
       }
 
     const handleSubmit = async (e) => {
+      console.log("handle Submit called");
         e.preventDefault()
         try {
           const response = await LikeFinder.post("/", {
-              'post_id' : post_id,
+              'post_id' : inp.post_id,
               'reaction' : 0,
           }).then(response => {
             let data = response.json(); 
             if(data.state == "success"){
-              alert("Post " + toString(post_id) + " Liked!");
+              alert("Post " + toString(inp.post_id) + " Liked!");
             } else {
-              alert("Post " + toString(post_id) + " coult not be Liked");
+              alert("Post " + toString(inp.post_id) + " coult not be Liked");
             }
           });
         } catch (err) {
