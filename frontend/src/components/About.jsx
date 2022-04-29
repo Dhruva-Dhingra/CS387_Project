@@ -19,7 +19,8 @@ const DisplayAbout = () => {
     });
 // console.log(response.data.result)
                 setPoststm(response.data.result);
-                console.log(poststm)
+                console.log(poststm);
+                console.log("HI");
      
             } catch (err) {}
         }
@@ -31,19 +32,13 @@ const DisplayAbout = () => {
         <thead>
           <tr className='bg-primary'>
               {/* <th scope = "col">Post ID</th> */}
-              <th scope = "col">Post Content</th>
+              <th scope = "col">Details</th>
           </tr>
         </thead>
         <tbody>
-            {poststm && poststm.map(posttm => {
-                return (
-                  <tr 
-                  key={posttm.post_id}>
-                    {/* <td>{posts.post_id}</td> */}
-                    <td>{posttm.post_id}</td>
-                </tr>
-                )
-            })}
+            <tr><td>Name</td></tr>
+            <tr><td>Residence</td></tr>
+            <tr><td>Birthday</td></tr>
         </tbody>
     </table>
     </div>
