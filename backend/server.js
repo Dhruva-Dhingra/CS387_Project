@@ -35,10 +35,6 @@ const {
 } = require('./Views/admin');
 
 const {
-	edit_profile
-} = require('./Views/editprofile');
-
-const {
 		get_invitations,
 		sync_node,
 		get_recommendations,

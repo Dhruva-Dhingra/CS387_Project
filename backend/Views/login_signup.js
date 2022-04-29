@@ -63,7 +63,7 @@ const signup = async (req, res) => {
 		// let password = bcrypt.hashSync(req.body.password, 8);
 		let residence = req.body.residence;
 		residence = residence == undefined ? null : residence;
-		let bday = req.body.bday;
+		let bday = req.body.birthday;
 		bday = bday == undefined ? null : bday;
 		let sgndate = new Date();
 		let pfp = req.body.pfp;
