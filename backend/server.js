@@ -229,3 +229,7 @@ app.post('/editprofile', async(req, res) => {
 
 	await async_run(req, res, edit_profile);
 })
+
+app.get('/about', async(req, res) => {
+	await async_run(req, res, get_timeline);
+})
