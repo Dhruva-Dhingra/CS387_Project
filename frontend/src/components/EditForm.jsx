@@ -56,6 +56,7 @@ const EditForm = () => {
         var profile_pic;
         try {
             var dp_file_element = document.getElementById("file-selector");
+						if (dp_file_element.files.length > 0) {
             var reader = new FileReader();
             reader.onloadend = function(){
                 // console.log("Reader = ", reader);
@@ -65,6 +66,8 @@ const EditForm = () => {
                 // imgElement.src = reader.result;
             }
             await reader.readAsDataURL(dp_file_element.files[0]);
+						}
+						else profile_pic = null;
             console.log(first);
         await EditFinder.post("/", {
               first: first,
