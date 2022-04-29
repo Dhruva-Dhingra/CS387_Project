@@ -1,7 +1,24 @@
+import sys
+import csv
 from numpy import binary_repr
 import psycopg2, csv, sys, argparse
 import psycopg2.extensions
 from psycopg2 import extras
+
+maxInt = sys.maxsize
+print(maxInt)
+
+while True:
+    # decrease the maxInt value by factor 10 
+    # as long as the OverflowError occurs.
+
+    try:
+        csv.field_size_limit(maxInt)
+        break
+    except OverflowError:
+        maxInt = int(maxInt//2)
+print(maxInt)
+csv.field_size_limit(maxInt)
 
 def san(i):
     if i.lower().strip() == "null":

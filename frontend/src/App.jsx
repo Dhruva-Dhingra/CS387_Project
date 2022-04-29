@@ -17,6 +17,7 @@ import RecomInvit from './routes/FriendsPage';
 import LogOut from './routes/Logout';
 import SearchPage from './routes/SearchPage';
 import CreatePostPage from './routes/CreatePostPage';
+import AboutPage from './routes/AboutPage';
 import SearchBoxFinder from './apis/SearchBoxFinder';
 
 
@@ -45,6 +46,12 @@ return (
 <a className="nav-link" href="http://localhost:3000/homepage">Homepage</a>
 </li>
 <li className="nav-item active">
+<a className="nav-link" href="http://localhost:3000/search">Search</a>
+</li>
+<li className="nav-item active">
+<a className="nav-link" href="http://localhost:3000/post">Create Post</a>
+</li>
+<li className="nav-item active">
 <a className="nav-link" href="http://localhost:3000/messenger">Messenger</a>
 </li>
 <li className="nav-item">
@@ -55,6 +62,9 @@ return (
 </li>
 <li className="nav-item">
 <a className="nav-link" href="http://localhost:3000/editprofile">Edit Profile</a>
+</li>
+<li className="nav-item">
+<a className="nav-link" href = "http://localhost:3000/about">About</a>
 </li>
 <li className="nav-item">
 <a className="nav-link" href = "http://localhost:3000/logout">Logout</a>
@@ -80,6 +90,7 @@ return (
 <Route path = "/notif" element = {<PrivateRoute><NotifPage /></PrivateRoute>} />
 <Route path = "/friends" element = {<PrivateRoute><RecomInvit /></PrivateRoute>} />
 <Route path = "/search" element = {<PrivateRoute><SearchPage /></PrivateRoute>} />
+<Route path = "/about" element = {<PrivateRoute><AboutPage /></PrivateRoute>} />
 <Route path = "/post" element = {<PrivateRoute><CreatePostPage /></PrivateRoute>} />
 </Routes>
 </BrowserRouter>
