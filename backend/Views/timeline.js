@@ -65,7 +65,7 @@ const get_timeline = async (req, res) => {
 					return console.error('Error executing query', err.stack);
 				}
 				else{
-                    res.status(200).json({"status" : "success", "result" : result.rows});
+                    res.status(200).json({"status" : "success", "result" : result.rows , "rowCount" : result.rowCount });
 				}
 			}
         );

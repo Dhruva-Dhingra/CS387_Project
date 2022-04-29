@@ -7,8 +7,8 @@ import DisplayAbout from "../components/About";
 const TimelinePage = () => {
     return (
 <div>
-    <DisplayAbout></DisplayAbout>
-    {/* <DisplayPostTimeline></DisplayPostTimeline> */}
+    {/* <DisplayAbout></DisplayAbout> */}
+    <DisplayPostTimeline></DisplayPostTimeline>
 </div>
     );
 };

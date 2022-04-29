@@ -13,26 +13,37 @@ const DisplayPostTimleine = () => {
     const [pageCounttm, setPageCounttm] = useState(0);
     const [postscounttm, spostscounttm] = useState(0);
     const [isNextDisabledtm, setisNextDisabledtm] = useState(false);
+    
 
     const [isDisabledtm, setisDisabledtm] = useState(true);
     let history = useNavigate();
     useEffect( ()=> {
       const fetchData = async () => {
           try {
-           if(pageCounttm == 0){
+           if(pageCounttm === 0){
              setisDisabledtm(true);
          } else {
              setisDisabledtm(false);
          }
          console.log(itemOffsettm)
-         var end = itemOffsettm+19;
+         var end = itemOffsettm+9;
          const response = await  TimelineFinder.post(`/${id}`, {
           start: `${itemOffsettm}`,
       end : `${end}`,
   });
-              // console.log(response.data.result);
+              console.log(response.data.rowCount);
               // spostscounttm(response.data.data.postscount);
-              setPoststm(response.data.result);
+              
+            
+             
+                  if (response.data.rowCount === 0) {
+                    alert("You have reached the end of posts")
+                    // handlePrevPoststm();
+                  }
+                   else{
+                   setPageCounttm(pageCounttm+1);
+                   setPoststm(response.data.result);}
+
               // setPageCounttm(pageCounttm+1);
               // console.log(response.data);
 
@@ -42,7 +53,7 @@ const DisplayPostTimleine = () => {
       }
 
       fetchData();
- },[itemOffsettm, 20]) 
+ },[itemOffsettm, 10]) 
     
     // const handlePostSelect = (id) => {
     //     history.push(`/homepage/${id}`);
@@ -51,7 +62,7 @@ const DisplayPostTimleine = () => {
       const handleNextPoststm= () => {
         console.log("clicked on next");
         var newOffset = itemOffsettm;
-        newOffset = newOffset + 20;
+        newOffset = newOffset + 10;
         setItemOffsettm(newOffset);
         history(`/timeline/${id}`);
       };
@@ -71,7 +82,7 @@ const DisplayPostTimleine = () => {
         }
         else
         {
-         newOffsettm = ((pageCounttm-2) * 20);
+         newOffsettm = ((pageCounttm-2) * 10);
          setPageCounttm(pageCounttm-2);
          setItemOffsettm(newOffsettm);
         history(`/timeline/${id}`);

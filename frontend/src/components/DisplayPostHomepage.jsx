@@ -37,7 +37,7 @@ const DisplayPostHomepage = () => {
                  setPageCount(pageCount+1);
    
                  console.log(posts)
-                 setTimeout(() => {fetchData()}, 1000);
+                //  setTimeout(() => {fetchData()}, 1000);
       
              } catch (err) {}
          }
