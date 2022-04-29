@@ -28,6 +28,7 @@ const send_message = async (req, res) => {
 		let sender = req.cookies.user_id;
 		sender = parseInt(sender);
 		let receiver = req.params.user;
+		receiver = parseInt(receiver);
 		console.log(receiver)
 
 		let time = req.body.time;
@@ -46,16 +47,18 @@ const send_message = async (req, res) => {
 			try {
 				await client.query('BEGIN');
 				const queryText = 'INSERT into message (content, time, view_once, deleted) VALUES ($1, $2, $3, $4) returning message_id;';
-				const res = await client.query(queryText, [content, time, view_once, deleted]);
+				const res_1 = await client.query(queryText, [content, time, view_once, deleted]);
+				console.log([content, time, view_once, deleted, sender, receiver]);
 				console.log("Insert into message done");
 				const insertDM = 'INSERT into private_chat (message_id, sender_id, receiver_id) VALUES ($1, $2, $3);';
-				const insertDMValues = [res.rows[0].message_id, sender, receiver];
+				const insertDMValues = [res_1.rows[0].message_id, sender, receiver];
 				await client.query(insertDM, insertDMValues);
 				console.log("Insert into private chat done");
 				await client.query('COMMIT');
 				console.log("Commit done");
 				res.status(200).json({ "status": "success", "message": "Message Sent!" });
 			} catch (e) {
+				console.log(e.stack);
 				await client.query('ROLLBACK');
 				console.log("Rollback");
 				res.status(200).json({ "status": "failure", "message": "Message Could not be sent" });
@@ -64,7 +67,6 @@ const send_message = async (req, res) => {
 				client.release();
 			}
 		})().catch(e => {
-			res.status(200).json({ "status": "failure", "message": "Message Could not be sent" });
 			console.error(e.stack);
 		});
 	}

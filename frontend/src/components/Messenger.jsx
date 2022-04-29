@@ -26,14 +26,10 @@ const Messenger = (props) => {
 				// console.log(requestOptions);
 			   await MessageFinder.get("/").then(response => {
        
-                    if(response.data.status === "success"){  setFriends(response.data);
-                        setTimeout(() => {fetchData()}, 2000);
-                        console.log(friends);
-                        console.log("Messenger base page data fetch successful");
-                    } else{
-                            console.log("Messenger base page data fetch unsuccessful");
-
-                        }})
+                    setFriends(response.data);
+                    setTimeout(() => {fetchData()}, 2000);
+                    console.log(friends);
+                    })
               
             } catch (err) { console.log(err);}
         }
