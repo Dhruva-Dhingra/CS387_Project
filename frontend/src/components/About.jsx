@@ -37,6 +37,11 @@ const DisplayAbout = () => {
         </thead>
         <tbody>
             <tr><td>Name</td></tr>
+            <tr><td>Email</td></tr>
+            <tr><td>Roll Number</td></tr>
+            <tr><td>Branch</td></tr>
+            <tr><td>Degree</td></tr>
+            <tr><td>Batch</td></tr>
             <tr><td>Residence</td></tr>
             <tr><td>Birthday</td></tr>
         </tbody>
