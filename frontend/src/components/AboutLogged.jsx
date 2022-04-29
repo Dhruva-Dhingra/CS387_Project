@@ -19,18 +19,19 @@ const AboutLogged = () => {
                 arr = arr.filter((el) => el.includes('user_id'));
                 console.log(arr);
                 let uid = arr[0].split('=')[1];
-           const response = await  AboutFinder.get('/'+uid, {
-            start: 1,
-            end : 2,
-    });
-    var imgobbj = document.getElementById("profile_photo_box");
-			// console.log("Created new image placeholder");
-			// var len = response.data.result[0].profile_picture.length;
-			// console.log(response.data.result[0].profile_picture.slice(len - 10, len - 1));
-			// imgobbj.src = "data:text/css;base64,"+response.data.result[0].profile_picture.slice(1, response.data.result[0].profile_picture.length - 1);
-			imgobbj.src = "data:text/css;base64,"+response.data.result[0].profile_picture;
-			console.log("Added source to image holder");
-// console.log(response.data.result)
+								const response = await  AboutFinder.get('/'+uid, {
+										start: 1,
+										end : 2,
+								});
+								console.log('Data:', response.data);
+								var imgobbj = document.getElementById("profile_photo_box");
+								// console.log("Created new image placeholder");
+								// var len = response.data.result[0].profile_picture.length;
+								// console.log(response.data.result[0].profile_picture.slice(len - 10, len - 1));
+								// imgobbj.src = "data:text/css;base64,"+response.data.result[0].profile_picture.slice(1, response.data.result[0].profile_picture.length - 1);
+								imgobbj.src = "data:text/css;base64,"+response.data.result[0].profile_picture;
+								console.log("Added source to image holder");
+								// console.log(response.data.result)
                 setPoststm(response.data.result);
                 console.log(poststm);
                 loaded = true;

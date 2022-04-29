@@ -75,8 +75,30 @@ const get_timeline = async (req, res) => {
     }
 }
 
+const get_about = async (req, res) => {
+		try {
+				let user_id = req.params.user;
+				await pool.query(`
+select *
+from AppUser
+where user_id = $1
+`, [user_id], (err, result) => {
+		if (err) {
+				res.status(200).json({"status" : "failure", "message" : "SQL query failed"});
+				return console.error('Error executing query', err.stack);
+		}
+		else{
+        res.status(200).json({"status" : "success", "result" : result.rows , "rowCount" : result.rowCount });
+		}
+});
+		} catch (err) {
+				console.log(err.stack);
+		}
+}
+
 
 			
 module.exports = {
     get_timeline,
+		get_about,
 }

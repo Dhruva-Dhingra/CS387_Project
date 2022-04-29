@@ -26,12 +26,12 @@ app.use(function(req, res, next) {
 
 // function imports from files
 const {
-	plots,
-	plot1,
-	plot2,
-	plot3,
-	plot4,
-	plot5,
+		plots,
+		plot1,
+		plot2,
+		plot3,
+		plot4,
+		plot5,
 } = require('./Views/admin');
 
 const {
@@ -46,46 +46,47 @@ const {
 } = require('./Views/friends');
 
 const {
-	get_homepage_posts,
+		get_homepage_posts,
 } = require('./Views/homepage');
 
 const {
-	checkIfExists,
+		checkIfExists,
     signup,
     login,
-	logout,
-	verifyToken,
+		logout,
+		verifyToken,
 } = require('./Views/login_signup');
 
 const {
-	send_message,
-	display_chat,
-	last_message_list,	
+		send_message,
+		display_chat,
+		last_message_list,	
 } = require('./Views/message');
 
 const {
-	create_post
+		create_post
 } = require('./Views/post');
 
 const {
-	react_to_post,
-	remove_reaction_from_post,
+		react_to_post,
+		remove_reaction_from_post,
    	get_reaction_count,
    	remove_post_reaction,
-	get_single_reaction_count,
+		get_single_reaction_count,
 } = require('./Views/reaction');
 
 const {
-	get_search_results,
+		get_search_results,
 } = require('./Views/search');
 
 const {
-	get_timeline
+		get_timeline,
+		get_about,
 } = require('./Views/timeline');
 
 const {
-	edit_profile,
-	get_profile_info,
+		edit_profile,
+		get_profile_info,
 } = require('./Views/editprofile');
 
 setTimeout(async () => {
@@ -107,39 +108,39 @@ const async_run = async (req, res, fn) => {
 // setting up node port
 const PORT = 8080
 app.listen(PORT, async () => {
-	console.log(`Server running on port ${PORT}`);
+		console.log(`Server running on port ${PORT}`);
 });
 
 // signup endpoint
 app.post('/signup', async(req, res) => {
-	let ex = await checkIfExists(req.body.email);
-	if (!ex){
-			signup(req, res);
-	}
-	else{
-			console.log('Could not sign up!');
-			res.status(400).json({"status" : "failure"});
-	}
+		let ex = await checkIfExists(req.body.email);
+		if (!ex){
+				signup(req, res);
+		}
+		else{
+				console.log('Could not sign up!');
+				res.status(400).json({"status" : "failure"});
+		}
 });
 
 // login endpoint
 app.post('/login', async (req, res) => {
-	login(req, res);
+		login(req, res);
 });
 
 // logout endpoint
 app.get('/logout', async (req, res) => {
-	run(req, res, logout);
+		run(req, res, logout);
 })
 
 // homepage endpoint
 app.post('/homepage', async (req, res) => {
-	await async_run(req, res, get_homepage_posts);
+		await async_run(req, res, get_homepage_posts);
 });
 
 // timeline endpoint
 app.post('/timeline/:user', async (req, res) => {
-	await async_run(req, res, get_timeline);
+		await async_run(req, res, get_timeline);
 });
 
 // app.get('/timeline/:user', async (req, res) => {
@@ -152,78 +153,80 @@ app.post('/timeline/:user', async (req, res) => {
 
 // post creation endpoint
 app.post('/create_post', async (req, res) => {
-	await async_run(req, res, create_post);
+		await async_run(req, res, create_post);
 });
 
 app.post('/react', async (req, res) => {
-	await async_run(req, res, react_to_post);
+		await async_run(req, res, react_to_post);
 });
 
 app.post('/unreact', async (req, res) => {
-	await async_run(req, res, remove_reaction_from_post);
+		await async_run(req, res, remove_reaction_from_post);
 });
 
 app.post('/get_single_reaction_count', async (req, res) => {
-	await async_run(req, res, get_single_reaction_count);
+		await async_run(req, res, get_single_reaction_count);
 });
 
 
 app.get('/messenger', async(req,res)=> {
-	await async_run(req, res, last_message_list);
+		await async_run(req, res, last_message_list);
 });
 
 app.get('/messenger/:user', async(req,res)=> {
-	await async_run(req, res, display_chat);
+		await async_run(req, res, display_chat);
 });
 
 app.post('/messenger/:user', async(req,res)=> {
-	run(req, res, send_message);
+		run(req, res, send_message);
 });
 
 app.get('/friends/recommendations', async(req, res) => {
-	console.log('Backend: getting recommendations');
-	await async_run(req, res, get_recommendations);
+		console.log('Backend: getting recommendations');
+		await async_run(req, res, get_recommendations);
 });
 
 app.get('/friends/invitations', async(req, res) => {
-	await async_run(req, res, get_invitations);
+		await async_run(req, res, get_invitations);
 });
 
 app.post('/friends/accept', async(req, res) => {
-	run(req, res, accept_request);
+		run(req, res, accept_request);
 });
 
 app.post('/friends/send', async(req, res) => {
-	run(req, res, send_request);
+		run(req, res, send_request);
 });
 
 app.post('/friends/decline', async(req, res) => {
-	run(req, res, decline_request);
+		run(req, res, decline_request);
 });
 
 // TODO: merge this with homepage
 app.post('/search',async(req, res) => {
-	await async_run(req, res, get_search_results);
+		await async_run(req, res, get_search_results);
 });
 
 app.get('/admin', async(req, res) => {
-	await async_run(req, res, plots);
+		await async_run(req, res, plots);
 });
 
 app.post('/post', async(req, res) => {
-	await async_run(req, res, create_post);
+		await async_run(req, res, create_post);
 })
 
 app.post('/editprofile', async(req, res) => {
-	await async_run(req, res, edit_profile);
+		await async_run(req, res, edit_profile);
 })
 
 app.get('/about/:user', async(req, res) => {
-	// console.log("Reached Backend")
-	await async_run(req, res, get_timeline);
+		await async_run(req, res, get_timeline);
 })
 
+app.get('/get_about/:user', async(req, res) => {
+		await async_run(req, res, get_about);
+})
 
 app.get('/editprofile', async(req, res) => {
-	await async_run(req, res,  get_profile_info);
+		await async_run(req, res,  get_profile_info);
 })
