@@ -16,7 +16,7 @@ def random_date(start, end):
 d1 = datetime.strptime('1/1/1995 12:01 AM', '%m/%d/%Y %I:%M %p')
 d2 = datetime.strptime('12/31/2005 11:59 PM', '%m/%d/%Y %I:%M %p')
 d3 = datetime.strptime('1/1/2019 12:01 AM', '%m/%d/%Y %I:%M %p')
-d4 = datetime.strptime(datetime.now().strftime("%m/%d/%Y %I:%M %p"), '%m/%d/%Y %I:%M %p')
+d4 = datetime.strptime(datetime.now().strftime("%m/%d/%Y %I:%M %p") - timedelta(days = -1), '%m/%d/%Y %I:%M %p')
 content = "Sender,Acceptor,Sending_Time,Accept_Time,Status\n"
 message_csv_content = "Content,Time,View_Once,Deleted,Invitation,Group_ID\n"
 private_chat = "Message_ID,Sender_ID,Receiver_ID\n"

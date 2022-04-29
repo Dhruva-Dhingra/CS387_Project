@@ -47,7 +47,7 @@ const get_search_results = async (req, res) => {
 		for (var idx = 0; idx < len; idx++) {
 			var idx_str = (idx + 1).toString();
 			console.log(idx_str);
-			query = query + "first_name like $" + idx_str + " or last_name like $" + idx_str;
+			query = query + "first_name ilike $" + idx_str + " or last_name ilike $" + idx_str;
 			if (idx != len - 1) {
 				query = query + " or ";
 			} else {
