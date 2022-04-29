@@ -105,11 +105,10 @@ select * from res
 order by random()
 limit 20;
 `);
-				console.log('SQL query run');
 				let wildcard = ans.rows;
 				wildcard = wildcard.map((el) => el.user_id);
 
-				query = `MATCH p = (n: User {ID: ${user_id}})-[*2..3]-(m: User)
+				let query = `MATCH p = (n: User {ID: ${user_id}})-[*2..3]-(m: User)
 UNWIND NODES(p) as nd
 WITH p, size(collect(distinct(nd))) as distinctlen, m, size((m)--()) as degree
 where distinctlen = length(p) + 1
@@ -119,9 +118,17 @@ RETURN m.ID as id, factor
 order by factor desc`;
 				let res = await session.run(query);
 				res = res.records.map((el) => (el.get('id').low).toString());
+
+				ans = await pool.query(`
+select Sender as user_id from Friend where Acceptor = ${user_id} and not Status
+union
+select Acceptor as user_id from Friend where Sender = ${user_id} and not Status
+`);
+				let rem = ans.rows.map((el) => el.user_id);
 				res.push.apply(res, wildcard);
 				console.log(res);
 				res = res.filter((el, index) => res.indexOf(el) === index);
+				res = res.filter((el) => !rem.includes(el));
 				res = res.slice(0, 20);
 				ret = []
 				for (let result of res) {

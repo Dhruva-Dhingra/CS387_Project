@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+
 
 const LogOut = () => {
 		let history = useNavigate();
@@ -15,11 +17,15 @@ const LogOut = () => {
 
 		const handleClick = () => {
 				history('/')
+				fetch('http://localhost:8080/logout', reqOpt)
+						.then(resp => resp.json());
 		}
-		fetch('http://localhost:8080/logout', reqOpt)
-				.then(resp => resp.json());
+
+		const goBack = () => {
+				history('/homepage');
+		}
 		return (
-			<center><button onClick={handleClick} className="btn btn-warning btn">Logout</button></center>	
+				<center><Button onClick={handleClick} variant='warning'>Logout</Button>{' '}<Button vavriant='primary' onClick={goBack}>Go back</Button></center>	
 				
 		);
 }

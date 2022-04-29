@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 
 class LoginForm extends Component {
 		constructor() {
@@ -42,23 +46,22 @@ class LoginForm extends Component {
 
 		render() {
 				return (
-						<div>
-								<p>Please Login!</p>
-								<br/>
-								<form onSubmit = {this.handleSubmit}>
-										<label>
-												Email:
-												<input type = 'email' name = 'email' value = {this.state.email} onChange = {this.handleChange} />
-										</label>
-										<br/>
-										<label>
-												Password:
-												<input type = 'password' name = 'password' value = {this.state.password} onChange = {this.handleChange} />
-										</label>
-										<br/>
-										<input type = 'submit' value ='Submit'></input>
-								</form>
-						</div>
+						<Form>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+										<Form.Label>Email address</Form.Label>
+										<Form.Control type="email" placeholder="Enter email" />
+										<Form.Text className="text-muted">
+												We'll never share your email with anyone else.
+										</Form.Text>
+								</Form.Group>	
+								<Form.Group className="mb-3" controlId="formBasicPassword">
+										<Form.Label>Password</Form.Label>
+										<Form.Control type="password" placeholder="Password" />
+								</Form.Group>
+								<Button variant="primary" type="submit">
+										Submit
+								</Button>
+						</Form>
 				);
 		}
 }
@@ -119,17 +122,53 @@ class SignupForm extends Component {
 								<form onSubmit = {this.handleSubmit}  class="was-validated">
 										
 										
-										<label class="col-sm-12 controls">
-												Email:
-												<input type = 'text' name = 'email' value = {this.state.email} placeholder = 'Enter email' onChange = {this.handleChange} />
-										</label>
-										<br/>
-										<label>
+										<div className="col">
+												First Name:
+												<input type = 'text' className='form-control' name = 'email' value = {this.state.email} placeholder = 'Enter email' onChange = {this.handleChange} />
+										</div>
+		
+										<div className='col'>
+												Last Name:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
+												Roll Number:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
+												Branch:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
+												Degree:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
+												Batch:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
+												Email-ID:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
 												Password:
-												<input type = 'password' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
-										</label>
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
+												Residence:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
+												Birthday:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
+										<div className='col'>
+												Profile Picture:
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
+										</div>
 										<br/>
-										<input type = 'submit' value ='Submit'></input>
+										<center><input type = 'submit' value ='Submit'></input></center>
 								</form>
 						</div>
 				);
@@ -167,12 +206,14 @@ class LoginSignup extends Component {
 				form = this.state.isLogin? <LoginForm />: <SignupForm />;
 
 				return (
-						<div>
-						 		{form}
-								
-						 		<button onClick = {this.loginClick} class="btn btn-success">Login</button>
-						 		<button onClick = {this.signupClick} class="btn btn-primary">Signup</button>
-						</div>
+						<Tabs defaultActiveKey="login" id="uncontrolled-tab-example" className="mb-3">
+								<Tab eventKey="login" title="Login">
+										<LoginForm />
+								</Tab>
+								<Tab eventKey="signup" title="Sign Up">
+										<SignupForm />
+								</Tab>
+						</Tabs>
 				);
 		}
 }

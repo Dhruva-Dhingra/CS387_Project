@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Button  from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 
 class Recommendations extends Component {
 		constructor (props) {
@@ -36,13 +36,9 @@ class Recommendations extends Component {
 		}
 
 		removeRecommendation (user_id) {
-				for (let i = 0; i < this.state.recommendations.length(); i++) {
-						if (this.state.recommendations[i].user_id == user_id) {
-								this.setState({
-										recommendations: this.state.recommendations.splice(i, 1),
-								});
-						}
-				}
+				this.setState({
+						recommendations: this.state.recommendations.filter((el) => el.user_id != user_id),
+				});
 		}
 
 		sendRequest(acceptor_id) {
@@ -69,6 +65,7 @@ class Recommendations extends Component {
 								if (dat.status != 'failure') {
 										console.log('Here');
 										this.removeRecommendation(acceptor_id);
+										console.log('Modified recommendations:', this.state.recommendations);
 								}
 						});
 		}
@@ -79,7 +76,7 @@ class Recommendations extends Component {
 				if (this.state.recommendations) {
 						recoms = this.state.recommendations.map((el) => <ListGroup.Item className="d-flex justify-content-between align-items-start">
 																														{el.user_id}
-																																<Button variant='primary' onClick={this.sendRequest(el.user_id)}>Send</Button>
+																																<Button variant='primary' onClick={() => {this.sendRequest(el.user_id)}}>Send</Button>
 																												</ListGroup.Item>);
 				}
 				return (
@@ -125,13 +122,9 @@ class Invitations extends Component {
 		}
 
 		removeInvitation (user_id) {
-				for (let i = 0; i < this.state.invitations.length(); i++) {
-						if (this.state.invitations[i].user_id == user_id) {
-								this.setState({
-										invitations: this.state.nvitations.splice(i, 1),
-								});
-						}
-				}
+				this.setState({
+						invitations: this.state.invitations.filter((el) => el.user_id != user_id),
+				});
 		}
 
 		acceptRequest (sender_id) {
@@ -156,6 +149,7 @@ class Invitations extends Component {
 							.then(dat => {
 									if (dat.status != 'failure') {
 											this.removeInvitation(sender_id);
+											console.log('Modified recommendations:', this.state.recommendations);
 									}
 							});
 		}
@@ -182,6 +176,7 @@ class Invitations extends Component {
 							.then(dat => {
 									if (dat.status != 'failure') {
 											this.removeInvitation(sender_id);
+											console.log('Modified recommendations:', this.state.recommendations);
 									}
 							});
 		}
@@ -192,8 +187,8 @@ class Invitations extends Component {
 				if (this.state.invitations) {
 						invits = this.state.invitations.map((el) => <ListGroup.Item className="d-flex justify-content-between align-items-start">
 																														{el.user_id}
-																														<Button variant='primary' onClick={this.acceptRequest(el.user_id)}>Accept</Button>
-																														<Button variant='secondary' onClick={this.declineRequest(el.user_id)}>Decline</Button>
+																														<Button variant='primary' onClick={() => {this.acceptRequest(el.user_id)}}>Accept</Button>
+																														<Button variant='secondary' onClick={() => {this.declineRequest(el.user_id)}}>Decline</Button>
 																												</ListGroup.Item>);
 				}
 				return (
