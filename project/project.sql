@@ -54,7 +54,7 @@ create Table AppUser (
   Residence  text,
   Birthday  date,
   SignUp_Date  timestamp NOT NULL,
-  Profile_Picture   bytea,
+  Profile_Picture   text,
   Private  boolean NOT NULL,
   AutoAdd_to_Groups  boolean NOT NULL
 );
@@ -75,7 +75,7 @@ Create Table Hobby (
 Create Table Page (
   Page_ID  bigint  PRIMARY KEY,
   Name  text NOT NULL,
-  Profile_Picture   bytea,
+  Profile_Picture   text,
   Description  text,
   Created_On  timestamp NOT NULL
 );
@@ -86,7 +86,7 @@ Create Table Post (
 	User_ID bigint,
 	Content_Type int NOT NULL,
 	Content  text,
-  Content_Picture bytea,
+  Content_Picture text,
 	Time  timestamp NOT NULL,
 	Validity  int NOT NULL,
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID),
@@ -98,7 +98,7 @@ Create Table Status (
   Status_ID bigint PRIMARY KEY,  
   User_ID bigint NOT NULL,
   Content_Type int NOT NULL,
-  Content  bytea NOT NULL,
+  Content  text NOT NULL,
   Time timestamp NOT NULL,
   FOREIGN KEY (User_ID) REFERENCES AppUser (User_ID)
  );
@@ -113,7 +113,7 @@ Create Table Page_Keyword (
 Create Table UserGroup (
 Group_ID  bigint PRIMARY KEY,  
 	Name  text NOT NULL,
-	Profile_Picture   bytea,
+	Profile_Picture   text,
 	Description  text,
 	Created_on  timestamp NOT NULL
 );

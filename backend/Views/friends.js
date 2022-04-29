@@ -139,7 +139,7 @@ UNWIND NODES(p) as nd
 WITH p, size(collect(distinct(nd))) as distinctlen, m, size((m)--()) as degree
 where distinctlen = length(p) + 1
 WITH m, 1.0 * degree / (distinctlen - 1) as factor
-WHERE factor >= 1
+WHERE factor >= 0
 RETURN m.ID as id, factor
 order by factor desc`;
 				let res = await session.run(query);
