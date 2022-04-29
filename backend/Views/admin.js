@@ -40,6 +40,7 @@ const plots = async (req, res) => {
         });
     }
     catch (err){
+        res.status(200).json({"status" : "failure", "message" : "Message Could not be sent", data : {r1 : [], r2 : [], r3 : [], r4 : [], r5 : []}});
         console.log(err)
     }
 }
