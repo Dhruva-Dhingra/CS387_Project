@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Button  from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 
 class Recommendations extends Component {
 		constructor (props) {
