@@ -66,26 +66,29 @@ class EditForm extends Component {
 				console.log(this.state);
 		}
 
-    handleSubmit(e) {
+    handleSubmit = async(e) => {
         e.preventDefault()
-        console.log(this.state.first);
         var profile_pic;
         try {
             var dp_file_element = document.getElementById("file-selector");
+						console.log(dp_file_element);
+						console.log('DP_file_elem length:', dp_file_element.files.length);
 						if (dp_file_element.files.length > 0) {
 								var reader = new FileReader();
 								reader.onloadend = function(){
 										// console.log("Reader = ", reader);
 										// console.log("Reader.result = ", reader.result);
-										profile_pic = reader.result;
+										// profile_pic = reader.result;
+										return reader.result;
 										// var imgElement = document.getElementById("checking_image_file");
 										// imgElement.src = reader.result;
 								}
-								reader.readAsDataURL(dp_file_element.files[0]);
+								profile_pic = await reader.readAsDataURL(dp_file_element.files[0]);
 						}
 						else profile_pic = null;
+						console.log(profile_pic);
 						this.setState({
-								'dp': profile_pic,
+								'profile_picture': profile_pic,
 						})
 
 						console.log('State:', this.state);
