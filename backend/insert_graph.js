@@ -12,7 +12,7 @@ const clear = async() => {
 				let res = await session.run(query);
 				console.log('Cleared');
 		} catch(err) {
-				console.log(err).stack;
+				console.log(err.stack);
 		}
 }
 const load_users = async () =>  {
