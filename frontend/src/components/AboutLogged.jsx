@@ -23,6 +23,13 @@ const AboutLogged = () => {
             start: 1,
             end : 2,
     });
+    var imgobbj = document.getElementById("profile_photo_box");
+			// console.log("Created new image placeholder");
+			// var len = response.data.result[0].profile_picture.length;
+			// console.log(response.data.result[0].profile_picture.slice(len - 10, len - 1));
+			// imgobbj.src = "data:text/css;base64,"+response.data.result[0].profile_picture.slice(1, response.data.result[0].profile_picture.length - 1);
+			imgobbj.src = "data:text/css;base64,"+response.data.result[0].profile_picture;
+			console.log("Added source to image holder");
 // console.log(response.data.result)
                 setPoststm(response.data.result);
                 console.log(poststm);
@@ -52,6 +59,9 @@ const AboutLogged = () => {
             <tr><td>Birthday</td><td>{poststm[0].birthday}</td></tr>
         </tbody>
     </table>
+    <div>
+        <img id="profile_photo_box" width="600" height="500"></img>
+    </div>
     </div>
 
 }

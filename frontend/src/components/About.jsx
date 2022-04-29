@@ -20,8 +20,6 @@ const DisplayAbout = () => {
     });
     console.log("HIHIHIHI");
 // console.log(response.data.result)
-var encodedImage = window.btoa(response.data.result[0].profile_picture);
-			console.log("Encoded Image");
 			var imgobbj = document.getElementById("profile_photo_box");
 			// console.log("Created new image placeholder");
 			// var len = response.data.result[0].profile_picture.length;
