@@ -4,6 +4,7 @@ import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
 import TimelineFinder from '../apis/TimelineFinder';
 import { useParams } from 'react-router-dom';
+import LikeUnlike from './LikeUnlike';
 
 const DisplayPostTimleine = () => {
   const { id } = useParams()
@@ -107,6 +108,7 @@ const DisplayPostTimleine = () => {
                   key={posttm.post_id}>
                     {/* <td>{posts.post_id}</td> */}
                     <td>{posttm.content}</td>
+                    <LikeUnlike post_id = {posttm.post_id}/>
                 </tr>
                 )
             })}
