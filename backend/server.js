@@ -41,7 +41,6 @@ const {
 const {
 		get_invitations,
 		sync_node,
-		sync_graphdb,
 		get_recommendations,
 		get_friends,
 		reset_graph,
@@ -87,29 +86,9 @@ const {
 		get_timeline
 } = require('./Views/timeline');
 
-// daemon to sync graph DB with relational DB
-let seconds = 500 * 1000;
-let user_arr = [];
-let friend_arr = [];
 setTimeout(async () => {
-		// let ans = await reset_graph();
-		console.log('First delete');
-		console.log('Calling periodic function');
 		uf = await sync_node();
-		user_arr = uf.user_arr;
-		friend_arr = uf.friend_arr;
-		console.log('Length of user_arr:', user_arr.length);
-		console.log('Length of friend_arr:', friend_arr.length);
-		console.log('First syncing done');
 });
-setInterval(async () => {
-		console.log('Calling periodic function');
-		uf = await sync_graphdb(user_arr, friend_arr);
-		user_arr = uf.user_arr;
-		friend_arr = uf.friend_arr;
-		console.log('friend_arr =', friend_arr);
-		console.log('user_arr =', user_arr);
-}, seconds);
 
 const run = (req, res, fn) => {
 		let ver = verifyToken(req.cookies.accessToken, req.cookies.user_id);

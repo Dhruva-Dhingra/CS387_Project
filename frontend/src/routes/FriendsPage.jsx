@@ -1,18 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, useCallback } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
 
-class Recommendations extends Component {
+class Recom extends Component {
 		constructor (props) {
 				super(props);
+				this.history = this.props.history;
 				this.state = {
 						recommendations: null,
 						loaded: false,
 				}
 				this.getRecoms = this.getRecoms.bind(this);
 				this.sendRequest = this.sendRequest.bind(this);
+				this.goToTimeline = this.goToTimeline.bind(this);
 		}
 
 		getRecoms() {
@@ -70,13 +73,20 @@ class Recommendations extends Component {
 						});
 		}
 
+		goToTimeline(user_id) {
+				this.history(`/timeline/${user_id}`, {replace: true});
+		}
+
 		render() {
 				console.log('Recommendations', this.state.recommendations);
 				let recoms = null;
 				if (this.state.recommendations) {
 						recoms = this.state.recommendations.map((el) => <ListGroup.Item className="d-flex justify-content-between align-items-start">
-																														{el.user_id}
-																																<Button variant='primary' onClick={() => {this.sendRequest(el.user_id)}}>Send</Button>
+																														<div className="ms-2 me-auto">
+																																<div className="fw-bold" onClick={() => {this.goToTimeline(el.user_id)}}>{el.first_name} {el.last_name}</div>
+																																{el.roll_number}
+																														</div>
+																																<Button variant='primary' onClick={() => {this.sendRequest(el.user_id)}}>Send Friend Request</Button>
 																												</ListGroup.Item>);
 				}
 				return (
@@ -89,15 +99,24 @@ class Recommendations extends Component {
 		}
 }
 
-class Invitations extends Component {
+const Recommendations = (props) => {
+		const history = useNavigate();
+
+		return <Recom {...props} history={history} />
+}
+
+class Invit extends Component {
 		constructor (props) {
 				super(props);
+
+				this.history = this.props.history;
 
 				this.state = {
 						invitations: null
 				}
 				this.getInvits = this.getInvits.bind(this);
 				this.acceptRequest = this.acceptRequest.bind(this);
+				this.goToTimeline = this.goToTimeline.bind(this);
 				this.declineRequest = this.declineRequest.bind(this);
 		}
 
@@ -181,14 +200,21 @@ class Invitations extends Component {
 							});
 		}
 
+    goToTimeline(user_id) {
+				this.history(`/timeline/${user_id}`, {replace: true});
+		}
+
 		render() {
 				console.log('Invitations', this.state.invitations);
 				let invits = null;
 				if (this.state.invitations) {
 						invits = this.state.invitations.map((el) => <ListGroup.Item className="d-flex justify-content-between align-items-start">
-																														{el.user_id}
-																														<Button variant='primary' onClick={() => {this.acceptRequest(el.user_id)}}>Accept</Button>
-																														<Button variant='secondary' onClick={() => {this.declineRequest(el.user_id)}}>Decline</Button>
+																														<div className="ms-2 me-auto">
+																																<div className="fw-bold" onClick={() => {this.goToTimeline(el.user_id)}}>{el.first_name} {el.last_name}</div>
+																																{el.roll_number}
+																														</div>
+																														<Button variant='primary' onClick={() => {this.acceptRequest(el.user_id)}}>Accept Friend Request</Button>
+																														<Button variant='secondary' onClick={() => {this.declineRequest(el.user_id)}}>Decline Friend Request</Button>
 																												</ListGroup.Item>);
 				}
 				return (
@@ -199,6 +225,12 @@ class Invitations extends Component {
 						</div>
 				);
 		}
+}
+
+const Invitations = (props) => {
+		const history = useNavigate();
+
+		return <Invit history={history} />
 }
 
 class RecomInvit extends Component {

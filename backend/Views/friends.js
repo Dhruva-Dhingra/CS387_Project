@@ -28,8 +28,7 @@ const get_invitations = async (req, res) => {
 				let acceptor_id = user_id;
 				console.log('Checking invitations for', acceptor_id);
 				let ans = await pool.query(`
--- select AppUser.User_ID, AppUser.First_Name, AppUser.Last_Name, AppUser.Roll_Number
-select AppUser.User_ID
+select AppUser.User_ID, AppUser.First_Name, AppUser.Last_Name, AppUser.Roll_Number
 from AppUser, Friend
 where Friend.Acceptor = $1
 and Friend.Sender = AppUser.User_ID
@@ -65,46 +64,6 @@ select Sender, Acceptor from Friend
 				friend_arr = friend_arr.map((el) => JSON.stringify(el));
 				console.log(friend_arr);
 				return {'user_arr': user_arr, 'friend_arr': friend_arr};
-		} catch (err) {
-				return err.stack;
-		}
-}
-const sync_graphdb = async (user_arr, friend_arr) => {
-		try {
-				console.log('Here in syncing function');
-				let user_ans = await pool.query(`select User_ID from AppUser;`)
-				console.log('Got response from SQL server');
-				user_ans = user_ans.rows.map((el) => el.user_id);
-				user_diff = user_ans.filter((el) => !user_arr.includes(el));
-				console.log('New users:', user_diff);
-				let queries = [];
-				for (let user of user_diff) {
-						queries.push(`CREATE (n: User {ID: ${user}});`);
-				}
-				console.log("User queries inserted");
-				let friend_ans = await pool.query(`
-select Sender, Acceptor
-from Friend
-where Status  
-`);
-				friend_ans = friend_ans.rows.map((el) => JSON.stringify(el));
-				friend_diff = friend_ans.filter((el) => friend_arr.indexOf(el) == -1);
-				for (let friend of friend_diff) {
-						friend = JSON.parse(friend);
-						queries.push(`MATCH (n: User {ID: ${friend.sender}}), (m: User {ID: ${friend.acceptor}}) CREATE (n)-[:FRIEND]->(m);`)
-				}
-				console.log(queries.length);
-				let i = 0;
-				for (let query of queries) {
-						console.log(i);
-						let res = await session.run(query);
-						i += 1;
-				}
-				console.log('Syncing done');
-				let result = {
-						'user_arr': user_ans, 'friend_arr': friend_ans
-				};
-				res.json(result);
 		} catch (err) {
 				return err.stack;
 		}
@@ -162,7 +121,7 @@ select Acceptor as user_id from Friend where Sender = $1 and not Status
 				ret = []
 				for (let result of results) {
 						let ans = await pool.query(`
-select AppUser.User_ID
+select User_ID, First_Name, Last_Name, Roll_Number 
 from AppUser
 where User_ID = $1
 `, [result]);
@@ -263,6 +222,8 @@ const accept_request = async (req, res) => {
 																									res.status(200).json({"status" : "failure", "message" : "Could not accept request"});
 																									console.log(err.stack);
 																							} else {
+																									quer = `MATCH (n: User {ID: ${friend.sender}}), (m: User {ID: ${friend.acceptor}}) CREATE (n)-[:FRIEND]->(m);`
+																									let ans = session.query(quer);
 																									res.status(200).json({"status" : "success", "message" : "Request Accepted"});
 																							}
 																					})
@@ -311,7 +272,6 @@ const decline_request = async (req, res) => {
 module.exports = {
 		get_invitations,
 		sync_node,
-		sync_graphdb,
 		get_recommendations,
 		get_friends,
 		reset_graph,

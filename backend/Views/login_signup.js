@@ -1,4 +1,5 @@
-// const Pool = require('pg').Pool;
+const neo4j = require('neo4j-driver');
+const nconf = require('nconf');
 const Pool = require('pg').Pool;
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
@@ -20,6 +21,10 @@ const pool = new Pool({
 });
 
 console.log('Pool made');
+
+const driver = neo4j.driver("neo4j://localhost:7687", neo4j.auth.basic("neo4j", "neo4j"));
+console.log('Connected to neo4j');
+const session = driver.session();
 
 const checkIfExists = async (email) => {
 		console.log('Checking if user exists');
@@ -66,29 +71,35 @@ const signup = async (req, res) => {
 		let pvt = req.body.pvt;
 		let autoadd = req.body.autoadd;
 		
-		pool.query(
-				`
+		try {
+				pool.query(
+						`
 			insert into AppUser (First_Name, Last_Name, Roll_Number, Branch, Degree, Batch,
 			Email, Hash_of_Password, Residence, Birthday, SignUp_Date,
 			Profile_Picture, Private, AutoAdd_to_Groups)
 			values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
 			`,
-				// `
-				// insert into AppUser (Email, Hash_of_Password)
-				// values ($7, $8)
-				// `,
-				[firstname, lastname, rollno, branch, degree, batch, email, password,
-				 residence, bday, sgndate, pfp, pvt, autoadd],
-				(err, result) => {
-						if (err) {
-								res.status(200).json({"status" : "failure"});
-								return console.error('Error executing query', err.stack);
+						// `
+						// insert into AppUser (Email, Hash_of_Password)
+						// values ($7, $8)
+						// `,
+						[firstname, lastname, rollno, branch, degree, batch, email, password,
+						 residence, bday, sgndate, pfp, pvt, autoadd],
+						(err, result) => {
+								if (err) {
+										res.status(200).json({"status" : "failure"});
+										return console.error('Error executing query', err.stack);
+								}
+								else{
+										quer = `CREATE (n: User {ID: ${user}});`;
+										let ans = session.query(quer);
+										res.status(200).json({"status" : "success"});
+								}
 						}
-						else{
-								res.status(200).json({"status" : "success"});
-						}
-				}
-		);
+				);
+		} catch (err) {
+				console.log(err.stack)
+		}
 }
 
 const login = async (req, res) => {
