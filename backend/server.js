@@ -1,3 +1,4 @@
+// imports
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -9,69 +10,10 @@ var corsOptions = {
 		credentials: true
 };
 
+// setting up express options
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
-
-const {
-	plots,
-	plot1,
-	plot2,
-	plot3,
-	plot4,
-	plot5,
-} = require('./Views/admin');
-
-const {
-	get_invitations,
-	sync_graphdb,
-	get_recommendations,
-	get_friends,
-	reset_graph,
-	send_request,
-	accept_request,
-	decline_request,
-} = require('./Views/friends');
-
-const {
-	get_homepage_posts,
-} = require('./Views/homepage');
-
-const {
-	checkIfExists,
-    signup,
-    login,
-	verifyToken,
-	verifyTokenWithUserID,
-} = require('./Views/login_signup');
-
-const {
-	send_message,
-	display_chat,
-	last_message_list,	
-} = require('./Views/message');
-
-const {
-	create_post
-} = require('./Views/post');
-
-const {
-	react_to_post,
-	remove_reaction_from_post,
-   	get_reaction_count,
-   	remove_post_reaction,
-} = require('./Views/reaction');
-
-const {
-	get_search_results,
-} = require('./Views/search');
-
-const {
-		get_timeline
-} = require('./Views/timeline');
-
-
-
 app.use(function(req, res, next) {
 		res.header('Content-Type', 'application/json')
 		res.header('Access-Control-Allow-Credentials', true)
@@ -80,8 +22,67 @@ app.use(function(req, res, next) {
 				'Origin, X-Requested-With, Content-Type, Accept'
 		)
 		next()
-})
+});
 
+// function imports from files
+const {
+		plots,
+		plot1,
+		plot2,
+		plot3,
+		plot4,
+		plot5,
+} = require('./Views/admin');
+
+const {
+		get_invitations,
+		sync_graphdb,
+		get_recommendations,
+		get_friends,
+		reset_graph,
+		send_request,
+		accept_request,
+		decline_request,
+} = require('./Views/friends');
+
+const {
+		get_homepage_posts,
+} = require('./Views/homepage');
+
+const {
+		checkIfExists,
+    signup,
+    login,
+		logout,
+		verifyToken,
+} = require('./Views/login_signup');
+
+const {
+		send_message,
+		display_chat,
+		last_message_list,	
+} = require('./Views/message');
+
+const {
+		create_post
+} = require('./Views/post');
+
+const {
+		react_to_post,
+		remove_reaction_from_post,
+   	get_reaction_count,
+   	remove_post_reaction,
+} = require('./Views/reaction');
+
+const {
+		get_search_results,
+} = require('./Views/search');
+
+const {
+		get_timeline
+} = require('./Views/timeline');
+
+// daemon to sync graph DB with relational DB
 let seconds = 500 * 1000;
 let user_arr = [];
 let friend_arr = [];
@@ -104,18 +105,25 @@ setInterval(async () => {
 		console.log('user_arr =', user_arr);
 }, seconds);
 
-app.post('/test', async (req, res) => {
-		if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success'});
-		else res.json({'result': 'failed'})
-		console.log(req.body);
-		console.log(req.cookies);
-});
+const run = (req, res, fn) => {
+		let ver = verifyToken(req.cookies.accessToken, req.cookies.user_id);
+		if (ver) fn(req, res);
+		else res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+}
 
+const async_run = async (req, res, fn) => {
+		let ver = verifyToken(req.cookies.accessToken, req.cookies.user_id);
+		if (ver) await fn(req, res);
+		else res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
+}
+
+// setting up node port
 const PORT = 8080
 app.listen(PORT, async () => {
 		console.log(`Server running on port ${PORT}`);
 });
 
+// signup endpoint
 app.post('/signup', async(req, res) => {
 		let ex = await checkIfExists(req.body.email);
 		if (!ex){
@@ -127,256 +135,77 @@ app.post('/signup', async(req, res) => {
 		}
 });
 
-app.get('/checklogin', async (req, res) => {
-		console.log('Checking for login');
-		console.log(req.cookies);
-		if (verifyToken(req.cookies.accessToken)) res.json({'result': 'success', logged_in: true});
-		else res.json({'result': 'failure', logged_in: false});
-		// if (req.cookies.accessToken) {
-		// 		if (verifyToken(req.cookies.accesssToken)) {
-		// 				console.log('Token verified');
-		// 				res.json({'logged_in': true});
-		// 		}
-		// 		else {
-		// 				console.log('Token not verified');
-		// 				res.json({'logged_in': false});
-		// 		}
-		// }
-		// else {
-		// 		console.log("Token doesn't exist");
-		// 		res.json({'logged_in': false});
-		// }
-})
-
+// login endpoint
 app.post('/login', async (req, res) => {
 		login(req, res);
 });
 
+// logout endpoint
 app.get('/logout', async (req, res) => {
-		console.log('At logout');
-		res.clearCookie('accessToken');
-		res.clearCookie('user_id');
-		res.json({'status': 'cleared'});
+		run(req, res, logout);
 })
 
+// homepage endpoint
 app.post('/homepage', async (req, res) => {
-		console.log("Get Homepage");
-		let verification = false;
-		if (verifyToken(req.cookies.accessToken) && req.cookies.user_id){
-				verification = true;
-				console.log('Verified user', req.cookies.user_id);
-		}
-		else{
-				verification = false;
-				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-		}
-		if(verification){
-				await get_homepage_posts(req, res);
-		}
+		await async_run(req, res, get_homepage_posts);
 });
 
+// timeline endpoint
 app.post('/timeline/:user', async (req, res) => {
-		console.log('Getting Timeline Posts');
-		let verification = false;
-		if (verifyToken(req.cookies.accessToken)){
-				verification = true;
-		}
-		else{
-				verification = false;
-				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-		}
-		console.log(req.body);
-		console.log(req.cookies);
-		console.log("Called Post Timeline");
-		if(verification){
-			console.log("calling get_timetamp");
-				await get_timeline(req, res);
-		}
+		await async_run(req, res, get_timeline);
 });
 
+// post creation endpoint
 app.post('/create_post', async (req, res) => {
-	let verification = false;
-	let user_id = req.body.user_id;
-	if (verifyTokenWithUserID(req.cookies.accessToken, user_id)){
-			verification = true;
-	}
-	else{
-			verification = false;
-			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-	}
-	if(verification){
-			await create_post(req, res);
-	}
+		await async_run(req, res, create_post);
 });
 
 app.post('/react', async (req, res) => {
-	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
-			verification = true;
-	}
-	else{
-			verification = false;
-			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-	}
-	if(verification){
-			await react_to_post(req, res);
-	}
+		await async_run(req, res, react_to_post);
 });
 
 app.post('/unreact', async (req, res) => {
-	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
-			verification = true;
-	}
-	else{
-			verification = false;
-			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-	}
-	if(verification){
-			await remove_reaction_from_post(req, res);
-	}
+		await async_run(req, res, remove_reaction_from_post);
 });
 
 app.get('/messenger', async(req,res)=> {
-
-		console.log('Received request');
-		// console.log(req.params.id);
-		let id1  = req.cookies.user_id;
-		console.log(req.cookies);
-		console.log(id1);
-		await last_message_list (req,res);
+		await async_run(req, res, last_message_list);
 });
 
 app.get('/messenger/:user', async(req,res)=> {
-
-	console.log(req.url);
-	console.log('Received request');
-	// console.log(req.params.id);
-	let id1  = req.cookies.user_id;
-	console.log(id1);
-	let ans = await display_chat (req,res);
-	console.log('Received response', ans);
-		res.json(ans);
+		await async_run(req, res, display_chat);
 });
 
 app.post('/messenger/:user', async(req,res)=> {
-	console.log('Received request for Sending Message');
-	let verification = false;
-	console.log(req.user);
-	console.log(req.url);
-	console.log(req.params);
-	let receiver = req.params.user;
-	if (verifyToken(req.cookies.accessToken)){
-			verification = true;
-	}
-	else{
-			verification = false;
-			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-	}
-	// console.log(req.body);
-	if (verification) {
-		send_message (req,res);
-	}
+		run(req, res, send_message(req, res));
 });
 
 app.get('/friends/recommendations', async(req, res) => {
-		console.log('In recommendations endpoint');
-		let verification = false;
-		if (verifyToken(req.cookies.accessToken)){
-				verification = true;
-		}
-		else{
-				verification = false;
-				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-		}
-		console.log(req.body);
-		if (verification) {
-				let user_id = req.cookies.user_id;
-				console.log('Recommendations: verified, user_id -', user_id);
-				let ans = await get_recommendations(user_id);
-				res.json(ans);
-		}
+		await async_run(req, res, get_recommendations);
 });
 
 app.get('/friends/invitations', async(req, res) => {
-		console.log('In invitations endpoint');
-		let verification = false;
-		if (verifyToken(req.cookies.accessToken)){
-				verification = true;
-		}
-		else{
-				verification = false;
-				res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-		}
-		console.log(req.body);
-		if (verification) {
-				let user_id = req.cookies.user_id;
-				console.log('Recommendations: verified, user_id -', user_id);
-				let ans = await get_invitations(user_id);
-				res.json(ans);
-		}
+		await async_run(req, res, get_invitations);
 });
 
 app.post('/friends/accept', async(req, res) => {
-	console.log('In Accept Friend Requests');
-	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
-			verification = true;
-	}
-	else{
-			verification = false;
-			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-	}
-	if (verification) {
-			accept_request(req, res);
-	}
+		run(req, res, accept_request);
 });
 
 app.post('/friends/send', async(req, res) => {
-	console.log('In Send Friend Requests');
-	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
-			verification = true;
-	}
-	else{
-			verification = false;
-			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-	}
-	if (verification) {
-			send_request(req, res);
-	}
+		run(req, res, send_request);
 });
 
 app.post('/friends/decline', async(req, res) => {
-	console.log('In Decline Friend Requests');
-	let verification = false;
-	if (verifyToken(req.cookies.accessToken)){
-			verification = true;
-	}
-	else{
-			verification = false;
-			res.json({'status' : 'failure', 'message' : 'Invalid User', 'verification': 'failed', 'result' : null})
-	}
-	if (verification) {
-			decline_request(req, res);
-	}
+		run(req, res, decline_request);
 });
 
 // TODO: merge this with homepage
 app.post('/search',async(req, res) => {
-		await get_search_results(req,res);
-} )
-
-app.get('/admin', async(req, res) => {
-		await plots(req, res);
+		await async_run(req, res, get_search_results);
 });
 
-// app.post('/signup', (req, res) => {
-// 		console.log('At signup backend!');
-// 		console.log(req.body);
-// });
-// app.post('/login', (req, res) => {
-// 		console.log('At login backend!');
-// 		console.log(req.body);
-// });
+app.get('/admin', async(req, res) => {
+		await async_run(req, res, plots);
+});
 

@@ -3,32 +3,26 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import { useNavigate } from 'react-router-dom';
 
-class LoginForm extends Component {
-		constructor() {
-				super();
-
-				this.state = {
-						email: '',
-						password: '',
-				};
-				this.handleSubmit = this.handleSubmit.bind(this);
-				this.handleChange = this.handleChange.bind(this);
+const LoginForm = () => {
+		let history = useNavigate();
+		let state = {
+				email: '',
+				password: '',
 		}
 
-		handleChange(e) {
+		const handleChange = (e) => {
 				console.log('Change in login form');
 				e.preventDefault();
-				this.setState({
-						[e.target.name]: e.target.value,
-				});
-				console.log(this.state);
+				state[e.target.name] = e.target.value;
+				console.log(state);
 		}
 
-		async handleSubmit(e) {
+		const handleSubmit = async (e) => {
 				e.preventDefault();
 				console.log('Sending login form to backend!');
-				console.log(this.state);
+				console.log(state);
 				const requestOptions = {
 						method: 'POST',
 						mode: 'cors',
@@ -37,35 +31,34 @@ class LoginForm extends Component {
 								'Accept': 'application/json',
 								'Content-Type': 'application/json'
 						},
-						body: JSON.stringify(this.state),
+						body: JSON.stringify(state),
 				};
-				const res = await fetch('http://localhost:8080/login', requestOptions)
-				let data = await res.json();
-
-				console.log(data);
-
+				const res = fetch('http://localhost:8080/login', requestOptions)
+							.then(res => res.json())
+							.then(data => {
+									console.log(data);
+									history('/homepage');
+							});
 		}
 
-		render() {
-				return (
-						<Form onSubmit={this.handleSubmit}>
-								<Form.Group className="mb-3" controlId="formBasicEmail">
-										<Form.Label>Email address</Form.Label>
-										<Form.Control type="email" name='email' placeholder="Enter email" value={this.state.email} onChange={this.handleChange}/>
-										<Form.Text className="text-muted">
-												We'll never share your email with anyone else.
-										</Form.Text>
-								</Form.Group>	
-								<Form.Group className="mb-3" controlId="formBasicPassword">
-										<Form.Label>Password</Form.Label>
-										<Form.Control type="password" name='password' placeholder="Password" value={this.state.password} onChange={this.handleChange} />
-								</Form.Group>
-								<Button variant="primary" type="submit">
-										Submit
-								</Button>
-						</Form>
-				);
-		}
+		return (
+				<Form onSubmit={handleSubmit}>
+						<Form.Group className="mb-3" controlId="formBasicEmail">
+								<Form.Label>Email address</Form.Label>
+								<Form.Control type="email" name='email' placeholder="Enter email" value={state.email} onChange={handleChange}/>
+								<Form.Text className="text-muted">
+										We'll never share your email with anyone else.
+								</Form.Text>
+						</Form.Group>	
+						<Form.Group className="mb-3" controlId="formBasicPassword">
+								<Form.Label>Password</Form.Label>
+								<Form.Control type="password" name='password' placeholder="Password" value={state.password} onChange={handleChange} />
+						</Form.Group>
+						<Button variant="primary" type="submit">
+								Submit
+						</Button>
+				</Form>
+		);
 }
 
 class SignupForm extends Component {
@@ -119,7 +112,7 @@ class SignupForm extends Component {
 		return (
 			<div>
 				<center>Sign up!</center>
-				<form onSubmit = {this.handleSubmit}  class="was-validated">
+				<form onSubmit = {this.handleSubmit}  className="was-validated">
 					
 					
 					<div className="col">

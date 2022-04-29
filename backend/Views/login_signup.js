@@ -22,26 +22,26 @@ const pool = new Pool({
 console.log('Pool made');
 
 const checkIfExists = async (email) => {
-	console.log('Checking if user exists');
+		console.log('Checking if user exists');
     try {
-		var res;
-		res = await pool.query(
-			`
+				var res;
+				res = await pool.query(
+						`
 			select *
 			from AppUser
 			where Email = $1
 			`, [email]
-		);
-		// console.log("Res = ", res);
-		if (res.rows.length != 0) {
-				console.log("User already exists");
-				return true;
-		}
-		console.log("User doesn't already exist");
-		return false;
+				);
+				// console.log("Res = ", res);
+				if (res.rows.length != 0) {
+						console.log("User already exists");
+						return true;
+				}
+				console.log("User doesn't already exist");
+				return false;
     }
-	catch (err) {
-		return err.stack;
+		catch (err) {
+				return err.stack;
     }
 }
 
@@ -67,103 +67,97 @@ const signup = async (req, res) => {
 		let autoadd = req.body.autoadd;
 		
 		pool.query(
-			`
+				`
 			insert into AppUser (First_Name, Last_Name, Roll_Number, Branch, Degree, Batch,
 			Email, Hash_of_Password, Residence, Birthday, SignUp_Date,
 			Profile_Picture, Private, AutoAdd_to_Groups)
 			values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
 			`,
-			// `
-			// insert into AppUser (Email, Hash_of_Password)
-			// values ($7, $8)
-			// `,
-			[firstname, lastname, rollno, branch, degree, batch, email, password,
-			residence, bday, sgndate, pfp, pvt, autoadd],
-			(err, result) => {
-				if (err) {
-					res.status(200).json({"status" : "failure"});
-					return console.error('Error executing query', err.stack);
+				// `
+				// insert into AppUser (Email, Hash_of_Password)
+				// values ($7, $8)
+				// `,
+				[firstname, lastname, rollno, branch, degree, batch, email, password,
+				 residence, bday, sgndate, pfp, pvt, autoadd],
+				(err, result) => {
+						if (err) {
+								res.status(200).json({"status" : "failure"});
+								return console.error('Error executing query', err.stack);
+						}
+						else{
+								res.status(200).json({"status" : "success"});
+						}
 				}
-				else{
-					res.status(200).json({"status" : "success"});
-				}
-			}
 		);
 }
 
 const login = async (req, res) => {
 		email = req.body.email;
 		password = req.body.password;
-        pool.query(
-		`
+    pool.query(
+				`
 		select *
 		from AppUser
 		where Email = $1
 		`, [email],
-		(err, result) => {
-			if (err) {
-				res.status(200).json({"status" : "failure"});
-				return console.error('Error executing query', err.stack);
-			}
-			else{
-				if(result.rows.length == 0){
-					res.status(200).json({
-						accessToken: null,
-						message: "User doesn't exist",
-						status : "failure",
-					});
-				}
-				else{
-						ans = result.rows[0];
-						refpswd = ans['hash_of_password'];
-						// var isValid = bcrypt.compareSync(bcrypt.hash(password), refpswd);
-						var isValid = (password.localeCompare(refpswd)) == 0;
-						if (!isValid) {
-								res.status(200).json({
-										message: "Invalid Password",
-										status : "failure",
-								});
+				(err, result) => {
+						if (err) {
+								res.status(200).json({"status" : "failure"});
+								return console.error('Error executing query', err.stack);
 						}
-						else {
-								var token = jwt.sign({id: ans['user_id']}, config.secret, {
-										expiresIn: 86400
-								});
-								res.cookie('accessToken', token);
-								res.cookie('user_id', ans['user_id']);
-								res.status(200).json({
-										email: ans['email'],
-										message: "Success"
-								});
-					} 
+						else{
+								if(result.rows.length == 0){
+										res.status(200).json({
+												accessToken: null,
+												message: "User doesn't exist",
+												status : "failure",
+										});
+								}
+								else{
+										ans = result.rows[0];
+										refpswd = ans['hash_of_password'];
+										// var isValid = bcrypt.compareSync(bcrypt.hash(password), refpswd);
+										var isValid = (password.localeCompare(refpswd)) == 0;
+										if (!isValid) {
+												res.status(200).json({
+														message: "Invalid Password",
+														status : "failure",
+												});
+										}
+										else {
+												var token = jwt.sign({id: ans['user_id']}, config.secret, {
+														expiresIn: 86400
+												});
+												res.cookie('accessToken', token);
+												res.cookie('user_id', ans['user_id']);
+												res.status(200).json({
+														email: ans['email'],
+														message: "Success"
+												});
+										} 
+								}
+						}
 				}
-			}
-		}
-        );
+    );
 }
 
-const verifyToken = (token) => {
-	let ver = jwt.verify(token, config.secret, (err, verified) => {
-			if (err) return false;
-			return true;
-	});
-	console.log(ver);
-	return ver;
+const logout = (req, res) => {
+		res.clearCookie('accessToken');
+		res.clearCookie('user_id');
+		res.json({'status': 'cleared'});
 }
 
-const verifyTokenWithUserID = (token, user_id) => {
-	let ver = jwt.verify(token, config.secret);
-	console.log(ver);
-	if(ver.id != user_id){
-		return false;
-	} else {
-		return true;
-	}
+const verifyToken = (token, user_id) => {
+		let ver = jwt.verify(token, config.secret);
+		console.log(ver);
+		return ver.id == user_id;
 }
 
 module.exports = {
     checkIfExists,
     signup,
     login,
-	verifyToken,
-	verifyTokenWithUserID,
+		logout,
+		verifyToken,
 }
+
