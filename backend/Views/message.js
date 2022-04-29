@@ -28,7 +28,7 @@ const send_message = async (req, res) => {
 		let sender = req.cookies.user_id;
 		sender = parseInt(sender);
 		// let receiver = req.body.receiver;
-		let receiver = 2;
+		let receiver =   req.params.user;
         let time = req.body.time;
         let view_once = false;  // TODO  -- currently default is set to false
         let deleted = false;
