@@ -2,8 +2,9 @@ import React, { useState, useContext } from 'react';
 import MessageFinder from '../apis/MessageFinder';
 import { Context } from '../context/Context';
 import { useLocation } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom';
 const SendMessage = () => {
+    const { id } = useParams()
     const head = {
         color: '#7c795d', 'fontFamily': 'Trocchi', 
         'fontSize': '60px', 'fontWeight': 'normal', 'lineHeight': '48px', 
@@ -23,8 +24,8 @@ const SendMessage = () => {
         try {
 			var rightNow = new Date();
 			var dateTime = rightNow.toISOString().slice(0,19).replace("T"," ");
-		  console.log("Sending Post to backend");
-          const response = await MessageFinder.post("/:id2", {
+		  console.log("Sending Message to backend");
+          const response = await MessageFinder.post(`/${id}`, {
               content : text_message,
 			  time : dateTime
           })
