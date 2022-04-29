@@ -57,9 +57,11 @@ const send_message = async (req, res) => {
 			console.log("Insert into private chat done");
 			await client.query('COMMIT');
 			console.log("Commit done");
+      res.status(200).json({"status" : "success", "message" : "Message Sent!"});
 		} catch (e) {
 			await client.query('ROLLBACK');
 			console.log("Rollback");
+      res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
 			throw e
 		} finally {
 			client.release();
@@ -118,15 +120,16 @@ const display_chat = async (req,res) =>{
        `, [user1, user2]);
     
   console.log(ans.rows[0]);
-  return  {
+  res.status(200).json({
       message : 'Successful',
       data : {
         data: ans.rows
 
       },
-  }
+  });
 }
   catch (err) {
+    res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
 		return err.stack;
     }
 }
@@ -160,6 +163,7 @@ history as (
       res.status(200).json(ans.rows);
   }
   catch (err) {
+    res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
   return err.stack;
   }
 }
