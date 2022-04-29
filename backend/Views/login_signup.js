@@ -63,8 +63,8 @@ const signup = async (req, res) => {
 		let sgndate = new Date();
 		let pfp = req.body.pfp;
 		pfp = pfp == undefined ? null : pfp;
-		let pvt = req.body.pvt;
-		let autoadd = req.body.autoadd;
+		let pvt = false;
+		let autoadd = true;
 		
 		pool.query(
 				`
