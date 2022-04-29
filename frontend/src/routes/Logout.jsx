@@ -15,9 +15,9 @@ const LogOut = () => {
 
 		const handleClick = () => {
 				history('/')
+				fetch('http://localhost:8080/logout', reqOpt)
+						.then(resp => resp.json());
 		}
-		fetch('http://localhost:8080/logout', reqOpt)
-				.then(resp => resp.json());
 		return (
 			<center><button onClick={handleClick} className="btn btn-warning btn">Logout</button></center>	
 				

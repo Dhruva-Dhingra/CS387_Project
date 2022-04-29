@@ -49,4 +49,5 @@ values ($1, $2, TRUE)
 }
 
 // insert_users();
-insert_friends();
+// insert_friends();
+insert_users().then(insert_friends);
