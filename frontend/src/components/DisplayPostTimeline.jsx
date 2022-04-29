@@ -97,7 +97,7 @@ const DisplayPostTimleine = () => {
         <thead>
           <tr className='bg-primary'>
               {/* <th scope = "col">Post ID</th> */}
-              <th scope = "col">Post Content</th>
+              <th scope = "col">Content</th>
           </tr>
         </thead>
         <tbody>
@@ -106,7 +106,7 @@ const DisplayPostTimleine = () => {
                   <tr 
                   key={posttm.post_id}>
                     {/* <td>{posts.post_id}</td> */}
-                    <td>{posttm.post_id}</td>
+                    <td>{posttm.content}</td>
                 </tr>
                 )
             })}
