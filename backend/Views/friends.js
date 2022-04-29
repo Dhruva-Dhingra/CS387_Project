@@ -222,7 +222,7 @@ const accept_request = async (req, res) => {
 																									res.status(200).json({"status" : "failure", "message" : "Could not accept request"});
 																									console.log(err.stack);
 																							} else {
-																									quer = `MATCH (n: User {ID: ${friend.sender}}), (m: User {ID: ${friend.acceptor}}) CREATE (n)-[:FRIEND]->(m);`
+																									quer = `MATCH (n: User {ID: ${sender_id}}), (m: User {ID: ${acceptor_id}}) CREATE (n)-[:FRIEND]->(m);`
 																									let ans = session.run(quer);
 																									res.status(200).json({"status" : "success", "message" : "Request Accepted"});
 																							}
@@ -269,6 +269,36 @@ const decline_request = async (req, res) => {
 		}
 }
 
+const check_request = async (req, res) => {
+		try {
+				let user_id = req.cookies.user_id;
+				console.log(req.body);
+				let other_id = req.body.user_id;
+				console.log('Checking for user', user_id, 'and other', other_id);
+				let ans = await pool.query(`
+select * from friend
+where (sender = $1 and acceptor = $2) or (acceptor = $1 and sender = $2 and status)
+`, [user_id, other_id]);
+				if (ans.rows.length != 0) {
+						res.status(200).json({"status" : "success", "message" : "already friends"});
+				}
+				else {
+						ans = await pool.query(`
+select * from friend
+where acceptor = $1 and sender = $2 and not status
+`, [user_id, other_id]);
+						if (ans.rows.length != 0) {
+								res.status(200).json({"status" : "success", "message" : "request received"});
+						}
+						else {
+								res.status(200).json({'status': 'success', 'message': 'request possible'});
+						}
+				}
+		} catch (err) {
+				res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+				console.log(err.stack);
+		}
+}
 module.exports = {
 		get_invitations,
 		sync_node,
@@ -278,4 +308,5 @@ module.exports = {
 		send_request,
 		accept_request,
 		decline_request,
+		check_request,
 }
