@@ -23,6 +23,8 @@ const AddPost = () => {
       console.log("Post Frontend");  
       e.preventDefault()
         try {
+          console.log("HIII")
+          console.log(textcontent);
           var rightNow = new Date();
 		    	var dateTime = rightNow.toISOString().slice(0,19).replace("T"," ");
           const response = await PostFinder.post("/", {
@@ -30,6 +32,7 @@ const AddPost = () => {
               textcontent: textcontent,
               time : dateTime,
           })
+          
           console.log("Post Frontend Done");
         } catch (err) {
   
@@ -41,11 +44,11 @@ const AddPost = () => {
     <form action="">
         <div className="form-row">
         <div className="col">
-                <input value = {textcontent} onChange={(e) => settextcontent(e.target.textcontent)} type="text" className='form-control' placeholder='Text'/>
+                <input value = {textcontent} onChange={(e) => settextcontent(e.target.value)} type="text" className='form-control' placeholder='Text'/>
             </div>
-            <div className="col">
+            {/* <div className="col">
                 <input value = {content} onChange={(e) => setcontent(e.target.content)} type="file" className='form-control' placeholder='Content'/>
-            </div>
+            </div> */}
             <br></br>
           <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn-lg">Post</button></center>          
         </div>

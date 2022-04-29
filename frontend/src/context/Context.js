@@ -40,6 +40,8 @@ export const ContextProvider = (props) => {
     const [pageCounttm, setPageCounttm] = useState(0);
     const [postscounttm, spostscounttm] = useState(0);
     const [isNextDisabledtm, setisNextDisabledtm] = useState(false);
+    const [content, setcontent] = useState("");
+    const [textcontent, settextcontent] = useState("");
 
     const [isDisabledtm, setisDisabledtm] = useState(true);
     
@@ -73,6 +75,8 @@ export const ContextProvider = (props) => {
                 isDisabled, setisDisabled,
                 posts, setPosts,
                 resultSB, searchBox,
+                content, setcontent,
+                textcontent, settextcontent,
             }}
         >
             {props.children}
