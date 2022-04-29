@@ -16,6 +16,7 @@ import NotifPage from './routes/NotifPage';
 import RecomInvit from './routes/FriendsPage';
 import LogOut from './routes/Logout';
 import SearchPage from './routes/SearchPage';
+import CreatePostPage from './routes/CreatePostPage';
 import SearchBoxFinder from './apis/SearchBoxFinder';
 
 
@@ -79,6 +80,7 @@ return (
 <Route path = "/notif" element = {<PrivateRoute><NotifPage /></PrivateRoute>} />
 <Route path = "/friends" element = {<PrivateRoute><RecomInvit /></PrivateRoute>} />
 <Route path = "/search" element = {<PrivateRoute><SearchPage /></PrivateRoute>} />
+<Route path = "/post" element = {<PrivateRoute><CreatePostPage /></PrivateRoute>} />
 </Routes>
 </BrowserRouter>
 </div>
