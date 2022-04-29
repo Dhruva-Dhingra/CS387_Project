@@ -26,9 +26,9 @@ const DM = (props) => {
 //   };
 
   return <div className='list-group'>
-  <table className="table table-hover table-dark table-striped table-bordered">
+  <table className="table table-hover  table-bordered">
       <thead>
-        <tr className='bg-primary'>
+        <tr className='bg-success'>
             <th scope = "col">Message</th>
             <th scope = "col">Time</th>
         </tr>
@@ -36,15 +36,22 @@ const DM = (props) => {
       <tbody>
           {msgs && msgs.map(msg => {
               return (
-                <tr
-                key={msg.message_id}>
-                  <td>{msg.content}</td>
-                  <td>{msg.time}</td>
-                
-         {/* { msg.rec ? (<div id = "sent"  style="background-color:green" >chat.content</div>):(<div id = "received">chat.content</div>)
-         } */}
-   
-              </tr>
+                  msg.rec?     <tr  bgcolor="#abc"
+                  key={msg.message_id}>
+                    <td>{msg.content}</td>
+                    <td>{msg.time}</td>
+                  
+    
+     
+                </tr> : <tr bgcolor="#eee"
+                  key={msg.message_id}>
+                    <td>{msg.content}</td>
+                    <td>{msg.time}</td>
+                  
+    
+     
+                </tr> 
+             
               )
           })}
       </tbody>
