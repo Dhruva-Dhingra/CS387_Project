@@ -30,32 +30,43 @@ const EditForm = () => {
       const [hidden, setprivate] = useState("")
       const [autoadd, setautoadd] = useState("")
 
-    //   useEffect( ()=> {
-    //      const fetchData = async () => {
-    //          const response = await EditFinder.get("/");
-    //          console.log(response);
-    //          setfirst(response.data.first);
-    //          setlast(response.data.last);
-    //          setrolln(response.data.rolln);
-    //          setbranch(response.data.branch);
-    //          setdegree(response.data.degree);
-    //          setbatch(response.data.batch);
-    //          setemail(response.data.email);
-    //          setpswd(response.data.pswd);
-    //          setresidence(response.data.residence);
-    //          setbday(response.data.bday);
-    //          setdp(response.data.dp);
-    //          setprivate(response.data.private);
-    //          setautoadd(response.data.autoadd);
-    //      }
-    //      fetchData();
-    //   })
+      useEffect( ()=> {
+         const fetchData = async () => {
+             const response = await EditFinder.get("/");
+             console.log(response.data);
+             setfirst(response.data.first);
+             setlast(response.data.last);
+             setrolln(response.data.rolln);
+             setbranch(response.data.branch);
+             setdegree(response.data.degree);
+             setbatch(response.data.batch);
+             setemail(response.data.email);
+             setpswd(response.data.pswd);
+             setresidence(response.data.residence);
+             setbday(response.data.bday);
+             setdp(response.data.dp);
+             setprivate(response.data.private);
+             setautoadd(response.data.autoadd);
+         }
+         fetchData();
+      })
       const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(first);
+        var profile_pic;
         try {
+            var dp_file_element = document.getElementById("file-selector");
+            var reader = new FileReader();
+            reader.onloadend = function(){
+                // console.log("Reader = ", reader);
+                // console.log("Reader.result = ", reader.result);
+                profile_pic = reader.result;
+                // var imgElement = document.getElementById("checking_image_file");
+                // imgElement.src = reader.result;
+            }
+            await reader.readAsDataURL(dp_file_element.files[0]);
             console.log(first);
-          const response = await EditFinder.post("/", {
+        await EditFinder.post("/", {
               first: first,
               last: last,
               rolln: rolln,
@@ -66,12 +77,20 @@ const EditForm = () => {
               pswd: pswd,
               residence: residence,
               bday: bday,
-              dp: dp,
+              dp: profile_pic,
              private: hidden,
               autoadd: autoadd
-          })
-          console.log(response);
+          }).then(response => {
+            if(response.data.status === "success"){
+                console.log(response);
+            console.log("Profile Edit Successful");
+            } else {
+            console.log("Profile Edit Unsuccessful");
+            }
+        });
+      
         } catch (err) {
+            console.log(err.stack);
   
         }
       }
@@ -111,7 +130,7 @@ const EditForm = () => {
                 <input value = {bday} onChange={(e) => setbday(e.target.value)} type="date" className='form-control' placeholder='Birthday'/>
             </div>
             <div className="col">
-                <input value = {dp} onChange={(e) => setdp(e.target.value)} type="file" className='form-control' placeholder='Profile Picture'/>
+                <input type="file" className='form-control' placeholder='Profile Picture' id="file-selector" accept=".jpg, .jpeg, .png"/>
             </div>
             <div className="col">
                 <input value = {hidden} onChange={(e) => setprivate(e.target.value)} type="number" className='form-control' placeholder='Hide Account'/>

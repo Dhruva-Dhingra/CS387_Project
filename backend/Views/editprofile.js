@@ -72,7 +72,8 @@ const edit_profile = async (req, res) => {
 const get_profile_info = async (req, res) => {
     // incomplete
     try {
-        let user_id = req.cookies.user_id;      
+        let user_id = req.cookies.user_id;    
+        console.log("User id %s", user_id)  
 
         pool.query(
             `select  * from AppUser where User_ID = $1;`, [user_id],
@@ -82,7 +83,7 @@ const get_profile_info = async (req, res) => {
 					return console.error('Error executing query', err.stack);
 				}
 				else{
-                    res.status(200).json({"status" : "success", "message" : "get Profile info query) successful", "result" : res.rows});
+                    res.status(200).json({"status" : "success", "message" : "get Profile info query successful", "data" : res.rows});
 				}
 			}
         );

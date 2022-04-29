@@ -25,12 +25,21 @@ const SendMessage = () => {
 			var rightNow = new Date();
 			var dateTime = rightNow.toISOString().slice(0,19).replace("T"," ");
 		  console.log("Sending Message to backend");
-          const response = await MessageFinder.post(`/${id}`, {
+           await MessageFinder.post(`/${id}`, {
               content : text_message,
 			  time : dateTime
-          })
-          sendMessage(response.data.data.venue);
+          }).then(response => {
+            let data = response.json(); 
+            if(data.state === "success"){
+
+            sendMessage(response.data.data.venue);
           console.log(response);
+                        console.log("Message Sent");
+            } else {
+              console.log("Message couldnt be sent");
+            }
+          });
+          
         } catch (err) {
   
         }

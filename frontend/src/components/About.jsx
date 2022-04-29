@@ -155,8 +155,11 @@ const DisplayAbout = () => {
            const response = await  AboutFinder.get(`/${id}`, {
             start: 1,
             end : 2,
-    });
-    console.log("HIHIHIHI");
+           })
+    .then(response => {
+        if(response.data.status === "success"){
+      
+        console.log("HIHIHIHI");
 // console.log(response.data.result)
 			var imgobbj = document.getElementById("profile_photo_box");
 			// console.log("Created new image placeholder");
@@ -170,7 +173,15 @@ const DisplayAbout = () => {
                 console.log(poststm);
                 console.log("HI");
                 loaded = true;
-            } catch (err) {}
+                console.log("About get succesful");
+        } else {
+        console.log("About get unsuccessful");
+        }
+    });
+    
+            } catch (err) {
+                console.log(err.stack);
+            }
         }
         fetchData();
     },[]);

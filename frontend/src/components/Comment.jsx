@@ -22,10 +22,18 @@ const Comment = () => {
         try {
           const response = await TimelineFinder.post("/:id", {
               text_message: text_message,
-          })
-          comment(response.data.data.venue);
-          console.log(response);
-        } catch (err) {
+          }).then(response => {
+            if(response.data.status === "success"){
+              comment(response.data.data.venue);
+              console.log(response);
+            console.log("Accept friend request successful");
+            } else {
+            console.log("Accept friend request unsuccessful");
+
+            }
+        });
+        
+        } catch (err) {  console.log(err.stack);
   
         }
     }

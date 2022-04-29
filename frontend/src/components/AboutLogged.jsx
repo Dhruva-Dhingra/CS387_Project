@@ -19,11 +19,12 @@ const AboutLogged = () => {
                 arr = arr.filter((el) => el.includes('user_id'));
                 console.log(arr);
                 let uid = arr[0].split('=')[1];
-								const response = await  AboutFinder.get('/'+uid, {
+							await  AboutFinder.get('/'+uid, {
 										start: 1,
 										end : 2,
-								});
-								console.log('Data:', response.data);
+								}).then(response => {
+                                    if(response.data.status === "success"){
+                                        console.log('Data:', response.data);
 								var imgobbj = document.getElementById("profile_photo_box");
 								// console.log("Created new image placeholder");
 								// var len = response.data.result[0].profile_picture.length;
@@ -35,7 +36,14 @@ const AboutLogged = () => {
                 setPoststm(response.data.result);
                 console.log(poststm);
                 loaded = true;
-            } catch (err) {}
+                console.log("Get about, successful");
+
+                                    } else {
+                                        console.log("Get about, unsuccessful");
+                                    }
+                                });
+								
+            } catch (err) {  console.log(err.stack);}
         }
         fetchData();
     },[]);

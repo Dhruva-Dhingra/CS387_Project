@@ -20,12 +20,20 @@ const Analysis = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-          const response = await WebsiteAdminFinder.post("/admin", {
+         await WebsiteAdminFinder.post("/admin", {
               text_message: text_message,
-          })
-          analysis(response.data.data.result);
-          console.log(response);
-        } catch (err) {
+          }).then(response => {
+            if(response.data.status === "success"){
+              analysis(response.data.data.result);
+              console.log(response);
+            console.log("Analytics data fetched successfully");
+            } else {
+            console.log("Failed to fetch analytics data");
+
+            }
+        });
+    
+        } catch (err) {  console.log(err.stack);
   
         }
     }

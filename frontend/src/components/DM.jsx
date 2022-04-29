@@ -11,11 +11,18 @@ const DM = (props) => {
         const fetchData = async () => {
             try {
                 console.log("HI");
-                const res = await MessageFinder.get(`/${id}`); // TODO : add id as request parameter
-                console.log(res);
-                setMsg(res.data.data.data);
+               await MessageFinder.get(`/${id}`).then(res => {
+                    if(res.data.status === "success"){
+                        console.log(res);
+                        setMsg(res.data.data.data);
+                    console.log("Private Chat messages fetched successfully");
+                    } else {
+                    console.log("Private Chat messages fetch unsuccessful");
+                    }
+                }); // TODO : add id as request parameter
+              
                 setTimeout(() => {fetchData()}, 2000);
-            } catch (err) {}
+            } catch (err) { console.log(err.stack);}
         }
 
         fetchData();

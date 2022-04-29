@@ -28,29 +28,36 @@ const DisplayPostTimleine = () => {
          }
          console.log(itemOffsettm)
          var end = itemOffsettm+9;
-         const response = await  TimelineFinder.post(`/${id}`, {
+       await  TimelineFinder.post(`/${id}`, {
           start: `${itemOffsettm}`,
       end : `${end}`,
-  });
-              console.log(response.data.rowCount);
-              // spostscounttm(response.data.data.postscount);
-              
-            
-             
-                  if (response.data.rowCount === 0) {
-                    alert("You have reached the end of posts")
-                    // handlePrevPoststm();
-                  }
-                   else{
-                   setPageCounttm(pageCounttm+1);
-                   setPoststm(response.data.result);}
+  }).then(response => {
+    if(response.data.status === "success"){
 
-              // setPageCounttm(pageCounttm+1);
-              // console.log(response.data);
+      console.log(response.data.rowCount);
+      // spostscounttm(response.data.data.postscount);
+      
+    
+     
+          if (response.data.rowCount === 0) {
+            alert("You have reached the end of posts")
+            // handlePrevPoststm();
+          }
+           else{
+           setPageCounttm(pageCounttm+1);
+           setPoststm(response.data.result);}
 
-              console.log(poststm)
+      // setPageCounttm(pageCounttm+1);
+      // console.log(response.data);
+
+      console.log(poststm)
+    console.log("Display Post, successful");
+    } else {
+    console.log("Display Post, unsuccessful");
+    }
+});
    
-          } catch (err) {}
+          } catch (err) {  console.log(err.stack);}
       }
 
       fetchData();
@@ -61,16 +68,19 @@ const DisplayPostTimleine = () => {
     //   };
 
       const handleNextPoststm= () => {
+        try  {
         console.log("clicked on next");
         var newOffset = itemOffsettm;
         newOffset = newOffset + 10;
         setItemOffsettm(newOffset);
-        history(`/timeline/${id}`);
+        history(`/timeline/${id}`); }
+        catch (err) {  console.log(err);}
       };
 
 
       // 1 : newoffset 0 2: newoffset 0
       const handlePrevPoststm = () => {
+        try {
        
         var newOffsettm;
 
@@ -88,7 +98,8 @@ const DisplayPostTimleine = () => {
          setItemOffsettm(newOffsettm);
         history(`/timeline/${id}`);
         }
-        
+      }
+      catch (err) {  console.log(err);}
         
         
       };

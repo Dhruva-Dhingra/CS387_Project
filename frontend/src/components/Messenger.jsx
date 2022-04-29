@@ -24,11 +24,18 @@ const Messenger = (props) => {
 						// body: `id=${1}`,
 				};
 				// console.log(requestOptions);
-			    const res =  await MessageFinder.get("/");
-                setFriends(res.data);
-                setTimeout(() => {fetchData()}, 2000);
-                console.log(friends);
-            } catch (err) {}
+			   await MessageFinder.get("/").then(response => {
+       
+                    if(response.data.status === "success"){  setFriends(response.data);
+                        setTimeout(() => {fetchData()}, 2000);
+                        console.log(friends);
+                        console.log("Messenger base page data fetch successful");
+                    } else{
+                            console.log("Messenger base page data fetch unsuccessful");
+
+                        }})
+              
+            } catch (err) { console.log(err);}
         }
 
         fetchData();
