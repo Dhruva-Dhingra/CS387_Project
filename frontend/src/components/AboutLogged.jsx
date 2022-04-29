@@ -39,7 +39,11 @@ const AboutLogged = () => {
         fetchData();
     },[]);
     return <div className='list-group'>
-        <center>About</center>
+
+        <img id="profile_photo_box" class="rounded float-left" width="200" height="200"></img>
+        <br>
+        </br>
+        <br></br>
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
           <tr className='bg-primary'>
@@ -59,9 +63,7 @@ const AboutLogged = () => {
             <tr><td>Birthday</td><td>{poststm[0].birthday}</td></tr>
         </tbody>
     </table>
-    <div>
-        <img id="profile_photo_box" width="600" height="500"></img>
-    </div>
+
     </div>
 
 }
