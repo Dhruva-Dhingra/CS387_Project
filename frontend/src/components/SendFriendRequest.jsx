@@ -25,8 +25,10 @@ const SendFriendRequest = () => {
           })
           sendFriendRequest(response.data.data.venue);
           console.log(response);
+          
         } catch (err) {
   
+          console.log(err.stack);
         }
     }
 
