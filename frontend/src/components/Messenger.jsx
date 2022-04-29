@@ -26,12 +26,13 @@ const Messenger = (props) => {
 				// console.log(requestOptions);
 			    const res =  await MessageFinder.get("/");
                 setFriends(res.data);
+                setTimeout(() => {fetchData()}, 2000);
                 console.log(friends);
             } catch (err) {}
         }
 
         fetchData();
-   },[friends, setFriends]) 
+   },[]) 
 
    const handleFriendSelect = (id2) => {
      
