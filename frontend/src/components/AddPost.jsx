@@ -38,10 +38,10 @@ const AddPost = () => {
     <form action="">
         <div className="form-row">
         <div className="col">
-                <input value = {textcontent} onChange={(e) => settextcontent(e.target.value)} type="number" className='form-control' placeholder='Capacity'/>
+                <input value = {textcontent} onChange={(e) => settextcontent(e.target.value)} type="text" className='form-control' placeholder='Text'/>
             </div>
             <div className="col">
-                <input value = {content} onChange={(e) => setcontent(e.target.value)} type="number" className='form-control' placeholder='Capacity'/>
+                <input value = {content} onChange={(e) => setcontent(e.target.value)} type="number" className='form-control' placeholder='Content'/>
             </div>
             <br></br>
           <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn-lg">Post</button></center>          
