@@ -36,6 +36,7 @@ const DisplayPostHomepage = () => {
                  setPageCount(pageCount+1);
    
                  console.log(posts)
+                 setTimeout(() => {fetchData()}, 5000);
       
              } catch (err) {}
          }
@@ -94,13 +95,13 @@ const DisplayPostHomepage = () => {
         <tbody>
             {posts && posts.map(post => {
                 return (
-                  <tr onClick={() => handlePostSelect(post.post_id)} 
+                  <tr 
                   key={post.post_id}>
                     {/* <td>{posts.post_id}</td> */}
                     <td>{post.content}</td>
                     <td>{post.first_name} {post.last_name}</td>
                     <td>{post.reaction_count}</td>
-                    <td><Like/></td>
+                    <td><Like post_id = {post.post_id}/></td>
                 </tr>
                 )
             })}

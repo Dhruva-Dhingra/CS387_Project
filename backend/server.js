@@ -209,3 +209,6 @@ app.get('/admin', async(req, res) => {
 		await async_run(req, res, plots);
 });
 
+app.post('/post', async(req, res) => {
+		await async_run(req, res create_post);
+})

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import TimelineFinder from '../apis/TimelineFinder';
+import PostFinder from '../apis/PostFinder';
 import { Context } from '../context/Context';
 
 const AddPost = () => {
@@ -22,11 +22,10 @@ const AddPost = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-          const response = await TimelineFinder.post("/:id", {
+          const response = await PostFinder.post("/", {
               content: content,
               textcontent: textcontent
           })
-          addPost(response.data.data.venue);
           console.log(response);
         } catch (err) {
   
@@ -38,10 +37,10 @@ const AddPost = () => {
     <form action="">
         <div className="form-row">
         <div className="col">
-                <input value = {textcontent} onChange={(e) => settextcontent(e.target.value)} type="text" className='form-control' placeholder='Text'/>
+                <input value = {textcontent} onChange={(e) => settextcontent(e.target.textcontent)} type="text" className='form-control' placeholder='Text'/>
             </div>
             <div className="col">
-                <input value = {content} onChange={(e) => setcontent(e.target.value)} type="number" className='form-control' placeholder='Content'/>
+                <input value = {content} onChange={(e) => setcontent(e.target.content)} type="file" className='form-control' placeholder='Content'/>
             </div>
             <br></br>
           <center><button onClick={handleSubmit} type = "submit" className="btn btn-warning btn-lg">Post</button></center>          

@@ -14,6 +14,7 @@ const DM = (props) => {
                 const res = await  MessageFinder.get(`/${id}`); // TODO : add id as request parameter
                 console.log(res);
                 setMsg(res.data.data.data);
+                setTimeout(() => {fetchData()}, 2000);
             } catch (err) {}
         }
 
