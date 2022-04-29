@@ -117,32 +117,32 @@ class SignupForm extends Component {
 					
 					<div className="col">
 						First Name:
-						<input type = 'text' className='form-control' name = 'email' value = {this.state.firstname} placeholder = 'Your First Name' onChange = {this.handleChange} />
+						<input type = 'text' className='form-control' name = 'firstname' value = {this.state.firstname} placeholder = 'Your First Name' onChange = {this.handleChange} />
 					</div>
 	
 					<div className='col'>
 						Last Name:
-						<input type = 'text' className='form-control' name = 'password' placeholder = 'Your Last Name' value = {this.state.lastname} onChange = {this.handleChange} />
+						<input type = 'text' className='form-control' name = 'lastname' placeholder = 'Your Last Name' value = {this.state.lastname} onChange = {this.handleChange} />
 					</div>
 					<div className='col'>
 						Roll Number:
-						<input type = 'text' className='form-control' name = 'password' placeholder = 'Roll Number' value = {this.state.rollno} onChange = {this.handleChange} />
+						<input type = 'text' className='form-control' name = 'rollno' placeholder = 'Roll Number' value = {this.state.rollno} onChange = {this.handleChange} />
 					</div>
 					<div className='col'>
 						Branch:
-						<input type = 'text' className='form-control' name = 'password' placeholder = 'Branch' value = {this.state.branch} onChange = {this.handleChange} />
+						<input type = 'text' className='form-control' name = 'branch' placeholder = 'Branch' value = {this.state.branch} onChange = {this.handleChange} />
 					</div>
 					<div className='col'>
 						Degree:
-						<input type = 'text' className='form-control' name = 'password' placeholder = 'Degree' value = {this.state.degree} onChange = {this.handleChange} />
+						<input type = 'text' className='form-control' name = 'degree' placeholder = 'Degree' value = {this.state.degree} onChange = {this.handleChange} />
 					</div>
 					<div className='col'>
 						Batch:
-						<input type = 'number' className='form-control' name = 'password' placeholder = 'Batch' value = {this.state.batch} onChange = {this.handleChange} />
+						<input type = 'number' className='form-control' name = 'batch' placeholder = 'Batch' value = {this.state.batch} onChange = {this.handleChange} />
 					</div>
 					<div className='col'>
 						Email-ID:
-						<input type = 'text' className='form-control' name = 'password' placeholder = 'Enter your Email-ID' value = {this.state.email} onChange = {this.handleChange} />
+						<input type = 'text' className='form-control' name = 'email' placeholder = 'Enter your Email-ID' value = {this.state.email} onChange = {this.handleChange} />
 					</div>
 					<div className='col'>
 						Password:
@@ -150,15 +150,15 @@ class SignupForm extends Component {
 					</div>
 					<div className='col'>
 						Residence:
-						<input type = 'text' className='form-control' name = 'password' placeholder = 'Residence' value = {this.state.residence} onChange = {this.handleChange} />
+						<input type = 'text' className='form-control' name = 'residence' placeholder = 'Residence' value = {this.state.residence} onChange = {this.handleChange} />
 					</div>
 					<div className='col'>
 						Birthday:
-						<input type = 'date' className='form-control' name = 'password' placeholder = 'Birthday' value = {this.state.birthday} onChange = {this.handleChange} />
+						<input type = 'date' className='form-control' name = 'birthday' placeholder = 'Birthday' value = {this.state.birthday} onChange = {this.handleChange} />
 					</div>
 					<div className='col'>
 						Profile Picture:
-						<input type = 'file' className='form-control' name = 'password' placeholder = 'Select your Profile Picture' value = {this.state.profile_pic} onChange = {this.handleChange} />
+						<input type = 'file' className='form-control' name = 'profile_pic' placeholder = 'Select your Profile Picture' value = {this.state.profile_pic} onChange = {this.handleChange} />
 					</div>
 					<br/>
 					<center><input type = 'submit' className="btn btn-warning btn-lg" value ='Submit'></input></center>
