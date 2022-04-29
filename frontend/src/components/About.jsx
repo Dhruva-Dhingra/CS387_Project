@@ -21,6 +21,7 @@ class FriendButton extends Component {
 		}
 
 		sendRequest () {
+			try{
 				let tm = new Date();
 				const requestOptions = {
 						method: 'POST',
@@ -38,10 +39,13 @@ class FriendButton extends Component {
 								.then(data => console.log(data));
 				} catch (err) {
 						console.log(err.stack);
-				}
-		}
+				}}
+				catch (err) {
+						console.log(err.stack);
+		}}
 
 		acceptRequest () {
+			try{
 				let tm = new Date();
 				const requestOptions = {
 						method: 'POST',
@@ -64,11 +68,14 @@ class FriendButton extends Component {
 								});
 				} catch (err) {
 						console.log(err.stack);
-				}
-
+				}}
+				catch (err) {
+					console.log(err.stack);
+	}
 		}
 
 		declineRequest () {
+			try{
 				let tm = new Date();
 				const requestOptions = {
 						method: 'POST',
@@ -92,9 +99,14 @@ class FriendButton extends Component {
 				} catch (err) {
 						console.log(err.stack);
 				}
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		check () {
+			try{
 				let data = {
 						user_id: this.user_id,
 				}
@@ -123,13 +135,23 @@ class FriendButton extends Component {
 				} catch (err) {
 						console.log(err.stack);
 				}
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		componentDidMount () {
+			try{
 				this.check();
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		render () {
+			// TRY CATCH
 				let friend_btn = <br />
 				if (this.state.message == 'request received') {
 						friend_btn = <div><Button variant='primary' onClick={this.acceptRequest}>Accept Friend Request</Button>{ }<Button variant='secondary' onClick={this.declineRequest}>Decline Friend Request</Button></div>;
