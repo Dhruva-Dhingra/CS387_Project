@@ -284,7 +284,7 @@ const check_request = async (req, res) => {
 		console.log('Checking for user', user_id, 'and other', other_id);
 		let ans = await pool.query(`
 select * from friend
-where (sender = $1 and acceptor = $2) or (acceptor = $1 and sender = $2 and status)
+where (sender = $1 and acceptor = $2) or (acceptor = $1 and sender = $2 and status) or ($1 = $2)
 `, [user_id, other_id]);
 		if (ans.rows.length != 0) {
 			res.status(200).json({ "status": "success", "message": "already friends" });
