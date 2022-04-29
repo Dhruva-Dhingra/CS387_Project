@@ -41,7 +41,7 @@ const Messenger = (props) => {
 
     return (
   <div>
-      <div>MESSENGER</div>
+     
     <div className='list-group'>
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
