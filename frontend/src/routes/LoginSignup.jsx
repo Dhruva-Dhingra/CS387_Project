@@ -13,13 +13,19 @@ const LoginForm = () => {
 		}
 
 		const handleChange = (e) => {
+			try{
 				console.log('Change in login form');
 				e.preventDefault();
 				state[e.target.name] = e.target.value;
 				console.log(state);
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		const handleSubmit = async (e) => {
+			try {
 				e.preventDefault();
 				console.log('Sending login form to backend!');
 				console.log(state);
@@ -39,6 +45,10 @@ const LoginForm = () => {
 									console.log(data);
 									history('/homepage');
 							});
+						}
+						catch (err) {
+							console.log(err.stack);
+			}
 		}
 
 		return (
@@ -84,6 +94,7 @@ class SignupForm extends Component {
 	}
   
 	handleChange(e) {
+	try {
 		e.preventDefault();
 		console.log('Change in signup form');
 		this.setState({
@@ -91,8 +102,13 @@ class SignupForm extends Component {
 		});
 		console.log(this.state);
 	}
+	catch (err) {
+		console.log(err.stack);
+}
+	}
 	
 	handleSubmit(e) {
+		try {
 		e.preventDefault();
 		console.log('Sending to backend!');
 		console.log(this.state);
@@ -106,6 +122,10 @@ class SignupForm extends Component {
 				response.json();
 				console.log(response);
 			});
+		}
+		catch (err) {
+			console.log(err.stack);
+}
 	}
   
 	render() {
@@ -180,17 +200,28 @@ class LoginSignup extends Component {
 		}
 
 		loginClick() {
+			try{
 				this.setState({
 						isLogin: true
 				});
 				console.log(this.state.isLogin);
+			}
+			catch (err) {
+				console.log(err.stack);
+	}
+				
 		}
 
 		signupClick () {
+			try{
 				this.setState({
 						isLogin: false
 				});
 				console.log(this.state.isLogin);
+			}
+			catch (err) {
+				console.log(err.stack);
+	}
 		}
 
 

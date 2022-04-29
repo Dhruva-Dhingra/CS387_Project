@@ -19,6 +19,7 @@ class Recom extends Component {
 		}
 
 		getRecoms() {
+			try{
 				const reqOpt = {
 						method: 'GET',
 						mode: 'cors',
@@ -32,19 +33,34 @@ class Recom extends Component {
 				fetch('http://localhost:8080/friends/recommendations', reqOpt)
 						.then(resp => resp.json())
 						.then(dat => this.setState({recommendations: dat}));
+					}
+					catch (err) {
+						console.log(err.stack);
+		}
 		}
 
 		componentDidMount() {
+			try{
 				this.getRecoms();
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		removeRecommendation (user_id) {
+			try{
 				this.setState({
 						recommendations: this.state.recommendations.filter((el) => el.user_id != user_id),
 				});
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		sendRequest(acceptor_id) {
+			try{
 				console.log('Request sent');
 				let tm = new Date();
 				let data = {
@@ -71,10 +87,19 @@ class Recom extends Component {
 										console.log('Modified recommendations:', this.state.recommendations);
 								}
 						});
+					}
+					catch (err) {
+						console.log(err.stack);
+		}
 		}
 
 		goToTimeline(user_id) {
+			try{
 				this.history(`/timeline/${user_id}`, {replace: true});
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		render() {
@@ -100,6 +125,7 @@ class Recom extends Component {
 }
 
 const Recommendations = (props) => {
+	
 		const history = useNavigate();
 
 		return <Recom {...props} history={history} />
@@ -121,6 +147,7 @@ class Invit extends Component {
 		}
 
 		async getInvits() {
+			try{
 				const reqOpt = {
 						method: 'GET',
 						mode: 'cors',
@@ -134,19 +161,34 @@ class Invit extends Component {
 				let resp = await fetch('http://localhost:8080/friends/invitations', reqOpt)
 						.then(resp =>resp.json())
 						.then(dat => this.setState({invitations: dat}));
+					}
+					catch (err) {
+						console.log(err.stack);
+		}
 		}
 
 		componentDidMount() {
+			try{
 				this.getInvits();
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		removeInvitation (user_id) {
+			try{
 				this.setState({
 						invitations: this.state.invitations.filter((el) => el.user_id != user_id),
 				});
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		acceptRequest (sender_id) {
+			try{
 				console.log('Accepted request');
 				let tm = new Date();
 				let data = {
@@ -171,9 +213,14 @@ class Invit extends Component {
 											console.log('Modified recommendations:', this.state.recommendations);
 									}
 							});
+						}
+						catch (err) {
+							console.log(err.stack);
+			}
 		}
 
 		declineRequest (sender_id) {
+			try {
 				console.log('Declined request');
 				let tm = new Date();
 				let data = {
@@ -198,10 +245,19 @@ class Invit extends Component {
 											console.log('Modified recommendations:', this.state.recommendations);
 									}
 							});
+						}
+						catch (err) {
+							console.log(err.stack);
+			}
 		}
 
     goToTimeline(user_id) {
+		try{
 				this.history(`/timeline/${user_id}`, {replace: true});
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		render() {
@@ -244,15 +300,26 @@ class RecomInvit extends Component {
 		}
 
 		recomClick() {
+			try{
 				this.setState({
 						disp: <Recommendations />
 				});
+			
+			}
+				catch (err) {
+					console.log(err.stack);
+	}
 		}
 
 		invitClick() {
+			try{
 				this.setState({
 						disp: <Invitations />
 				});
+			}
+			catch (err) {
+				console.log(err.stack);
+}
 		}
 
 		render() {

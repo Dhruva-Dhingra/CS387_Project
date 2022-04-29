@@ -157,10 +157,10 @@ app.post('/login', async (req, res) => {
 // logout endpoint
 app.get('/logout', async (req, res) => {
 	try {
-		run(req, res, logout);
+		async_run(req, res, logout);
 	} catch (err) {
 		res.json({ 'status': 'failure', 'message': 'Invalid User', 'verification': 'failed', 'result': null });
-		console.log(err.stack);
+		// console.log(err.stack);
 	}
 })
 
