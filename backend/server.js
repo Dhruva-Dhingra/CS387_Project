@@ -35,6 +35,10 @@ const {
 } = require('./Views/admin');
 
 const {
+	edit_profile
+} = require('./Views/editprofile');
+
+const {
 		get_invitations,
 		sync_graphdb,
 		get_recommendations,
@@ -219,4 +223,9 @@ app.get('/admin', async(req, res) => {
 
 app.post('/post', async(req, res) => {
 		await async_run(req, res, create_post);
+})
+
+app.post('/editprofile', async(req, res) => {
+
+	await async_run(req, res, edit_profile);
 })

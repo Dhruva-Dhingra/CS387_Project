@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import HomepageFinder from '../apis/EditFinder';
+import EditFinder from '../apis/EditFinder';
 import { Context } from '../context/Context';
 
 const EditForm = () => {
@@ -32,8 +32,9 @@ const EditForm = () => {
 
       const handleSubmit = async (e) => {
         e.preventDefault()
+        console.log(first);
         try {
-          const response = await HomepageFinder.post("/", {
+          const response = await EditFinder.post("/", {
               first: first,
               last: last,
               rolln: rolln,
@@ -48,7 +49,6 @@ const EditForm = () => {
              private: hidden,
               autoadd: autoadd
           })
-          editForm(response.data.data.venue);
           console.log(response);
         } catch (err) {
   
