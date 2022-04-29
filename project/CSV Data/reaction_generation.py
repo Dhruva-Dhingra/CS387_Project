@@ -46,15 +46,15 @@ File.close()
 n = 4039
 n_arr = [i + 1 for i in range(n)]
 total_friends = [0 for i in range(n)]
-# friends = {i : [] for i in range(n)}
+friends = {i : [] for i in range(n)}
 File = open('Friend.csv', newline='')
 reader = csv.reader(File, quotechar='"', delimiter=',')
 relation, header = get_data(reader)
 for data in relation:
     total_friends[int(data[0]) - 1] += 1
-    # friends[int(data[0] - 1)].append(int(data[1]) - 1)
+    friends[int(data[0]) - 1].append(int(data[1]))
     total_friends[int(data[1]) - 1] += 1
-    # friends[int(data[1] - 1)].append(int(data[0]) - 1)
+    friends[int(data[1]) - 1].append(int(data[0]))
 File.close()
 
 # csv file name
@@ -83,8 +83,12 @@ content = "User_ID,Post_ID,Reaction,timestamp\n"
 post_id = 1
 total = 0
 for row in rows:
-    posted_by = int(row[1])
-    users = random.sample(n_arr, random.randint(0, total_friends[posted_by] // 2))
+    posted_by = int(row[1]) - 1
+    # users = random.sample(n_arr, random.randint(0, total_friends[posted_by] // 2))
+    users = []
+    for i in range(total_friends[posted_by]):
+        if random.random() < 0.1:
+            users.append(friends[posted_by][i])
     total += len(users)
     print(post_id, total)
     for user_id in users:
