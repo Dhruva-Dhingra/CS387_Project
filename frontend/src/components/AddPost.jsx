@@ -28,8 +28,7 @@ const AddPost = () => {
           var rightNow = new Date();
 		    	var dateTime = rightNow.toISOString().slice(0,19).replace("T"," ");
           const response = await PostFinder.post("/", {
-              content: content,
-              textcontent: textcontent,
+              content: textcontent,
               time : dateTime,
           })
           
