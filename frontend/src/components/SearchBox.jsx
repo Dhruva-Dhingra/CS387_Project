@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import HomepageFinder from '../apis/HomepageFinder';
 import { Context } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
@@ -35,7 +35,8 @@ const SearchBox = () => {
         }
     }
 
-
+    const handleOnClick = useCallback(() => navigate('/homepage', {replace: true}), [navigate]);
+    
     return <div className='mb-4'>
     <h1 style = {head2}>Search your friends! </h1>
     <form action="">
@@ -62,7 +63,8 @@ const SearchBox = () => {
             {resultSB && resultSB.map(res=> {
                 return (
                   //   @T - Do we need more key attributes?
-                  <tr  >
+                  <tr  onClick={handleOnClick} 
+                  key={res.user_id}>
                   <td>{res.user_id}  </td>
                   <td>{res.first_name}</td>
                   <td>{res.last_name}</td>
