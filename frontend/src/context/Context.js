@@ -76,6 +76,15 @@ export const ContextProvider = (props) => {
                 resultSB, searchBox,
                 content, setcontent,
                 textcontent, settextcontent,
+                first, setfirst,
+                last, setlast,
+                email, setemail,
+                pswd, setpswd,
+                residence, setresidence,
+                bday, setbday,
+                dp, setdp,
+                hidden, setprivate,
+                autoadd, setautoadd
             }}
         >
             {props.children}
