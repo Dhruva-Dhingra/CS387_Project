@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import LikeFinder from '../apis/LikeFinder';
+import UnlikeFinder from '../apis/UnlikeFinder';
 import { Context } from '../context/Context';
 
 const Unlike = (inp) => {
@@ -18,7 +18,7 @@ const Unlike = (inp) => {
       console.log("handle Submit called");
         e.preventDefault()
         try {
-          const response = await LikeFinder.post("/", {
+          const response = await UnlikeFinder.post("/", {
               'post_id' : inp.post_id,
               'reaction' : 0,
           }).then(response => {
