@@ -35,7 +35,7 @@ const SearchBox = () => {
         }
     }
 
-    const handleOnClick = useCallback(() => navigate('/homepage', {replace: true}), [navigate]);
+    const handleOnClick = useCallback((user_id) => navigate(`/timeline/${user_id}`, {replace: true}), [navigate]);
     
     return <div className='mb-4'>
     <h1 style = {head2}>Search your friends! </h1>
@@ -63,7 +63,7 @@ const SearchBox = () => {
             {resultSB && resultSB.map(res=> {
                 return (
                   //   @T - Do we need more key attributes?
-                  <tr  onClick={handleOnClick} 
+                  <tr  onClick={() => {handleOnClick(res.user_id)}} 
                   key={res.user_id}>
                   <td>{res.user_id}  </td>
                   <td>{res.first_name}</td>
