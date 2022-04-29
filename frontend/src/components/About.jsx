@@ -1,13 +1,151 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { Component, useState, useContext, useEffect } from 'react';
 // import TimelineFinder
 import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
 import AboutFinder from '../apis/AboutFinder';
 import { useParams } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+
+class FriendButton extends Component {
+		constructor(props) {
+				super(props);
+				this.state = {
+						'message': null
+				}
+				this.user_id = this.props.user_id;
+				this.sendRequest = this.sendRequest.bind(this);
+				this.acceptRequest = this.acceptRequest.bind(this);
+				this.declineRequest = this.declineRequest.bind(this);
+				this.check = this.check.bind(this);
+				console.log('User id:', this.user_id);
+		}
+
+		sendRequest () {
+				let tm = new Date();
+				const requestOptions = {
+						method: 'POST',
+						mode: 'cors',
+						credentials: 'include',
+						headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({'user_id': this.user_id, 'time': tm}),
+				};
+				try {
+						fetch('http://localhost:8080/friends/send', requestOptions)
+								.then(res => res.json())
+								.then(data => console.log(data));
+				} catch (err) {
+						console.log(err.stack);
+				}
+		}
+
+		acceptRequest () {
+				let tm = new Date();
+				const requestOptions = {
+						method: 'POST',
+						mode: 'cors',
+						credentials: 'include',
+						headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({'user_id': this.user_id, 'time': tm}),
+				};
+				try {
+						fetch('http://localhost:8080/friends/accept', requestOptions)
+								.then(res => res.json())
+								.then(data => {
+										this.setState({
+												'message': 'already friends',
+										})
+										console.log(data)
+								});
+				} catch (err) {
+						console.log(err.stack);
+				}
+
+		}
+
+		declineRequest () {
+				let tm = new Date();
+				const requestOptions = {
+						method: 'POST',
+						mode: 'cors',
+						credentials: 'include',
+						headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({'user_id': this.user_id, 'time': tm}),
+				};
+				try {
+						fetch('http://localhost:8080/friends/decline', requestOptions)
+								.then(res => res.json())
+								.then(data => {
+										this.setState({
+												'message': 'request possible',
+										})
+										console.log(data)
+								});
+				} catch (err) {
+						console.log(err.stack);
+				}
+		}
+
+		check () {
+				let data = {
+						user_id: this.user_id,
+				}
+				console.log('Data:', data);
+				const requestOptions = {
+						method: 'POST',
+						mode: 'cors',
+						credentials: 'include',
+						headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(data),
+				};
+				try {
+						fetch('http://localhost:8080/friends/check', requestOptions).then(async res => {
+								let ans = await res.json();
+								return ans.message;
+						})
+								.then(message => {
+										console.log('Message:', message);
+										this.setState({
+												'message': message
+										})
+								});
+				} catch (err) {
+						console.log(err.stack);
+				}
+		}
+
+		componentDidMount () {
+				this.check();
+		}
+
+		render () {
+				let friend_btn = <br />
+				if (this.state.message == 'request received') {
+						friend_btn = <div><Button variant='primary' onClick={this.acceptRequest}>Accept Friend Request</Button>{ }<Button variant='secondary' onClick={this.declineRequest}>Decline Friend Request</Button></div>;
+				}
+				else if (this.state.message == 'request possible') {
+						friend_btn = <Button variant='primary' onClick={this.sendRequest}>Send Friend Request</Button>;
+				}
+				return <div>{friend_btn}</div>;
+		}
+}
 
 const DisplayAbout = () => {
     const {id} = useParams();
     const {poststm, setPoststm} = useContext(Context);
+		let user_id = poststm[0].user_id;
+		console.log('User id in parent component:', user_id);
     console.log("HIHIHIHI");
     let history = useNavigate();
     var loaded = false;
@@ -36,10 +174,12 @@ const DisplayAbout = () => {
         }
         fetchData();
     },[]);
+
     return <div className='list-group'>
         <img id="profile_photo_box" class="rounded float-left" width="200" height="200"></img>
         <br>
         </br>
+							 {user_id ? <FriendButton user_id={user_id} />: <br />}
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
           <tr className='bg-primary'>

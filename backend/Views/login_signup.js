@@ -160,7 +160,6 @@ const logout = (req, res) => {
 
 const verifyToken = (token, user_id) => {
 		let ver = jwt.verify(token, config.secret);
-		console.log(ver);
 		return ver.id == user_id;
 }
 

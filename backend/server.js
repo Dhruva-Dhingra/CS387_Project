@@ -43,6 +43,7 @@ const {
 		send_request,
 		accept_request,
 		decline_request,
+		check_request,
 } = require('./Views/friends');
 
 const {
@@ -228,5 +229,9 @@ app.get('/get_about/:user', async(req, res) => {
 })
 
 app.get('/editprofile', async(req, res) => {
-		await async_run(req, res,  get_profile_info);
-})
+		await async_run(req, res, get_profile_info);
+});
+
+app.post('/friends/check', async(req, res) => {
+		await async_run(req, res, check_request);
+});
