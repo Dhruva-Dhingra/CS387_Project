@@ -38,7 +38,7 @@ const DisplayAbout = () => {
           </tr>
         </thead>
         <tbody>
-            <tr><td>Name</td><td>HI</td></tr>
+            <tr><td>Name</td><td>HIO</td></tr>
             <tr><td>Email</td><td>HI</td></tr>
             <tr><td>Roll Number</td><td>HI</td></tr>
             <tr><td>Branch</td><td>HI</td></tr>
