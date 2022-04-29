@@ -19,7 +19,7 @@ const DisplayPostHomepage = () => {
     useEffect( ()=> {
          const fetchData = async () => {
              try {
-              if(pageCount == 0){
+              if(pageCount === 0){
                 setisDisabled(true);
             } else {
                 setisDisabled(false);
