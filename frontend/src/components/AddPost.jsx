@@ -20,22 +20,28 @@ const AddPost = () => {
     const [textcontent, settextcontent] = useState("")
 
     const handleSubmit = async (e) => {
-      console.log("Post Frontend");  
+      // console.log("Post Frontend");  
       e.preventDefault()
         try {
-          console.log("HIII")
+          // console.log("HIII")
           console.log(textcontent);
           var rightNow = new Date();
 		    	var dateTime = rightNow.toISOString().slice(0,19).replace("T"," ");
-          const response = await PostFinder.post("/", {
+        await PostFinder.post("/", {
               content: textcontent,
               time : dateTime,
-          })
+          }).then(response => {
+            if(response.data.status === "success"){
+            console.log("Post added successfully");
+            } else {
+            console.log("Failed to add post");
+
+            }
+        });
           
-          console.log("Post Frontend Done");
-        } catch (err) {
-  
-        }
+          // console.log("Post Frontend Done");
+        } catch (err) {  console.log(err.stack);
+        } 
     }
 
     return <div className='mb-4'>

@@ -122,6 +122,7 @@ const display_chat = async (req,res) =>{
   console.log(ans.rows[0]);
   res.status(200).json({
       message : 'Successful',
+      "status" : "success",
       data : {
         data: ans.rows
 

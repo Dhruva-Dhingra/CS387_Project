@@ -28,19 +28,31 @@ const DisplayPostHomepage = () => {
             }
             var end = itemOffset+19;
        
-                 const response = await  HomepageFinder.post("/", {
+               await  HomepageFinder.post("/", {
                   start: `${itemOffset}`,
               end : `${end}`
-          });
-                 console.log(response.data);
-                 spostscount(response.data.data.postscount);
-                 setPosts(response.data.data.postList);
-                 setPageCount(pageCount+1);
-   
-                 console.log(posts)
+          }).then(response => {
+       
+            if(response.data.status === "success"){
+              console.log(response);
+            console.log("Homepage data fetch successful");
+            console.log(response.data);
+            spostscount(response.data.data.postscount);
+            setPosts(response.data.data.postList);
+            setPageCount(pageCount+1);
+
+            console.log(posts)
+            } else {
+              console.log(response);
+            console.log("Homepage data fetch unsuccessful");
+            // alert("Accept friend request unsuccessful");
+
+            }
+        });;
+              
                 //  setTimeout(() => {fetchData()}, 1000);
       
-             } catch (err) {}
+             } catch (err) {  console.log(err);}
          }
  
          fetchData();
@@ -51,16 +63,20 @@ const DisplayPostHomepage = () => {
       };
 
       const handleNextPosts = () => {
+        try{
         console.log("clicked on next");
         var newOffset = itemOffset;
         newOffset = newOffset + 20;
         setItemOffset(newOffset);
-        history(`/homepage`);
+        history(`/homepage`);}
+        catch (err) { console.log(err);}
+
       };
 
 
       // 1 : newoffset 0 2: newoffset 0
       const handlePrevPosts = () => {
+        try{
        
         var newOffset;
 
@@ -79,7 +95,12 @@ const DisplayPostHomepage = () => {
         history(`/homepage`);
         }
         
+      }
+      catch  (err){
+        console.log(err);
         
+
+      }
         
       };
 

@@ -24,7 +24,8 @@ const LikeUnlike = (inp) => {
                 });
                 setReactionCount(response.data[0].reaction_count);
                 setTimeout(() => {fetchData()}, 1000);
-             } catch (err) {console.log(err.stack);}
+             } catch (err) {console.log(err.stack);
+            console.log(err.stack)}
          }
          fetchData();
     },[]) 
@@ -32,14 +33,14 @@ const LikeUnlike = (inp) => {
     const handleLike = async (e) => {
         e.preventDefault()
         try {
-        const response = await LikeUnlikeFinder.post("/react", {
+         await LikeUnlikeFinder.post("/react", {
             'post_id' : inp.post_id,
             'reaction' : 0,
         }).then(response => {
             if(response.data.status === "success"){
-            alert("Post " + inp.post_id + " Liked!");
+            console.log("Post " + inp.post_id + " Liked!");
             } else {
-            alert("Post " + inp.post_id + " could not be Liked");
+            console.log("Post " + inp.post_id + " could not be Liked");
             }
         });
         } catch (err) {console.log(err.stack)}
@@ -48,14 +49,14 @@ const LikeUnlike = (inp) => {
     const handleUnLike = async (e) => {
         e.preventDefault()
         try {
-        const response = await LikeUnlikeFinder.post("/unreact", {
+      await LikeUnlikeFinder.post("/unreact", {
             'post_id' : inp.post_id,
             'reaction' : 0,
         }).then(response => {
             if(response.data.status === "success"){
-            alert("Post " + inp.post_id + " unliked!");
+            console.log("Post " + inp.post_id + " unliked!");
             } else {
-            alert("Post " + inp.post_id + " could not be unliked");
+            console.log("Post " + inp.post_id + " could not be unliked");
             }
         });
     } catch (err) {console.log(err.stack)}

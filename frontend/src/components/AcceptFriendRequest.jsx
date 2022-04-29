@@ -20,13 +20,21 @@ const AcceptFriendRequest = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-          const response = await NotifFinder.post("/", {
+        await NotifFinder.post("/", {
               text_message: text_message,
-          })
-          acceptFriendRequest(response.data.data.venue);
-          console.log(response);
+          }).then(response => {
+            if(response.data.status === "success"){
+              acceptFriendRequest(response.data.data.venue);
+              console.log(response);
+              console.log("Accept friend request successful");
+            } else {
+              console.log("Accept friend request unsuccessful");
+
+            }
+        });
+         
         } catch (err) {
-  
+          console.log(err.stack);
         }
     }
 

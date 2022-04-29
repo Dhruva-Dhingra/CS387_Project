@@ -23,14 +23,15 @@ const Like = (inp) => {
               'reaction' : 0,
           }).then(response => {
             let data = response.json(); 
-            if(data.state === "success"){
-              alert("Post " + toString(inp.post_id) + " Liked!");
+            if(data.status === "success"){
+              console.log("Post " + toString(inp.post_id) + "Liked!");
             } else {
-              alert("Post " + toString(inp.post_id) + " coult not be Liked");
+              console.log("Post " + toString(inp.post_id) + "could not be Liked");
             }
           });
         } catch (err) {
   
+          console.log(err);
         }
     }
 
