@@ -43,7 +43,7 @@ const AboutLogged = () => {
         <img id="profile_photo_box" class="rounded float-left" width="200" height="200"></img>
         <br>
         </br>
-        <br></br>
+      
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
           <tr className='bg-primary'>
