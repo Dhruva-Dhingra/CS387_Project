@@ -97,7 +97,7 @@ const DisplayPostTimleine = () => {
         <thead>
           <tr className='bg-primary'>
               {/* <th scope = "col">Post ID</th> */}
-              <th scope = "col">Post Content</th>
+              <th scope = "col">Content</th>
           </tr>
         </thead>
         <tbody>
