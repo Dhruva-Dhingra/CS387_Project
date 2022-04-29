@@ -17,15 +17,17 @@ class LoginForm extends Component {
 		}
 
 		handleChange(e) {
+				console.log('Change in login form');
 				e.preventDefault();
 				this.setState({
 						[e.target.name]: e.target.value,
 				});
+				console.log(this.state);
 		}
 
 		async handleSubmit(e) {
 				e.preventDefault();
-				console.log('Sending to backend!');
+				console.log('Sending login form to backend!');
 				console.log(this.state);
 				const requestOptions = {
 						method: 'POST',
@@ -46,17 +48,17 @@ class LoginForm extends Component {
 
 		render() {
 				return (
-						<Form>
+						<Form onSubmit={this.handleSubmit}>
 								<Form.Group className="mb-3" controlId="formBasicEmail">
 										<Form.Label>Email address</Form.Label>
-										<Form.Control type="email" placeholder="Enter email" />
+										<Form.Control type="email" name='email' placeholder="Enter email" value={this.state.email} onChange={this.handleChange}/>
 										<Form.Text className="text-muted">
 												We'll never share your email with anyone else.
 										</Form.Text>
 								</Form.Group>	
 								<Form.Group className="mb-3" controlId="formBasicPassword">
 										<Form.Label>Password</Form.Label>
-										<Form.Control type="password" placeholder="Password" />
+										<Form.Control type="password" name='password' placeholder="Password" value={this.state.password} onChange={this.handleChange} />
 								</Form.Group>
 								<Button variant="primary" type="submit">
 										Submit
