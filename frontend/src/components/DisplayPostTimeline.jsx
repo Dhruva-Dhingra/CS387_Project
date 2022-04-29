@@ -9,7 +9,7 @@ const DisplayPostTimleine = () => {
   const { id } = useParams()
     const {poststm, setPoststm} = useContext(Context);
     // const {offset, setOffset} = useContext(Context);
-    const [itemOffsettm, setItemOffsettm] = useState(0);
+    const [itemOffsettm, setItemOffsettm] = useState(1);
     const [pageCounttm, setPageCounttm] = useState(0);
     const [postscounttm, spostscounttm] = useState(0);
     const [isNextDisabledtm, setisNextDisabledtm] = useState(false);
@@ -17,60 +17,40 @@ const DisplayPostTimleine = () => {
     const [isDisabledtm, setisDisabledtm] = useState(true);
     let history = useNavigate();
     useEffect( ()=> {
-         const fetchData = async () => {
-             try {
-              if(pageCounttm === 0){
-                setisDisabledtm(true);
-            } else {
-                setisDisabledtm(false);
-            }
-            const requestOptions = {
-              method: 'post',
-              mode: 'cors',
-              credentials: 'include',
-              headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-              },
-              body: {
-                'start': pageCounttm *20,
-                'end' :  pageCounttm *20 + 20
-              } 
-          };
-    
-          console.log(requestOptions);
-                 const response = await  TimelineFinder.post(`/${id}`, requestOptions);
-                 console.log(response.data);
-                 const endOffsettm = itemOffsettm + 20;
-                 spostscounttm(response.data.data.postscount);
-                 setPoststm(response.data.data.postList);
-                //  setPosts(response.data.data.postList);
-                 setPageCounttm(pageCounttm+1);
-                 console.log(poststm)
-                 // TODO: check this once
-                 if(pageCounttm*20 > postscounttm){
-                  setisNextDisabledtm(true);
-              } else {
-                  setisNextDisabledtm(false);
-              }
-      
-             } catch (err) {}
+      const fetchData = async () => {
+          try {
+           if(pageCounttm == 0){
+             setisDisabledtm(true);
+         } else {
+             setisDisabledtm(false);
          }
- 
-         fetchData();
-    },[itemOffsettm, 20]) 
+         var end = itemOffsettm+19;
+         const response = await  TimelineFinder.post(`/${id}`, {
+          start: `${itemOffsettm}`,
+      end : `${end}`
+  });
+              console.log(response.data);
+              spostscounttm(response.data.data.postscount);
+              setPoststm(response.data.data.postList);
+              setPageCounttm(pageCounttm+1);
+
+              console.log(poststm)
+   
+          } catch (err) {}
+      }
+
+      fetchData();
+ },[itemOffsettm, 20]) 
     
     // const handlePostSelect = (id) => {
     //     history.push(`/homepage/${id}`);
     //   };
 
       const handleNextPoststm= () => {
-        var newOffsettm = (pageCounttm * 20);
-        if (newOffsettm>= postscounttm)
-        {
-          newOffsettm = newOffsettm -20;
-        }
-        setItemOffsettm(newOffsettm);
+        console.log("clicked on next");
+        var newOffset = itemOffsettm;
+        newOffset = newOffset + 20;
+        setItemOffsettm(newOffset);
         history(`/timeline/${id}`);
       };
 
