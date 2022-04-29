@@ -83,6 +83,7 @@ const DisplayPostHomepage = () => {
       };
 
     return <div className='list-group'>
+      
     <table className="table table-hover table-dark table-striped table-bordered">
         <thead>
           <tr className='bg-primary'>
