@@ -223,7 +223,7 @@ const accept_request = async (req, res) => {
 																									console.log(err.stack);
 																							} else {
 																									quer = `MATCH (n: User {ID: ${friend.sender}}), (m: User {ID: ${friend.acceptor}}) CREATE (n)-[:FRIEND]->(m);`
-																									let ans = session.query(quer);
+																									let ans = session.run(quer);
 																									res.status(200).json({"status" : "success", "message" : "Request Accepted"});
 																							}
 																					})

@@ -92,7 +92,7 @@ const signup = async (req, res) => {
 								}
 								else{
 										quer = `CREATE (n: User {ID: ${user}});`;
-										let ans = session.query(quer);
+										let ans = session.run(quer);
 										res.status(200).json({"status" : "success"});
 								}
 						}
