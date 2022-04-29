@@ -34,7 +34,7 @@ export const ContextProvider = (props) => {
     const [D5, SD5] = useState([]);
     const [posts, setPosts] = useState([]);
     const [resultSB, searchBox] = useState([]);
-    const [poststm, setPoststm] =  useState([]);
+    const [poststm, setPoststm] =  useState([{"first_name" : "Manan"}]);
     const [itemOffsettm, setItemOffsettm] = useState(1);
     const [pageCounttm, setPageCounttm] = useState(0);
     const [postscounttm, spostscounttm] = useState(0);

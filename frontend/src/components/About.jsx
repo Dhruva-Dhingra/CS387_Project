@@ -8,8 +8,9 @@ import { useParams } from 'react-router-dom';
 const DisplayAbout = () => {
     const {id} = useParams();
     const {poststm, setPoststm} = useContext(Context);
-
+    console.log("HIHIHIHI");
     let history = useNavigate();
+    var loaded = false;
     useEffect( ()=> {
         const fetchData = async () => {
             try {
@@ -17,16 +18,16 @@ const DisplayAbout = () => {
             start: 1,
             end : 2,
     });
+    console.log("HIHIHIHI");
 // console.log(response.data.result)
                 setPoststm(response.data.result);
                 console.log(poststm);
                 console.log("HI");
-     
+                loaded = true;
             } catch (err) {}
         }
         fetchData();
     },[]);
-
     return <div className='list-group'>
         <center>About</center>
     <table className="table table-hover table-dark table-striped table-bordered">
