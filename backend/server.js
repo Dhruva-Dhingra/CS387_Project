@@ -92,7 +92,7 @@ let seconds = 500 * 1000;
 let user_arr = [];
 let friend_arr = [];
 setTimeout(async () => {
-		let ans = await reset_graph();
+		// let ans = await reset_graph();
 		console.log('First delete');
 		console.log('Calling periodic function');
 		uf = await sync_node();
