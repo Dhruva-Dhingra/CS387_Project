@@ -21,8 +21,9 @@ const driver = neo4j.driver("neo4j://localhost:7687", neo4j.auth.basic("neo4j", 
 console.log('Connected to neo4j');
 const session = driver.session();
 
-const get_invitations = async (user_id) => {
+const get_invitations = async (req, res) => {
 		try {
+				let user_id = req.cookies.user_id;
 				console.log('In invitations code');
 				let acceptor_id = user_id;
 				console.log('Checking invitations for', acceptor_id);
@@ -31,9 +32,8 @@ const get_invitations = async (user_id) => {
 select AppUser.User_ID
 from AppUser, Invitations
 where Invitations.Sender = AppUser.User_ID
-and Invitations.Acceptor = ${acceptor_id};
-`
-				);
+and Invitations.Acceptor = $1;
+`, [acceptor_id]);
 				console.log(ans.rows);
 				return ans.rows;
 		} catch (err) {
@@ -79,20 +79,21 @@ where Status
 				let result = {
 						'user_arr': user_ans, 'friend_arr': friend_ans
 				};
-				return result;
+				res.json(result);
 		} catch (err) {
 				return err.stack;
 		}
 }
 
-const get_recommendations = async (user_id) => {
+const get_recommendations = async (req, res) => {
 		try {
+				let user_id = req.cookies.user_id;
 				console.log('Getting recommendations!');
 				let ans = await pool.query(`
 with linked as (
-select Sender as user_id from Friend where Acceptor = ${user_id}
+select Sender as user_id from Friend where Acceptor = $1
 union
-select Acceptor as user_id from Friend where Sender = ${user_id}
+select Acceptor as user_id from Friend where Sender = $1
 union
 select User_ID from AppUser where User_ID = ${user_id}
 ),
@@ -104,7 +105,7 @@ select user_id from linked)
 select * from res
 order by random()
 limit 20;
-`);
+`, [user_id]);
 				let wildcard = ans.rows;
 				wildcard = wildcard.map((el) => el.user_id);
 
@@ -120,10 +121,10 @@ order by factor desc`;
 				res = res.records.map((el) => (el.get('id').low).toString());
 
 				ans = await pool.query(`
-select Sender as user_id from Friend where Acceptor = ${user_id} and not Status
-union
-select Acceptor as user_id from Friend where Sender = ${user_id} and not Status
-`);
+select Sender as user_id from Friend where Acceptor = $1 and not Status
+union																									 
+select Acceptor as user_id from Friend where Sender = $1 and not Status
+`, [user_id]);
 				let rem = ans.rows.map((el) => el.user_id);
 				res.push.apply(res, wildcard);
 				console.log(res);
@@ -136,13 +137,13 @@ select Acceptor as user_id from Friend where Sender = ${user_id} and not Status
 						let ans = await pool.query(`
 select AppUser.User_ID
 from AppUser
-where User_ID = ${result}
-`);
+where User_ID = $1
+`, [result]);
 						console.log(ans.rows);
 						ret.push(ans.rows[0]);
 				}
 				console.log(ret);
-				return ret;
+				res.json(ret);
 		} catch (err) {
 				return err.stack;
 		}
