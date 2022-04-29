@@ -177,7 +177,7 @@ app.get('/messenger/:user', async(req,res)=> {
 });
 
 app.post('/messenger/:user', async(req,res)=> {
-		run(req, res, send_message(req, res));
+		run(req, res, send_message);
 });
 
 app.get('/friends/recommendations', async(req, res) => {

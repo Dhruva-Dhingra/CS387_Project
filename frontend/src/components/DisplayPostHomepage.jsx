@@ -3,6 +3,7 @@ import HomepageFinder from '../apis/HomepageFinder';
 import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
 import Like from "../components/Like";
+import Unlike from "../components/Unlike";
 
 
 
@@ -90,6 +91,7 @@ const DisplayPostHomepage = () => {
               <th scope = "col">Posted By </th>
               <th scope = "col">Total Likes</th>
               <th scope = "col">Like!</th>
+              <th scope = "col">Unlike</th>
           </tr>
         </thead>
         <tbody>
@@ -102,6 +104,7 @@ const DisplayPostHomepage = () => {
                     <td>{post.first_name} {post.last_name}</td>
                     <td>{post.reaction_count}</td>
                     <td><Like post_id = {post.post_id}/></td>
+                    <td><Unlike post_id = {post.post_id}/></td>
                 </tr>
                 )
             })}

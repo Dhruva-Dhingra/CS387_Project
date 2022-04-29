@@ -50,6 +50,7 @@ console.log("OK")
     }
     catch (err) {
         console.log(err.stack)
+        res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
 		return err.stack;
     }
 }

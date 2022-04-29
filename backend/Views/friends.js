@@ -145,6 +145,7 @@ where User_ID = $1
 				console.log(ret);
 				res.json(ret);
 		} catch (err) {
+				res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
 				return err.stack;
 		}
 }
@@ -167,6 +168,7 @@ const get_friends  = async (req, res) => {
             }     
         });
 	   } catch (err) {
+		res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
         return err.stack;
     }
 }
