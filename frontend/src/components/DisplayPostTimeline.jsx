@@ -113,8 +113,8 @@ const DisplayPostTimleine = () => {
         </tbody>
     </table>
    
-    <left><button   disabled={isDisabledtm} className="btn btn-warning btn-lg" onClick={() => handlePrevPoststm()}>Prev</button></left> 
-    <right><button disabled={isNextDisabledtm}  className="btn btn-warning btn-lg" onClick={() => handleNextPoststm()}>Next</button></right>
+    <button   disabled={isDisabledtm} className="btn btn-warning btn-lg" onClick={() => handlePrevPoststm()}>Prev</button>
+    <button disabled={isNextDisabledtm}  className="btn btn-warning btn-lg" onClick={() => handleNextPoststm()}>Next</button>
 </div>;
 
 };
