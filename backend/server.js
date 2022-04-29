@@ -155,12 +155,12 @@ app.post('/timeline/:user', async (req, res) => {
 		await async_run(req, res, get_timeline);
 });
 
-app.get('/timeline/:user', async (req, res) => {
-	console.log("get timeline @backend");
-	await async_run(req, res, get_timeline);
-	console.log("got timeline @backend");
+// app.get('/timeline/:user', async (req, res) => {
+// 	console.log("get timeline @backend");
+// 	await async_run(req, res, get_timeline);
+// 	console.log("got timeline @backend");
 
-});
+// });
 
 
 // post creation endpoint

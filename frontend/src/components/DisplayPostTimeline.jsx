@@ -26,14 +26,14 @@ const DisplayPostTimleine = () => {
          }
          console.log(itemOffsettm)
          var end = itemOffsettm+19;
-         const response = await  TimelineFinder.get(`/${id}`, {
+         const response = await  TimelineFinder.post(`/${id}`, {
           start: `${itemOffsettm}`,
       end : `${end}`,
   });
-              console.log(response.data.result);
+              // console.log(response.data.result);
               // spostscounttm(response.data.data.postscount);
               setPoststm(response.data.result);
-              setPageCounttm(pageCounttm+1);
+              // setPageCounttm(pageCounttm+1);
               // console.log(response.data);
 
               console.log(poststm)
