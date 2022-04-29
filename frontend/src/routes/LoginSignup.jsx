@@ -94,17 +94,17 @@ class SignupForm extends Component {
 		super();
 
 		this.state = {
-			firstname: '',
-			lastname: '',
-			rollno: '',
+			first_name: '',
+			last_name: '',
+			roll_number: '',
 			branch: '',
 			degree: '',
 			batch: '',
 			email: '',
-			password: '',
+			hash_of_password: '',
 			residence: '',
 			birthday: '',
-			profile_pic: '',
+			profile_picture: '',
 
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -194,44 +194,44 @@ class SignupForm extends Component {
 
 					<div className="col">
 						First Name:
-						<input type='text' className='form-control' name='email' value={this.state.firstname} placeholder='Your First Name' onChange={this.handleChange} />
+						<input type='text' className='form-control' name='first_name' value={this.state.first_name} placeholder='Your First Name' onChange={this.handleChange} />
 					</div>
 
 					<div className='col'>
 						Last Name:
-						<input type='text' className='form-control' name='password' placeholder='Your Last Name' value={this.state.lastname} onChange={this.handleChange} />
+						<input type='text' className='form-control' name='last_name' placeholder='Your Last Name' value={this.state.last_name} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Roll Number:
-						<input type='text' className='form-control' name='password' placeholder='Roll Number' value={this.state.rollno} onChange={this.handleChange} />
+						<input type='text' className='form-control' name='roll_number' placeholder='Roll Number' value={this.state.roll_number} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Branch:
-						<input type='text' className='form-control' name='password' placeholder='Branch' value={this.state.branch} onChange={this.handleChange} />
+						<input type='text' className='form-control' name='branch' placeholder='Branch' value={this.state.branch} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Degree:
-						<input type='text' className='form-control' name='password' placeholder='Degree' value={this.state.degree} onChange={this.handleChange} />
+						<input type='text' className='form-control' name='degree' placeholder='Degree' value={this.state.degree} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Batch:
-						<input type='number' className='form-control' name='password' placeholder='Batch' value={this.state.batch} onChange={this.handleChange} />
+						<input type='number' className='form-control' name='batch' placeholder='Batch' value={this.state.batch} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Email-ID:
-						<input type='text' className='form-control' name='password' placeholder='Enter your Email-ID' value={this.state.email} onChange={this.handleChange} />
+						<input type='text' className='form-control' name='email' placeholder='Enter your Email-ID' value={this.state.email} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Password:
-						<input type='password' className='form-control' name='password' placeholder='Password' value={this.state.password} onChange={this.handleChange} />
+						<input type='password' className='form-control' name='hash_of_password' placeholder='Password' value={this.state.hash_of_password} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Residence:
-						<input type='text' className='form-control' name='password' placeholder='Residence' value={this.state.residence} onChange={this.handleChange} />
+						<input type='text' className='form-control' name='residence' placeholder='Residence' value={this.state.residence} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Birthday:
-						<input type='date' className='form-control' name='password' placeholder='Birthday' value={this.state.birthday} onChange={this.handleChange} />
+						<input type='date' className='form-control' name='birthday' placeholder='Birthday' value={this.state.birthday} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Profile Picture:
