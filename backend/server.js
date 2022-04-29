@@ -36,6 +36,7 @@ const {
 
 const {
 		get_invitations,
+		sync_node,
 		sync_graphdb,
 		get_recommendations,
 		get_friends,
@@ -90,9 +91,11 @@ setTimeout(async () => {
 		let ans = await reset_graph();
 		console.log('First delete');
 		console.log('Calling periodic function');
-		uf = await sync_graphdb(user_arr, friend_arr);
+		uf = await sync_node();
 		user_arr = uf.user_arr;
 		friend_arr = uf.friend_arr;
+		console.log('Length of user_arr:', user_arr.length);
+		console.log('Length of friend_arr:', friend_arr.length);
 		console.log('First syncing done');
 });
 setInterval(async () => {

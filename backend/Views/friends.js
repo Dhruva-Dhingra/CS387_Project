@@ -47,6 +47,27 @@ const checkArray = (arr, arrays) => {
 		}
 		return false;
 }
+
+const sync_node = async() => {
+		try {
+				let user_arr = await pool.query(`
+select User_ID from AppUser
+`);
+				user_arr = user_arr.rows;
+				user_arr = user_arr.map((el) => el.user_id);
+				console.log(user_arr);
+
+				let friend_arr = await pool.query(`
+select Sender, Acceptor from Friend
+`);
+				friend_arr = friend_arr.rows;
+				friend_arr = friend_arr.map((el) => JSON.stringify(el));
+				console.log(friend_arr);
+				return {'user_arr': user_arr, 'friend_arr': friend_arr};
+		} catch (err) {
+				return err.stack;
+		}
+}
 const sync_graphdb = async (user_arr, friend_arr) => {
 		try {
 				console.log('Here in syncing function');
@@ -154,26 +175,26 @@ where User_ID = $1
 				return err.stack;
 		}
 }
-		
+
 const get_friends  = async (req, res) => {
-	console.log('Fetch friends');
-	try {
-		// let user_id = req.user_id; // TODO
-		let user_id = req.cookies.user_id;
-		const friends = await pool.query(`with actual_friends as (
+		console.log('Fetch friends');
+		try {
+				// let user_id = req.user_id; // TODO
+				let user_id = req.cookies.user_id;
+				const friends = await pool.query(`with actual_friends as (
 			(select friend.acceptor a from friend where friend.accept_time is not null and friend.sender = $1)
 			union
 			(select  friend.sender a from friend where friend.accept_time is not null  and friend.acceptor = $1)
 		)  select first_name, last_name , profile_picture from appuser, actual_friends where  a = appuser.user_id`, [user_id]);
-		console.log(friends);
+				console.log(friends);
         res.status(200).json({
             status: "success",
             data: {
-               friends : friends
+								friends : friends
             }     
         });
-	   } catch (err) {
-		res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
+	  } catch (err) {
+				res.status(200).json({"status" : "failure", "message" : "Message Could not be sent"});
         return err.stack;
     }
 }
@@ -189,111 +210,112 @@ const reset_graph = async () => {
 }
 
 const send_request = async (req, res) => {
-	try {
-		let sender_id = req.cookies.user_id;
-		let acceptor_id = req.body.user_id;
-		let sending_time = req.body.time;
-		pool.query('select sender, acceptor, status from friend where (sender = $1 and acceptor = $2) or (sender = $2 and acceptor = $1);'
-		, [sender_id, acceptor_id],
-		(err, result) => {
-			if(err){
+		try {
+				let sender_id = req.cookies.user_id;
+				let acceptor_id = req.body.user_id;
+				let sending_time = req.body.time;
+				pool.query('select sender, acceptor, status from friend where (sender = $1 and acceptor = $2) or (sender = $2 and acceptor = $1);'
+									 , [sender_id, acceptor_id],
+									 (err, result) => {
+											 if(err){
+													 res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+													 console.log(err.stack);
+											 } else {
+													 if(result.rows.length != 0){
+															 res.status(200).json({"status" : "failure", "message" : "Request already pending"});
+													 } else {
+															 pool.query('insert into friend (sender, acceptor, sending_time, accept_time, status) values ($1, $2, $3, null, false);',
+																					[sender_id, acceptor_id, sending_time], (err, result) => {
+																							if(err){
+																									res.status(200).json({"status" : "failure", "message" : "Could not send request"});
+																									console.log(err.stack);
+																							} else {
+																									res.status(200).json({"status" : "success", "message" : "Request Sent"});
+																							}
+																					})
+													 }
+											 }
+									 })
+		} catch (err){
 				res.status(200).json({"status" : "failure", "message" : "Query Failed"});
 				console.log(err.stack);
-			} else {
-				if(result.rows.length != 0){
-					res.status(200).json({"status" : "failure", "message" : "Request already pending"});
-				} else {
-					pool.query('insert into friend (sender, acceptor, sending_time, accept_time, status) values ($1, $2, $3, null, false);',
-					[sender_id, acceptor_id, sending_time], (err, result) => {
-						if(err){
-							res.status(200).json({"status" : "failure", "message" : "Could not send request"});
-							console.log(err.stack);
-						} else {
-							res.status(200).json({"status" : "success", "message" : "Request Sent"});
-						}
-					})
-				}
-			}
-		})
-	} catch (err){
-		res.status(200).json({"status" : "failure", "message" : "Query Failed"});
-		console.log(err.stack);
-	}
+		}
 }
 
 const accept_request = async (req, res) => {
-	try {
-		let acceptor_id = req.cookies.user_id;
-		let sender_id = req.body.user_id;
-		let accept_time = req.body.time;
-		pool.query('select sender, acceptor, status from friend where sender = $1 and acceptor = $2 and status = false;', [sender_id, acceptor_id],
-		(err, result) => {
-			if(err){
+		try {
+				let acceptor_id = req.cookies.user_id;
+				let sender_id = req.body.user_id;
+				let accept_time = req.body.time;
+				pool.query('select sender, acceptor, status from friend where sender = $1 and acceptor = $2 and status = false;', [sender_id, acceptor_id],
+									 (err, result) => {
+											 if(err){
+													 res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+													 console.log(err.stack);
+											 } else {
+													 if(result.rows.length == 0){
+															 res.status(200).json({"status" : "failure", "message" : "No such (pending) request"});
+													 } else {
+															 pool.query(`update friend set accept_time = $3, status = true where 
+								sender = $1 and acceptor = $2 and status = false;`,
+																					[sender_id, acceptor_id, accept_time], (err, result) => {
+																							if(err){
+																									res.status(200).json({"status" : "failure", "message" : "Could not accept request"});
+																									console.log(err.stack);
+																							} else {
+																									res.status(200).json({"status" : "success", "message" : "Request Accepted"});
+																							}
+																					})
+													 }
+											 }
+									 })
+		} catch (err){
 				res.status(200).json({"status" : "failure", "message" : "Query Failed"});
 				console.log(err.stack);
-			} else {
-				if(result.rows.length == 0){
-					res.status(200).json({"status" : "failure", "message" : "No such (pending) request"});
-				} else {
-					pool.query(`update friend set accept_time = $3, status = true where 
-								sender = $1 and acceptor = $2 and status = false;`,
-								[sender_id, acceptor_id, accept_time], (err, result) => {
-								if(err){
-									res.status(200).json({"status" : "failure", "message" : "Could not accept request"});
-									console.log(err.stack);
-								} else {
-									res.status(200).json({"status" : "success", "message" : "Request Accepted"});
-								}
-					})
-				}
-			}
-		})
-	} catch (err){
-		res.status(200).json({"status" : "failure", "message" : "Query Failed"});
-		console.log(err.stack);
-	}
+		}
 }
 
 const decline_request = async (req, res) => {
-	try {
-		let acceptor_id = req.cookies.user_id;
-		let sender_id = req.body.user_id;
-		let accept_time = req.body.time;
-		pool.query('select sender, acceptor, status from friend where sender = $1 and acceptor = $2 and status = false;', [sender_id, acceptor_id],
-		(err, result) => {
-			if(err){
+		try {
+				let acceptor_id = req.cookies.user_id;
+				let sender_id = req.body.user_id;
+				let accept_time = req.body.time;
+				pool.query('select sender, acceptor, status from friend where sender = $1 and acceptor = $2 and status = false;', [sender_id, acceptor_id],
+									 (err, result) => {
+											 if(err){
+													 res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+													 console.log(err.stack);
+											 } else {
+													 if(result.rows.length == 0){
+															 res.status(200).json({"status" : "failure", "message" : "No such (pending) request"});
+													 } else {
+															 pool.query(`delete from friend where 
+								sender = $1 and acceptor = $2`,
+																					[sender_id, acceptor_id, accept_time], (err, result) => {
+																							if(err){
+																									res.status(200).json({"status" : "failure", "message" : "Could not decline request"});
+																									console.log(err.stack);
+																							} else {
+																									res.status(200).json({"status" : "success", "message" : "Request Declined"});
+																							}
+																					})
+													 }
+											 }
+									 })
+		} catch (err){
 				res.status(200).json({"status" : "failure", "message" : "Query Failed"});
 				console.log(err.stack);
-			} else {
-				if(result.rows.length == 0){
-					res.status(200).json({"status" : "failure", "message" : "No such (pending) request"});
-				} else {
-					pool.query(`delete from friend where 
-								sender = $1 and acceptor = $2`,
-								[sender_id, acceptor_id, accept_time], (err, result) => {
-								if(err){
-									res.status(200).json({"status" : "failure", "message" : "Could not decline request"});
-									console.log(err.stack);
-								} else {
-									res.status(200).json({"status" : "success", "message" : "Request Declined"});
-								}
-					})
-				}
-			}
-		})
-	} catch (err){
-		res.status(200).json({"status" : "failure", "message" : "Query Failed"});
-		console.log(err.stack);
-	}
+		}
 }
 
 module.exports = {
-	get_invitations,
-	sync_graphdb,
-	get_recommendations,
-	get_friends,
-	reset_graph,
-	send_request,
-	accept_request,
-	decline_request,
+		get_invitations,
+		sync_node,
+		sync_graphdb,
+		get_recommendations,
+		get_friends,
+		reset_graph,
+		send_request,
+		accept_request,
+		decline_request,
 }
