@@ -371,6 +371,10 @@ app.get('/admin', async(req, res) => {
 		await plots(req, res);
 });
 
+app.post('/post', async(req, res) => {
+	await create_post(req, res);
+})
+
 // app.post('/signup', (req, res) => {
 // 		console.log('At signup backend!');
 // 		console.log(req.body);
