@@ -27,6 +27,7 @@ const get_homepage_posts = async (req, res) => {
     try {
         var result;
         let user_id = req.cookies.user_id;
+        console.log(req.body.start, req.body.end);
         let start = req.body.start === undefined ? 1 : req.body.start;
         let end = req.body.end === undefined ? 20 : req.body.end;
         console.log(user_id, start, end);

@@ -9,7 +9,7 @@ import Like from "../components/Like";
 const DisplayPostHomepage = () => {
     const {posts, setPosts} = useContext(Context);
     // const {offset, setOffset} = useContext(Context);
-    const [itemOffset, setItemOffset] = useState(0);
+    const [itemOffset, setItemOffset] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [postscount, spostscount] = useState(0);
     const [isNextDisabled, setisNextDisabled] = useState(false);
@@ -24,22 +24,18 @@ const DisplayPostHomepage = () => {
             } else {
                 setisDisabled(false);
             }
-          
-    
-                 const response = await  HomepageFinder.post("/");
+            var end = itemOffset+19;
+       
+                 const response = await  HomepageFinder.post("/", {
+                  start: `${itemOffset}`,
+              end : `${end}`
+          });
                  console.log(response.data);
-                 const endOffset = itemOffset + 20;
                  spostscount(response.data.data.postscount);
-                 setPosts(response.data.data.postList.slice(itemOffset, endOffset));
-                //  setPosts(response.data.data.postList);
+                 setPosts(response.data.data.postList);
                  setPageCount(pageCount+1);
+   
                  console.log(posts)
-                 // TODO: check this once
-                 if(pageCount*20 > postscount){
-                  setisNextDisabled(true);
-              } else {
-                  setisNextDisabled(false);
-              }
       
              } catch (err) {}
          }
@@ -52,11 +48,9 @@ const DisplayPostHomepage = () => {
       };
 
       const handleNextPosts = () => {
-        var newOffset = (pageCount * 20);
-        if (newOffset>= postscount)
-        {
-          newOffset = newOffset -20;
-        }
+        console.log("clicked on next");
+        var newOffset = itemOffset;
+        newOffset = newOffset + 20;
         setItemOffset(newOffset);
         history(`/homepage`);
       };
@@ -113,8 +107,8 @@ const DisplayPostHomepage = () => {
         </tbody>
     </table>
    
-    <button   disabled={isDisabled} className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button>
-    <button  disabled={isNextDisabled} className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button>
+    <button    className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button>
+    <button className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button>
 </div>;
 
 };

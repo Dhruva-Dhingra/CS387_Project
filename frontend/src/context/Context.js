@@ -18,7 +18,7 @@ export const ContextProvider = (props) => {
     const [hidden, setprivate] = useState("");
     const [autoadd, setautoadd] = useState("");
     const [friends, setFriends] = useState([]);
-    const [itemOffset, setItemOffset] = useState(0);
+    const [itemOffset, setItemOffset] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [postscount, spostscount] = useState(0);
     const [L1, SL1] = useState([]);

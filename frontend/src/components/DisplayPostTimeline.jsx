@@ -64,7 +64,7 @@ const DisplayPostTimleine = () => {
     //     history.push(`/homepage/${id}`);
     //   };
 
-      const handleNextPosts = () => {
+      const handleNextPoststm= () => {
         var newOffsettm = (pageCounttm * 20);
         if (newOffsettm>= postscounttm)
         {
@@ -76,7 +76,7 @@ const DisplayPostTimleine = () => {
 
 
       // 1 : newoffset 0 2: newoffset 0
-      const handlePrevPosts = () => {
+      const handlePrevPoststm = () => {
        
         var newOffsettm;
 
@@ -120,8 +120,8 @@ const DisplayPostTimleine = () => {
         </tbody>
     </table>
    
-    <left><button   disabled={isDisabledtm} className="btn btn-warning btn-lg" onClick={() => handlePrevPosts()}>Prev</button></left> 
-    <right><button disabled={isNextDisabledtm}  className="btn btn-warning btn-lg" onClick={() => handleNextPosts()}>Next</button></right>
+    <left><button   disabled={isDisabledtm} className="btn btn-warning btn-lg" onClick={() => handlePrevPoststm()}>Prev</button></left> 
+    <right><button disabled={isNextDisabledtm}  className="btn btn-warning btn-lg" onClick={() => handleNextPoststm()}>Next</button></right>
 </div>;
 
 };
