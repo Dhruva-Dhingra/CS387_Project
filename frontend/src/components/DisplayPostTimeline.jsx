@@ -106,7 +106,7 @@ const DisplayPostTimleine = () => {
                   <tr 
                   key={posttm.post_id}>
                     {/* <td>{posts.post_id}</td> */}
-                    <td>{posttm.post_id}</td>
+                    <td>{posttm.content}</td>
                 </tr>
                 )
             })}
