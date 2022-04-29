@@ -20,13 +20,14 @@ const AddPost = () => {
     const [textcontent, settextcontent] = useState("")
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+      console.log("Post Frontend");  
+      e.preventDefault()
         try {
           const response = await PostFinder.post("/", {
               content: content,
               textcontent: textcontent
           })
-          console.log(response);
+          console.log("Post Frontend Done");
         } catch (err) {
   
         }
