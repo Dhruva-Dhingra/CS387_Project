@@ -46,6 +46,12 @@ return (
 <a className="nav-link" href="http://localhost:3000/homepage">Homepage</a>
 </li>
 <li className="nav-item active">
+<a className="nav-link" href="http://localhost:3000/search">Search</a>
+</li>
+<li className="nav-item active">
+<a className="nav-link" href="http://localhost:3000/post">Create Post</a>
+</li>
+<li className="nav-item active">
 <a className="nav-link" href="http://localhost:3000/messenger">Messenger</a>
 </li>
 <li className="nav-item">
@@ -56,6 +62,9 @@ return (
 </li>
 <li className="nav-item">
 <a className="nav-link" href="http://localhost:3000/editprofile">Edit Profile</a>
+</li>
+<li className="nav-item">
+<a className="nav-link" href = "http://localhost:3000/about">About</a>
 </li>
 <li className="nav-item">
 <a className="nav-link" href = "http://localhost:3000/logout">Logout</a>

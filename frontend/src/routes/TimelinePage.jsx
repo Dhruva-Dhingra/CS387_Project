@@ -8,7 +8,7 @@ const TimelinePage = () => {
     return (
 <div>
     <DisplayAbout></DisplayAbout>
-    {/* <DisplayPostTimeline></DisplayPostTimeline> */}
+    <DisplayPostTimeline></DisplayPostTimeline>
 </div>
     );
 };
