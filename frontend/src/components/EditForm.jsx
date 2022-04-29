@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext , useEffect } from 'react';
 import EditFinder from '../apis/EditFinder';
 import { Context } from '../context/Context';
-
+// import { useEffect } from 'react/cjs/react.production.min';
 const EditForm = () => {
     const head = {
         color: '#7c795d', 'fontFamily': 'Trocchi', 
@@ -30,6 +30,26 @@ const EditForm = () => {
       const [hidden, setprivate] = useState("")
       const [autoadd, setautoadd] = useState("")
 
+    //   useEffect( ()=> {
+    //      const fetchData = async () => {
+    //          const response = await EditFinder.get("/");
+    //          console.log(response);
+    //          setfirst(response.data.first);
+    //          setlast(response.data.last);
+    //          setrolln(response.data.rolln);
+    //          setbranch(response.data.branch);
+    //          setdegree(response.data.degree);
+    //          setbatch(response.data.batch);
+    //          setemail(response.data.email);
+    //          setpswd(response.data.pswd);
+    //          setresidence(response.data.residence);
+    //          setbday(response.data.bday);
+    //          setdp(response.data.dp);
+    //          setprivate(response.data.private);
+    //          setautoadd(response.data.autoadd);
+    //      }
+    //      fetchData();
+    //   })
       const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(first);

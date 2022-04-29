@@ -35,10 +35,6 @@ const {
 } = require('./Views/admin');
 
 const {
-	edit_profile
-} = require('./Views/editprofile');
-
-const {
 		get_invitations,
 		sync_node,
 		sync_graphdb,
@@ -87,6 +83,10 @@ const {
 		get_timeline
 } = require('./Views/timeline');
 
+const {
+	edit_profile,
+	get_profile_info,
+} = require('./Views/editprofile');
 // daemon to sync graph DB with relational DB
 let seconds = 500 * 1000;
 let user_arr = [];
@@ -234,6 +234,12 @@ app.post('/editprofile', async(req, res) => {
 })
 
 app.get('/about/:user', async(req, res) => {
-	console.log("Reached Backend")
+	// console.log("Reached Backend")
 	await async_run(req, res, get_timeline);
+})
+
+
+app.get('/editprofile', async(req, res) => {
+
+	await async_run(req, res,  get_profile_info);
 })

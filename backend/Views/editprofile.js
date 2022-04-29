@@ -82,7 +82,7 @@ const get_profile_info = async (req, res) => {
 					return console.error('Error executing query', err.stack);
 				}
 				else{
-                    res.status(200).json({"status" : "success", "message" : "get Profile info query) successful"});
+                    res.status(200).json({"status" : "success", "message" : "get Profile info query) successful", "result" : res.rows});
 				}
 			}
         );

@@ -159,7 +159,7 @@ history as (
  where message_rank <= 1 and appuser.user_id = history.user_id order by time desc;
                        `
                        , [user_id]);
-        console.log(ans.rows);
+        // console.log(ans.rows);
       res.status(200).json(ans.rows);
   }
   catch (err) {
