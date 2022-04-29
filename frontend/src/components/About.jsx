@@ -38,14 +38,14 @@ const DisplayAbout = () => {
           </tr>
         </thead>
         <tbody>
-            <tr><td>Name</td><td>HIO</td></tr>
-            <tr><td>Email</td><td>HI</td></tr>
-            <tr><td>Roll Number</td><td>HI</td></tr>
-            <tr><td>Branch</td><td>HI</td></tr>
-            <tr><td>Degree</td><td>HI</td></tr>
-            <tr><td>Batch</td><td>HI</td></tr>
-            <tr><td>Residence</td><td>HI</td></tr>
-            <tr><td>Birthday</td><td>HI</td></tr>
+            <tr><td>Name</td><td>{poststm[0].first_name} {poststm[0].last_name}</td></tr>
+            <tr><td>Email</td><td>{poststm[0].email}</td></tr>
+            <tr><td>Roll Number</td><td>{poststm[0].roll_number}</td></tr>
+            <tr><td>Branch</td><td>{poststm[0].branch}</td></tr>
+            <tr><td>Degree</td><td>{poststm[0].degree}</td></tr>
+            <tr><td>Batch</td><td>{poststm[0].batch}</td></tr>
+            <tr><td>Residence</td><td>{poststm[0].residence}</td></tr>
+            <tr><td>Birthday</td><td>{poststm[0].birthday}</td></tr>
         </tbody>
     </table>
     </div>
