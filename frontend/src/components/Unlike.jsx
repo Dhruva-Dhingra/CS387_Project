@@ -24,12 +24,13 @@ const Unlike = (inp) => {
           }).then(response => {
             let data = response.json(); 
             if(data.state === "success"){
-              alert("Post " + toString(inp.post_id) + " Liked!");
+              console.log("Post " + toString(inp.post_id) + " Liked!");
             } else {
-              alert("Post " + toString(inp.post_id) + " coult not be Liked");
+              console.log("Post " + toString(inp.post_id) + " coult not be Liked");
             }
           });
         } catch (err) {
+          console.log(err.stack)
   
         }
     }

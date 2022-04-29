@@ -43,7 +43,7 @@ const AboutLogged = () => {
                                     }
                                 });
 								
-            } catch (err) {  alert(err.stack);}
+            } catch (err) {  console.log(err.stack);}
         }
         fetchData();
     },[]);
