@@ -34,10 +34,23 @@ export const ContextProvider = (props) => {
     const [D5, SD5] = useState([]);
     const [posts, setPosts] = useState([]);
     const [resultSB, searchBox] = useState([]);
+    const {poststm, setPoststm} =  useState([])
+    // const {offset, setOffset} = useContext(Context);
+    const [itemOffsettm, setItemOffsettm] = useState(1);
+    const [pageCounttm, setPageCounttm] = useState(0);
+    const [postscounttm, spostscounttm] = useState(0);
+    const [isNextDisabledtm, setisNextDisabledtm] = useState(false);
+
+    const [isDisabledtm, setisDisabledtm] = useState(true);
     
     return (
         <Context.Provider
             value={{
+                poststm, setPoststm,
+                itemOffsettm, setItemOffsettm,
+                pageCounttm, setPageCounttm,
+                isDisabledtm, setisDisabledtm,
+                isNextDisabledtm, setisNextDisabledtm,
                 search, setSearchBox,
                 msgs, setMsg,
                 friendRequest, setFriendRequest,

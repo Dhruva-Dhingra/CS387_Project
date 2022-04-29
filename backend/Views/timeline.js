@@ -24,9 +24,15 @@ console.log('Pool made');
 
 const get_timeline = async (req, res) => {
     try {
-        let user_id = req.params.user;
-        let start = req.body.start;
-        let end = req.body.end;
+        let user_id = req.cookies.user_id;
+        console.log("log request ", req);
+        // console.log(req.body.start, req.body.end);
+        let start = req.body.start === undefined ? 1 : req.body.start;
+        let end = req.body.end === undefined ? 20 : req.body.end;
+        console.log(user_id, start, end);
+        if(start < 0 || end < 0){
+            res.status(200).json({"status" : "failure", "message" : "start or end < 0"});
+        }  
         pool.query(
             // `select post_info.post_id, post_info.poster_page_id, post_info.poster_user_id, post_info.content_type, post_info.content, post_info.time, coalesce(reaction_count.reaction_count, 0)
             // from 
