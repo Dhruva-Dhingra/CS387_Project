@@ -23,8 +23,8 @@ const create_post = async (req, res) => {
         page_id = page_id == undefined ? null : parseInt(page_id);
         let user_id = parseInt(req.cookies.user_id);
         user_id = user_id == undefined ? null : parseInt(user_id);
-        let content_type = parseInt(req.body.content_type);
-        content_type = content_type == undefined ? null : parseInt(content_type);
+        let content_type = 0;
+        // content_type = content_type == undefined ? null : parseInt(content_type);
         let content = req.body.content;
         content = content == undefined ? null : content
         let time = req.body.time;
@@ -42,7 +42,7 @@ console.log("OK")
 					return console.error('Error executing query', err.stack);
 				}
 				else{
-                    console.log("Err")
+                    // console.log("Err")
                     res.status(200).json({"status" : "success", "message" : "Post Created"});
 				}
 			}
