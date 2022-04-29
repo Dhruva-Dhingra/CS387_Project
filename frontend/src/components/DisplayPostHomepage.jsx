@@ -4,6 +4,7 @@ import { Context } from '../context/Context';
 import { useNavigate } from "react-router-dom";
 import Like from "../components/Like";
 import Unlike from "../components/Unlike";
+import LikeUnlike from './LikeUnlike';
 
 
 
@@ -103,9 +104,7 @@ const DisplayPostHomepage = () => {
                     {/* <td>{posts.post_id}</td> */}
                     <td>{post.content}</td>
                     <td>{post.first_name} {post.last_name}</td>
-                    <td>{post.reaction_count}</td>
-                    <td><Like post_id = {post.post_id}/></td>
-                    <td><Unlike post_id = {post.post_id}/></td>
+                    <LikeUnlike post_id = {post.post_id}/>
                 </tr>
                 )
             })}

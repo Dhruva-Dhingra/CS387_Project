@@ -129,10 +129,30 @@ const get_reaction_count = async (req, res ) =>{
     catch (err){
         console.log(err);
     }
-
 }
+
+const get_single_reaction_count = async (req, res) => {
+    try{
+        var post_id = req.body.post_id;
+        pool.query(`
+        select coalesce(count(reaction.reaction), 0) as reaction_count
+        from reaction where post_id = $1;`, [post_id], (err, result) => {
+            if(err){
+                res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+                return console.error('Query Failed', err.stack);
+            } else {
+                res.status(200).json(result.rows);
+            }
+        });
+    } catch(err) {
+        res.status(200).json({"status" : "failure", "message" : "Query Failed"});
+        return console.error('Query Failed', err.stack);
+    }
+}
+
 module.exports = {
    react_to_post,
    remove_reaction_from_post,
    get_reaction_count,
+   get_single_reaction_count,
 }
