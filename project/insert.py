@@ -74,7 +74,7 @@ for file in order:
     for data in relation:
         temp = []
         if len(data) > len(header):
-            print(data)
+            # print(data)
             print(len(data), len(header))
         for j in range(len(data)):
             entry = data[j]
