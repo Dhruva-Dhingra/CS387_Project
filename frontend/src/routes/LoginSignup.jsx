@@ -71,19 +71,19 @@ class SignupForm extends Component {
 				super();
 
 				this.state = {
-						firstname: null,
-						lastname: null,
-						rollno: null,
-						branch: null,
-						degree: null,
-						batch: null,
+						// firstname: null,
+						// lastname: null,
+						// rollno: null,
+						// branch: null,
+						// degree: null,
+						// batch: null,
 						email: '',
 						password: '',
-						residence: null,
-						birthday: null,
-						profile_pic: null,
-						pvt: null,
-						autoadd: null,
+						// residence: null,
+						// birthday: null,
+						// profile_pic: null,
+						// pvt: null,
+						// autoadd: null,
 				}
 				this.handleSubmit = this.handleSubmit.bind(this);
 				this.handleChange = this.handleChange.bind(this);
@@ -117,57 +117,58 @@ class SignupForm extends Component {
 		render() {
 				return (
 						<div>
-								<center>Sign up!</center>
+								<p>Please sign up!</p>
+								<br/>
 								<form onSubmit = {this.handleSubmit}  class="was-validated">
 										
 										
 										<div className="col">
 												First Name:
-												<input type = 'text' className='form-control' name = 'email' value = {this.state.email} placeholder = 'Your First Name' onChange = {this.handleChange} />
+												<input type = 'text' className='form-control' name = 'email' value = {this.state.email} placeholder = 'Enter email' onChange = {this.handleChange} />
 										</div>
 		
 										<div className='col'>
 												Last Name:
-												<input type = 'text' className='form-control' name = 'password' placeholder = 'Your Last Name' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Roll Number:
-												<input type = 'text' className='form-control' name = 'password' placeholder = 'Roll Number' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Branch:
-												<input type = 'text' className='form-control' name = 'password' placeholder = 'Branch' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Degree:
-												<input type = 'text' className='form-control' name = 'password' placeholder = 'Degree' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Batch:
-												<input type = 'number' className='form-control' name = 'password' placeholder = 'Batch' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Email-ID:
-												<input type = 'text' className='form-control' name = 'password' placeholder = 'Enter your Email-ID' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Password:
-												<input type = 'password' className='form-control' name = 'password' placeholder = 'Password' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Residence:
-												<input type = 'text' className='form-control' name = 'password' placeholder = 'Residence' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Birthday:
-												<input type = 'date' className='form-control' name = 'password' placeholder = 'Birthday' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<div className='col'>
 												Profile Picture:
-												<input type = 'file' className='form-control' name = 'password' placeholder = 'Select your Profile Picture' value = {this.state.password} onChange = {this.handleChange} />
+												<input type = 'password' className='form-control' name = 'password' placeholder = 'password' value = {this.state.password} onChange = {this.handleChange} />
 										</div>
 										<br/>
-										<center><input type = 'submit' className="btn btn-warning btn-lg" value ='Submit'></input></center>
+										<center><input type = 'submit' value ='Submit'></input></center>
 								</form>
 						</div>
 				);
