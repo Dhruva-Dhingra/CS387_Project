@@ -45,7 +45,7 @@ const LoginForm = () => {
 			e.preventDefault();
 			console.log('Sending login form to backend!');
 			console.log(state);
-			state.password = await sha256(state.password);
+			// state.password = await sha256(state.password);
 			console.log(state.password);
 			const requestOptions = {
 				method: 'POST',
@@ -130,34 +130,55 @@ class SignupForm extends Component {
 			e.preventDefault();
 			var profile_pic;
 			var dp_file_element = document.getElementById("file-selector");
+			console.log(dp_file_element);
+			var temp_state = this.state;
 			if (dp_file_element.files.length > 0) {
 				var reader = new FileReader();
 				reader.onloadend = function () {
 					// console.log("Reader = ", reader);
 					// console.log("Reader.result = ", reader.result);
 					profile_pic = reader.result;
+					var len = profile_pic.length;
+					profile_pic = profile_pic.slice(23, len - 1);
+					temp_state.profile_pic = profile_pic;
+					console.log('Sending to backend!');
+					console.log("Temp state = ", temp_state);
+					// this.state.password = await sha256(this.state.password);
+					// temp_state.password = await sha256(temp_state.password);
+					const requestOptions = {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(temp_state),
+					};
+					fetch('http://localhost:8080/signup', requestOptions)
+						.then(response => {
+							response.json();
+							console.log(response);
+						});
 					// var imgElement = document.getElementById("checking_image_file");
 					// imgElement.src = reader.result;
 				}
 				reader.readAsDataURL(dp_file_element.files[0]);
 			}
-			else profile_pic = null;
-			this.setState({
-				'profile_pic': profile_pic,
-			});
-			console.log('Sending to backend!');
-			console.log(this.state);
-			this.state.password = await sha256(this.state.password);
-			const requestOptions = {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(this.state),
-			};
-			fetch('http://localhost:8080/signup', requestOptions)
-				.then(response => {
-					response.json();
-					console.log(response);
+			else{
+				profile_pic = null;
+				this.setState({
+					'profile_pic': profile_pic,
 				});
+				console.log('Sending to backend!');
+				console.log(this.state);
+				// this.state.password = await sha256(this.state.password);
+				const requestOptions = {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(this.state),
+				};
+				fetch('http://localhost:8080/signup', requestOptions)
+					.then(response => {
+						response.json();
+						console.log(response);
+					});
+				}
 		}
 		catch (err) {
 			console.log(err.stack);

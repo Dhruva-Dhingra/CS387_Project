@@ -54,35 +54,6 @@ class EditForm extends Component {
 			});
 	}
 
-    handleSubmit = async(e) => {
-        e.preventDefault()
-        var profile_pic;
-        try {
-            var dp_file_element = document.getElementById("file-selector");
-						console.log(dp_file_element);
-						console.log('DP_file_elem length:', dp_file_element.files.length);
-						if (dp_file_element.files.length > 0) {
-								var reader = new FileReader();
-								reader.onloadend = function(){
-										// console.log("Reader = ", reader);
-										// console.log("Reader.result = ", reader.result);
-										// profile_pic = reader.result;
-										profile_pic = reader.result;
-										// var imgElement = document.getElementById("checking_image_file");
-										// imgElement.src = reader.result;
-								}
-								await reader.readAsDataURL(dp_file_element.files[0]);
-						}
-						else profile_pic = null;
-						console.log(profile_pic);
-						this.setState({
-								'profile_picture': profile_pic,
-						})
-				} catch (err) {
-						console.log(err.stack);
-				}
-		}
-
 	componentDidMount() {
 		this.getData();
 	}
@@ -95,52 +66,88 @@ class EditForm extends Component {
 		console.log(this.state);
 	}
 
-	handleSubmit(e) {
+	handleSubmit = async(e) => {
 		e.preventDefault()
-		console.log(this.state.first);
 		var profile_pic;
 		try {
 			var dp_file_element = document.getElementById("file-selector");
+			console.log(dp_file_element);
+			var temp_state = this.state;
 			if (dp_file_element.files.length > 0) {
 				var reader = new FileReader();
 				reader.onloadend = function () {
 					// console.log("Reader = ", reader);
 					// console.log("Reader.result = ", reader.result);
 					profile_pic = reader.result;
+					var len = profile_pic.length;
+					profile_pic = profile_pic.slice(23, len - 1);
+					console.log(profile_pic);
+					temp_state.profile_picture = profile_pic;
+						console.log('Temp State:', temp_state);
+					const requestOptions = {
+						method: 'POST',
+						mode: 'cors',
+						credentials: 'include',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(temp_state),
+					};
+
+					fetch('http://localhost:8080/editprofile', requestOptions)
+						.then(async response => {
+							let res = await response.json();
+							console.log(res);
+							if (res.status === "success") {
+								console.log(res);
+								console.log("Profile Edit Successful");
+							} else {
+								console.log("Profile Edit Unsuccessful");
+								console.log(res.message);
+							}
+						});
+					}
+					// console.log(reader.result);
+					// return reader.result;
 					// var imgElement = document.getElementById("checking_image_file");
 					// imgElement.src = reader.result;
-				}
-				reader.readAsDataURL(dp_file_element.files[0]);
+				await reader.readAsDataURL(dp_file_element.files[0]);
 			}
-			else profile_pic = null;
-			this.setState({
-				'dp': profile_pic,
-			})
+			else{
+				profile_pic = null;
+			// }
+			// {
+			
+				this.setState({
+					'profile_picture': profile_pic,
+				})
 
-			console.log('State:', this.state);
-			const requestOptions = {
-				method: 'POST',
-				mode: 'cors',
-				credentials: 'include',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state),
-			};
+				console.log('State:', this.state);
+				const requestOptions = {
+					method: 'POST',
+					mode: 'cors',
+					credentials: 'include',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(this.state),
+				};
 
-			fetch('http://localhost:8080/editprofile', requestOptions)
-				.then(async response => {
-					let res = await response.json();
-					console.log(res);
-					if (res.status === "success") {
+				fetch('http://localhost:8080/editprofile', requestOptions)
+					.then(async response => {
+						let res = await response.json();
 						console.log(res);
-						console.log("Profile Edit Successful");
-					} else {
-						console.log("Profile Edit Unsuccessful");
-						console.log(res.message);
-					}
-				});
+						if (res.status === "success") {
+							console.log(res);
+							console.log("Profile Edit Successful");
+						} else {
+							console.log("Profile Edit Unsuccessful");
+							console.log(res.message);
+						}
+					});
+				}
 
 		} catch (err) {
 			console.log(err.stack);
