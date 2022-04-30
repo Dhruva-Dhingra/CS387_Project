@@ -140,7 +140,7 @@ class SignupForm extends Component {
 					profile_pic = reader.result;
 					var len = profile_pic.length;
 					profile_pic = profile_pic.slice(23, len - 1);
-					temp_state.profile_pic = profile_pic;
+					temp_state.profile_picture = profile_pic;
 					console.log('Sending to backend!');
 					console.log("Temp state = ", temp_state);
 					// this.state.password = await sha256(this.state.password);
@@ -163,7 +163,7 @@ class SignupForm extends Component {
 			else{
 				profile_pic = null;
 				this.setState({
-					'profile_pic': profile_pic,
+					'profile_picture': profile_pic,
 				});
 				console.log('Sending to backend!');
 				console.log(this.state);
