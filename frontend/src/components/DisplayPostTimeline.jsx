@@ -110,6 +110,7 @@ const DisplayPostTimleine = () => {
           <tr className='bg-primary'>
               {/* <th scope = "col">Post ID</th> */}
               <th scope = "col">Content</th>
+              <th scope = "col">Total Likes</th>
           </tr>
         </thead>
         <tbody>
@@ -119,7 +120,7 @@ const DisplayPostTimleine = () => {
                   key={posttm.post_id}>
                     {/* <td>{posts.post_id}</td> */}
                     <td>{posttm.content}</td>
-                    <LikeUnlike post_id = {posttm.post_id}/>
+                    <td><LikeUnlike post_id = {posttm.post_id}/></td>
                 </tr>
                 )
             })}

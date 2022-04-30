@@ -68,11 +68,11 @@ return <div className='mb-4'>
           <center>{reactionCount}</center>          
         </div>
         <div className="form-row">
-          <center><button onClick={handleLike} type = "submit" className="btn btn-warning btn">Like</button></center>          
+          <center><button onClick={handleLike} type = "submit" className="btn btn-warning btn">Like</button></center> 
+          <br></br>  
+          <center><button onClick={handleUnLike} type = "submit" className="btn btn-warning btn">Unlike</button></center>           
         </div>
-        <div className="form-row">
-          <center><button onClick={handleUnLike} type = "submit" className="btn btn-warning btn">Unlike</button></center>          
-        </div>
+     
     </form>
 </div>;
 }

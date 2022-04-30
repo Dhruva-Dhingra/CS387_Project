@@ -123,7 +123,7 @@ const DisplayPostHomepage = () => {
                     {/* <td>{posts.post_id}</td> */}
                     <td>{post.content}</td>
                     <td>{post.first_name} {post.last_name}</td>
-                    <LikeUnlike post_id = {post.post_id}/>
+                   <td><LikeUnlike post_id = {post.post_id}/></td> 
                 </tr>
                 )
             })}
