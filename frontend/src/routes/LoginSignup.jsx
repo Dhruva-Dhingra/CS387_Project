@@ -45,7 +45,7 @@ const LoginForm = () => {
 			e.preventDefault();
 			console.log('Sending login form to backend!');
 			console.log(state);
-			// state.password = await sha256(state.password);
+			state.password = await sha256(state.password);
 			console.log(state.password);
 			const requestOptions = {
 				method: 'POST',
@@ -134,7 +134,7 @@ class SignupForm extends Component {
 			var temp_state = this.state;
 			if (dp_file_element.files.length > 0) {
 				var reader = new FileReader();
-				reader.onloadend = function () {
+				reader.onloadend = async function () {
 					// console.log("Reader = ", reader);
 					// console.log("Reader.result = ", reader.result);
 					profile_pic = reader.result;
@@ -144,7 +144,9 @@ class SignupForm extends Component {
 					console.log('Sending to backend!');
 					console.log("Temp state = ", temp_state);
 					// this.state.password = await sha256(this.state.password);
-					// temp_state.password = await sha256(temp_state.password);
+					console.log(temp_state.password);
+					temp_state.hash_of_password = await sha256(temp_state.hash_of_password);
+					console.log(temp_state.password);
 					const requestOptions = {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
@@ -167,7 +169,8 @@ class SignupForm extends Component {
 				});
 				console.log('Sending to backend!');
 				console.log(this.state);
-				// this.state.password = await sha256(this.state.password);
+				this.state.hash_of_password = await sha256(this.state.hash_of_password);
+				console.log(this.state);
 				const requestOptions = {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
