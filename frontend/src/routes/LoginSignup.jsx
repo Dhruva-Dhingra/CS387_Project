@@ -161,7 +161,6 @@ class SignupForm extends Component {
 				this.setState({
 					'profile_picture': profile_pic,
 				});
-				console.log(this.state);
 				this.setState({
 					'hash_of_password' : await sha256(this.state.hash_of_password)
 				});
