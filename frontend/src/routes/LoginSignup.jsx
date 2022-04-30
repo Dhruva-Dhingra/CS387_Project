@@ -3,7 +3,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import { useNavigate } from 'react-router-dom';
 
 async function sha256(message) {
 	// encode as UTF-8
@@ -89,10 +88,9 @@ const LoginForm = () => {
 	);
 }
 
-class Signup extends Component {
-	constructor(props) {
-		super(props);
-			this.history = this.props.history;
+class SignupForm extends Component {
+	constructor() {
+		super();
 
 		this.state = {
 			first_name: '',
@@ -157,7 +155,6 @@ class Signup extends Component {
 						.then(response => {
 							response.json();
 							console.log(response);
-								this.history('/', {replace: true});
 						});
 					// var imgElement = document.getElementById("checking_image_file");
 					// imgElement.src = reader.result;
@@ -250,10 +247,6 @@ class Signup extends Component {
 	}
 
 }
-
-const SignupForm => () {
-		history = useNavigate();
-		return <Signup history={history} />
 
 class LoginSignup extends Component {
 	constructor() {
