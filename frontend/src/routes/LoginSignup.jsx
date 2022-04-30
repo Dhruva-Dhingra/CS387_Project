@@ -168,7 +168,9 @@ class SignupForm extends Component {
 				});
 				console.log('Sending to backend!');
 				console.log(this.state);
-				this.state.hash_of_password = await sha256(this.state.hash_of_password);
+				this.setState({
+					'hash_of_password' : await sha256(this.state.hash_of_password)
+				});
 				console.log(this.state);
 				const requestOptions = {
 					method: 'POST',
