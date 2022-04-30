@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import { useNavigate } from 'react-router-dom';
 
 async function sha256(message) {
 	// encode as UTF-8
@@ -126,6 +127,14 @@ class SignupForm extends Component {
 
 	handleSubmit = async (e) => {
 		try {
+			this.setState({
+				'birthday' : Date(this.state.birthday)
+			});
+			this.setState({
+				'birthday' : this.state.birthday.toISOString().slice(0,19).replace("T"," ")
+			})
+
+
 			e.preventDefault();
 			var profile_pic;
 			var dp_file_element = document.getElementById("file-selector");
@@ -198,7 +207,7 @@ class SignupForm extends Component {
 
 					<div className="col">
 						First Name:
-						<input type='text' className='form-control' name='first_name' value={this.state.first_name} placeholder='Your First Name' onChange={this.handleChange} />
+						<input required type='text' className='form-control' name='first_name' value={this.state.first_name} placeholder='Your First Name' onChange={this.handleChange} />
 					</div>
 
 					<div className='col'>
@@ -207,27 +216,27 @@ class SignupForm extends Component {
 					</div>
 					<div className='col'>
 						Roll Number:
-						<input type='text' className='form-control' name='roll_number' placeholder='Roll Number' value={this.state.roll_number} onChange={this.handleChange} />
+						<input required type='text' className='form-control' name='roll_number' placeholder='Roll Number' value={this.state.roll_number} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Branch:
-						<input type='text' className='form-control' name='branch' placeholder='Branch' value={this.state.branch} onChange={this.handleChange} />
+						<input required type='text' className='form-control' name='branch' placeholder='Branch' value={this.state.branch} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Degree:
-						<input type='text' className='form-control' name='degree' placeholder='Degree' value={this.state.degree} onChange={this.handleChange} />
+						<input required type='text' className='form-control' name='degree' placeholder='Degree' value={this.state.degree} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Batch:
-						<input type='number' className='form-control' name='batch' placeholder='Batch' value={this.state.batch} onChange={this.handleChange} />
+						<input required type='number' className='form-control' name='batch' placeholder='Batch' value={this.state.batch} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Email-ID:
-						<input type='text' className='form-control' name='email' placeholder='Enter your Email-ID' value={this.state.email} onChange={this.handleChange} />
+						<input required type='text' className='form-control' name='email' placeholder='Enter your Email-ID' value={this.state.email} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Password:
-						<input type='password' className='form-control' name='hash_of_password' placeholder='Password' value={this.state.hash_of_password} onChange={this.handleChange} />
+						<input required type='password' className='form-control' name='hash_of_password' placeholder='Password' value={this.state.hash_of_password} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Residence:
@@ -235,7 +244,7 @@ class SignupForm extends Component {
 					</div>
 					<div className='col'>
 						Birthday:
-						<input type='date' className='form-control' name='birthday' placeholder='Birthday' value={this.state.birthday} onChange={this.handleChange} />
+						<input required type='date' className='form-control' name='birthday' placeholder='Birthday' value={this.state.birthday} onChange={this.handleChange} />
 					</div>
 					<div className='col'>
 						Profile Picture:
