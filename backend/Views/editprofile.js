@@ -20,7 +20,6 @@ const pool = new Pool({
 const edit_profile = async (req, res) => {
 		// incomplete
 		try {
-				console.log(req.body);
 				let user_id = req.cookies.user_id
 				let first = req.body.first_name;
 				first = first == undefined ? null : first
@@ -49,7 +48,7 @@ const edit_profile = async (req, res) => {
 				let autoadd = req.body.autoadd_to_groups;
 				autoadd = autoadd == undefined ? null : autoadd
 
-				console.log(first, last, rolln, branch, degree, batch, email, pswd, residence, bday, dp, pvt, autoadd)
+				console.log(first, last, rolln, branch, degree, batch, email, pswd, residence, bday, pvt, autoadd)
 
 				pool.query(
 						`UPDATE AppUser

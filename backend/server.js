@@ -38,10 +38,8 @@ const {
 
 const {
 	get_invitations,
-	sync_node,
 	get_recommendations,
 	get_friends,
-	reset_graph,
 	send_request,
 	accept_request,
 	decline_request,
@@ -91,10 +89,6 @@ const {
 	edit_profile,
 	get_profile_info,
 } = require('./Views/editprofile');
-
-setTimeout(async () => {
-	uf = await sync_node();
-});
 
 const run = (req, res, fn) => {
 	try{

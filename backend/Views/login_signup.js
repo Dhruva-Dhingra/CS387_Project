@@ -24,7 +24,6 @@ console.log('Pool made');
 
 const driver = neo4j.driver("neo4j://localhost:7687", neo4j.auth.basic("neo4j", "neo4j"));
 console.log('Connected to neo4j');
-const session = driver.session();
 
 const checkIfExists = async (email) => {
 	console.log('Checking if user exists');
@@ -73,6 +72,7 @@ const signup = async (req, res) => {
 		let autoadd = true;
 
 		try {
+				const session = driver.session();
 			pool.query(
 				`
 				insert into AppUser (First_Name, Last_Name, Roll_Number, Branch, Degree, Batch,
@@ -98,6 +98,7 @@ const signup = async (req, res) => {
 					}
 				}
 			);
+				session.close();
 		} catch (err) {
 			res.status(200).json({ "status": "failure" });
 			console.log(err.stack)

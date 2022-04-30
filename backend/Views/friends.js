@@ -19,7 +19,6 @@ const pool = new Pool({
 
 const driver = neo4j.driver("neo4j://localhost:7687", neo4j.auth.basic("neo4j", "neo4j"));
 console.log('Connected to neo4j');
-const session = driver.session();
 
 const get_invitations = async (req, res) => {
 	try {
@@ -55,29 +54,9 @@ const checkArray = (arr, arrays) => {
 	}
 }
 
-const sync_node = async () => {
-	try {
-		let user_arr = await pool.query(`
-select User_ID from AppUser
-`);
-		user_arr = user_arr.rows;
-		user_arr = user_arr.map((el) => el.user_id);
-		console.log(user_arr);
-
-		let friend_arr = await pool.query(`
-select Sender, Acceptor from Friend
-`);
-		friend_arr = friend_arr.rows;
-		friend_arr = friend_arr.map((el) => JSON.stringify(el));
-		console.log(friend_arr);
-		return { 'user_arr': user_arr, 'friend_arr': friend_arr };
-	} catch (err) {
-		return err.stack;
-	}
-}
-
 const get_recommendations = async (req, res) => {
 	try {
+			const session = driver.session()
 		let user_id = req.cookies.user_id;
 		let ans = await pool.query(`
 with linked as (
@@ -134,6 +113,7 @@ where User_ID = $1
 `, [result]);
 			ret.push(ans.rows[0]);
 		}
+			session.close();
 		res.json(ret);
 	} catch (err) {
 		res.status(200).json({ "status": "failure", "message": "Message Could not be sent" });
@@ -160,16 +140,6 @@ const get_friends = async (req, res) => {
 		});
 	} catch (err) {
 		res.status(200).json({ "status": "failure", "message": "Message Could not be sent" });
-		return err.stack;
-	}
-}
-
-const reset_graph = async () => {
-	try {
-		let query = 'MATCH (n: User) detach delete n;';
-		let res = await session.run(query);
-		return res;
-	} catch (err) {
 		return err.stack;
 	}
 }
@@ -210,6 +180,7 @@ const send_request = async (req, res) => {
 
 const accept_request = async (req, res) => {
 	try {
+			const session = driver.session();
 		let acceptor_id = req.cookies.user_id;
 		let sender_id = req.body.user_id;
 		let accept_time = req.body.time;
@@ -237,6 +208,7 @@ const accept_request = async (req, res) => {
 					}
 				}
 			})
+			session.close();
 	} catch (err) {
 		res.status(200).json({ "status": "failure", "message": "Query Failed" });
 		console.log(err.stack);
@@ -259,7 +231,7 @@ const decline_request = async (req, res) => {
 					} else {
 						pool.query(`delete from friend where 
 								sender = $1 and acceptor = $2`,
-							[sender_id, acceptor_id, accept_time], (err, result) => {
+							[sender_id, acceptor_id], (err, result) => {
 								if (err) {
 									res.status(200).json({ "status": "failure", "message": "Could not decline request" });
 									console.log(err.stack);
@@ -308,10 +280,8 @@ where acceptor = $1 and sender = $2 and not status
 }
 module.exports = {
 	get_invitations,
-	sync_node,
 	get_recommendations,
 	get_friends,
-	reset_graph,
 	send_request,
 	accept_request,
 	decline_request,
