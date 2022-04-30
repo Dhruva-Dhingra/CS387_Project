@@ -89,9 +89,10 @@ const LoginForm = () => {
 	);
 }
 
-class SignupForm extends Component {
-	constructor() {
-		super();
+class Signup extends Component {
+	constructor(props) {
+		super(props);
+			this.history = this.props.history;
 
 		this.state = {
 			first_name: '',
@@ -154,6 +155,7 @@ class SignupForm extends Component {
 						.then(response => {
 							response.json();
 							console.log(response);
+								this.history('/', {replace: true});
 						});
 					// var imgElement = document.getElementById("checking_image_file");
 					// imgElement.src = reader.result;
@@ -245,6 +247,10 @@ class SignupForm extends Component {
 	}
 
 }
+
+const SignupForm => () {
+		history = useNavigate();
+		return <Signup history={history} />
 
 class LoginSignup extends Component {
 	constructor() {
