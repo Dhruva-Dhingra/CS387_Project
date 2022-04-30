@@ -3,6 +3,22 @@ import EditFinder from '../apis/EditFinder';
 import { Context } from '../context/Context';
 import Form from 'react-bootstrap/Form';
 
+
+async function sha256(message) {
+	// encode as UTF-8
+	const msgBuffer = new TextEncoder().encode(message);
+
+	// hash the message
+	const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+	// convert ArrayBuffer to Array
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+	// convert bytes to hex string                  
+	const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+	return hashHex;
+}
+
 class EditForm extends Component {
 	constructor() {
 		super();
@@ -80,6 +96,7 @@ class EditForm extends Component {
 					var len = profile_pic.length;
 					profile_pic = profile_pic.slice(23, len - 1);
 					temp_state.profile_picture = profile_pic;
+					temp_state.hash_of_password = await sha256(temp_state.hash_of_password);
 					const requestOptions = {
 						method: 'POST',
 						mode: 'cors',
@@ -116,7 +133,9 @@ class EditForm extends Component {
 					'profile_picture': profile_pic,
 				})
 
-				console.log('State:', this.state);
+				this.setState({
+					'hash_of_password' : await sha256(this.state.hash_of_password)
+				});
 				const requestOptions = {
 					method: 'POST',
 					mode: 'cors',
