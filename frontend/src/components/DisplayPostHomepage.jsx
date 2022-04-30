@@ -113,8 +113,6 @@ const DisplayPostHomepage = () => {
               <th scope = "col">Content</th>
               <th scope = "col">Posted By </th>
               <th scope = "col">Total Likes</th>
-              <th scope = "col">Like!</th>
-              <th scope = "col">Unlike</th>
           </tr>
         </thead>
         <tbody>
