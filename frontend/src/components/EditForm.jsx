@@ -89,7 +89,7 @@ class EditForm extends Component {
 			var temp_state = this.state;
 			if (dp_file_element.files.length > 0) {
 				var reader = new FileReader();
-				reader.onloadend = function () {
+				reader.onloadend = async function () {
 					// console.log("Reader = ", reader);
 					// console.log("Reader.result = ", reader.result);
 					profile_pic = reader.result;
