@@ -30,10 +30,8 @@ const LoginForm = () => {
 
 	const handleChange = (e) => {
 		try {
-			console.log('Change in login form');
 			e.preventDefault();
 			state[e.target.name] = e.target.value;
-			console.log(state);
 		}
 		catch (err) {
 			console.log(err.stack);
@@ -43,10 +41,7 @@ const LoginForm = () => {
 	const handleSubmit = async (e) => {
 		try {
 			e.preventDefault();
-			console.log('Sending login form to backend!');
-			console.log(state);
 			state.password = await sha256(state.password);
-			console.log(state.password);
 			const requestOptions = {
 				method: 'POST',
 				mode: 'cors',
@@ -60,7 +55,6 @@ const LoginForm = () => {
 			const res = fetch('http://localhost:8080/login', requestOptions)
 				.then(res => res.json())
 				.then(data => {
-					console.log(data);
 					history('/homepage');
 				});
 		}
@@ -114,11 +108,9 @@ class SignupForm extends Component {
 	handleChange(e) {
 		try {
 			e.preventDefault();
-			console.log('Change in signup form');
 			this.setState({
 				[e.target.name]: e.target.value,
 			});
-			console.log(this.state);
 		}
 		catch (err) {
 			console.log(err.stack);
@@ -138,7 +130,6 @@ class SignupForm extends Component {
 			e.preventDefault();
 			var profile_pic;
 			var dp_file_element = document.getElementById("file-selector");
-			console.log(dp_file_element);
 			var temp_state = this.state;
 			if (dp_file_element.files.length > 0) {
 				var reader = new FileReader();
@@ -149,12 +140,8 @@ class SignupForm extends Component {
 					var len = profile_pic.length;
 					profile_pic = profile_pic.slice(23, len - 1);
 					temp_state.profile_picture = profile_pic;
-					console.log('Sending to backend!');
-					console.log("Temp state = ", temp_state);
 					// this.state.password = await sha256(this.state.password);
-					console.log(temp_state.password);
 					temp_state.hash_of_password = await sha256(temp_state.hash_of_password);
-					console.log(temp_state.password);
 					const requestOptions = {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
@@ -163,7 +150,6 @@ class SignupForm extends Component {
 					fetch('http://localhost:8080/signup', requestOptions)
 						.then(response => {
 							response.json();
-							console.log(response);
 						});
 					// var imgElement = document.getElementById("checking_image_file");
 					// imgElement.src = reader.result;
@@ -175,12 +161,10 @@ class SignupForm extends Component {
 				this.setState({
 					'profile_picture': profile_pic,
 				});
-				console.log('Sending to backend!');
 				console.log(this.state);
 				this.setState({
 					'hash_of_password' : await sha256(this.state.hash_of_password)
 				});
-				console.log(this.state);
 				const requestOptions = {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -189,7 +173,6 @@ class SignupForm extends Component {
 				fetch('http://localhost:8080/signup', requestOptions)
 					.then(response => {
 						response.json();
-						console.log(response);
 					});
 				}
 		}
@@ -274,7 +257,6 @@ class LoginSignup extends Component {
 			this.setState({
 				isLogin: true
 			});
-			console.log(this.state.isLogin);
 		}
 		catch (err) {
 			console.log(err.stack);
@@ -287,7 +269,6 @@ class LoginSignup extends Component {
 			this.setState({
 				isLogin: false
 			});
-			console.log(this.state.isLogin);
 		}
 		catch (err) {
 			console.log(err.stack);

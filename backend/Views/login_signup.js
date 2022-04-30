@@ -171,7 +171,7 @@ const logout = (req, res) => {
 		res.json({ 'status': 'cleared' });
 	} catch (err) {
 		res.status(200).json({ "status": "failure" });
-		// console.log(err.stack);
+		console.log(err.stack);
 	}
 }
 

@@ -63,7 +63,6 @@ class EditForm extends Component {
 		this.setState({
 			[e.target.name]: e.target.value,
 		});
-		console.log(this.state);
 	}
 
 	handleSubmit = async(e) => {
@@ -71,7 +70,6 @@ class EditForm extends Component {
 		var profile_pic;
 		try {
 			var dp_file_element = document.getElementById("file-selector");
-			console.log(dp_file_element);
 			var temp_state = this.state;
 			if (dp_file_element.files.length > 0) {
 				var reader = new FileReader();
@@ -81,9 +79,7 @@ class EditForm extends Component {
 					profile_pic = reader.result;
 					var len = profile_pic.length;
 					profile_pic = profile_pic.slice(23, len - 1);
-					console.log(profile_pic);
 					temp_state.profile_picture = profile_pic;
-						console.log('Temp State:', temp_state);
 					const requestOptions = {
 						method: 'POST',
 						mode: 'cors',
@@ -98,13 +94,10 @@ class EditForm extends Component {
 					fetch('http://localhost:8080/editprofile', requestOptions)
 						.then(async response => {
 							let res = await response.json();
-							console.log(res);
 							if (res.status === "success") {
-								console.log(res);
 								console.log("Profile Edit Successful");
 							} else {
 								console.log("Profile Edit Unsuccessful");
-								console.log(res.message);
 							}
 						});
 					}
@@ -138,13 +131,10 @@ class EditForm extends Component {
 				fetch('http://localhost:8080/editprofile', requestOptions)
 					.then(async response => {
 						let res = await response.json();
-						console.log(res);
 						if (res.status === "success") {
-							console.log(res);
 							console.log("Profile Edit Successful");
 						} else {
 							console.log("Profile Edit Unsuccessful");
-							console.log(res.message);
 						}
 					});
 				}
