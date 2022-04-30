@@ -92,6 +92,7 @@ return (
 <Route path = "/search" element = {<PrivateRoute><SearchPage /></PrivateRoute>} />
 <Route path = "/about" element = {<PrivateRoute><AboutPage /></PrivateRoute>} />
 <Route path = "/post" element = {<PrivateRoute><CreatePostPage /></PrivateRoute>} />
+<Route path = "*" element = {<Navigate to='/homepage' replace />} />
 </Routes>
 </BrowserRouter>
 </div>
