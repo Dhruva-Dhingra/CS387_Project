@@ -53,11 +53,11 @@ const checkIfExists = async (email) => {
 const signup = async (req, res) => {
 	try {
 		let email = req.body.email;
-		let password = req.body.password;
-		let firstname = req.body.firstname;
-		let lastname = req.body.lastname;
+		let password = req.body.hash_of_password;
+		let firstname = req.body.first_name;
+		let lastname = req.body.last_name;
 		lastname = lastname == undefined ? null : lastname;
-		let rollno = req.body.rollno;
+		let rollno = req.body.roll_number;
 		let branch = req.body.branch;
 		let degree = req.body.degree;
 		let batch = req.body.batch;
@@ -67,7 +67,7 @@ const signup = async (req, res) => {
 		let bday = req.body.birthday;
 		bday = bday == undefined ? null : bday;
 		let sgndate = new Date();
-		let pfp = req.body.pfp;
+		let pfp = req.body.profile_picture;
 		pfp = pfp == undefined ? null : pfp;
 		let pvt = false;
 		let autoadd = true;

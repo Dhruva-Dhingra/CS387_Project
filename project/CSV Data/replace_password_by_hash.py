@@ -85,7 +85,7 @@ d1 = datetime.strptime('1/1/1995 12:01 AM', '%m/%d/%Y %I:%M %p')
 d2 = datetime.strptime('12/31/2005 11:59 PM', '%m/%d/%Y %I:%M %p')
 d3 = datetime.strptime('1/1/2019 12:01 AM', '%m/%d/%Y %I:%M %p')
 d4 = datetime.strptime(datetime.now().strftime("%m/%d/%Y %I:%M %p"), '%m/%d/%Y %I:%M %p')
-content = "User_ID,First_Name,Last_Name,Roll_Number,Branch,Degree,Batch,Email,Hash_of_Password,Residence,Birthday,SignUp_Date,Profile_Picture,Private,AutoAdd_to_Groups\n"
+content = "First_Name,Last_Name,Roll_Number,Branch,Degree,Batch,Email,Hash_of_Password,Residence,Birthday,SignUp_Date,Profile_Picture,Private,AutoAdd_to_Groups\n"
 
 post_id = 1
 total = 0
@@ -99,7 +99,7 @@ for row in rows:
             temp_row[i] = '"' + temp_row[i] + '"'
     if temp_row[7][0] != '"':
         temp_row[7] = '"' + temp_row[7] + '"'
-    if temp_row[11][0] != '"':
+    if len(temp_row[11]) > 0 and temp_row[11][0] != '"':
         temp_row[11] = '"' + temp_row[11] + '"'
     content = content + ",".join(temp_row) + "\n"
 
